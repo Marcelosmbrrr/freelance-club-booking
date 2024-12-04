@@ -207,7 +207,7 @@ export default function Reservations() {
     });
 
     return (
-        <AuthenticatedLayout pageName="Clubes">
+        <AuthenticatedLayout pageName="Reservas">
             <Head title="" />
             <div className="w-full">
                 <div className="flex items-center py-4">

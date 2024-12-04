@@ -24,7 +24,7 @@ const app: { [key: string]: string } = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const user = usePage().props.auth.user ?? { role: window.location.pathname.split("/")[1]};
+    const user = usePage().props.auth.user;
 
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             alt="logo"
                         />
                         <span className="text-xl font-bold">
-                            App - {app[window.location.pathname.split("/")[1]]}
+                            App - {app[user.role]}
                         </span>
                     </div>
                 </SidebarMenuButton>

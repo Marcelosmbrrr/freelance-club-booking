@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('courts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('club_id')->nullable()->constrained('clubs');
             $table->string("name");
             $table->enum("sport", ["padel", "tenis", "squash"]);
             $table->enum("type", ["indoor", "outdoor"]);

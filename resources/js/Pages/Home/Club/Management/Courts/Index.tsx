@@ -207,7 +207,7 @@ export default function Courts() {
     });
 
     return (
-        <AuthenticatedLayout pageName="Clubes">
+        <AuthenticatedLayout pageName="Quadras">
             <Head title="" />
             <div className="w-full">
                 <div className="flex items-center py-4">

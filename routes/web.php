@@ -35,7 +35,7 @@ Route::prefix("club")->group(function () {
     Route::resource("reservations", ClubReservationController::class)->names("reservations.club");
     Route::resource("tournaments", ClubTournamentController::class)->names("tournaments.club");
     Route::resource("clients", ClientsController::class)->names("clients");
-    Route::get("profile/{tab?}", [ClubProfileController::class, "index"])->where('tab', 'index|update-password|delete-account');
+    Route::get("profile", [ClubProfileController::class, "index"]);
 });
 
 Route::prefix("player")->group(function () {

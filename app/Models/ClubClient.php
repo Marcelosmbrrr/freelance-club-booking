@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Player;
+use App\Models\Club;
+
+class Client extends Model
+{
+    protected $fillable = [
+        'player_id',
+    ];
+
+    public function player()
+    {
+        return $this->belongsTo(Player::class);
+    }
+
+    public function club()
+    {
+        return $this->belongsTo(Club::class);
+    }
+}

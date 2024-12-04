@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string("address");
             $table->string("latitude");
             $table->string("longitude");
-            $table->string("avatar");
-            $table->string("images");
+            $table->string("avatar")->nullable();
+            $table->string("images")->nullable();
             $table->timestamps();
         });
     }

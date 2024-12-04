@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->string("phonenumber");
-            $table->string("cpf");
-            $table->string("birth_date");
-            $table->string("avatar");
+            $table->string("phonenumber")->nullable();
+            $table->string("cpf")->nullable();
+            $table->string("birth_date")->nullable();
+            $table->string("avatar")->nullable();
             $table->timestamps();
         });
     }
