@@ -6,6 +6,8 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import InputError from "@/components/InputError";
 import { Combobox } from "@/components/combobox/Combobox";
 
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -17,7 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function RegisterClub() {
+export default function RegisterClub({ status }: { status?: string }) {
+    const { toast } = useToast();
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         email: "",
@@ -32,7 +36,31 @@ export default function RegisterClub() {
         e.preventDefault();
 
         post("/club/register", {
-            onFinish: () => alert('Sucesso! Confira o seu e-mail!'),
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Erro!",
+                    description:
+                        "Confira os dados informados e tente novamente.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "Sucesso!",
+                    description:
+                        "Verifique o seu e-mail para efetivar o cadastro.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
         });
     };
 

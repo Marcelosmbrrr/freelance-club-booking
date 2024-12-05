@@ -23,7 +23,7 @@ import {
 const navMain = [
     {
         title: "Dashboard",
-        url: "/player/dashboard",
+        url: "/dashboard",
         icon: PieChart,
         items: null,
     },

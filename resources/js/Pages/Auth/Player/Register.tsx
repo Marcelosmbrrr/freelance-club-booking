@@ -5,6 +5,8 @@ import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import InputError from "@/components/InputError";
 
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -16,7 +18,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function RegisterPlayer() {
+export default function RegisterPlayer({ status }: { status?: string }) {
+    const { toast } = useToast();
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         email: "",
@@ -28,7 +32,31 @@ export default function RegisterPlayer() {
         e.preventDefault();
 
         post("/player/register", {
-            onFinish: () => alert('Sucesso! Confira o seu e-mail!'),
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Erro!",
+                    description:
+                        "Confira os dados informados e tente novamente.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "Sucesso!",
+                    description:
+                        "Verifique o seu e-mail para efetivar o cadastro.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
         });
     };
 
@@ -48,7 +76,7 @@ export default function RegisterPlayer() {
                 <header className="p-8 h-20 w-full flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <AppIcon w="28" h="28" />
-                        <span className="text-xl font-bold">App - Clube</span>
+                        <span className="text-xl font-bold">App - Jogador</span>
                     </div>
                     <div>
                         <ThemeToggle />
@@ -61,8 +89,8 @@ export default function RegisterPlayer() {
                                 Cadastrar
                             </CardTitle>
                             <CardDescription>
-                                Informe os dados abaixo para requisitar o
-                                cadastro do seu clube.
+                                Informe os dados abaixo para cadastrar a sua
+                                conta.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -110,6 +138,7 @@ export default function RegisterPlayer() {
                                     <Input
                                         id="password"
                                         name="password"
+                                        type="password"
                                         value={data.password}
                                         className="mt-1 block w-full"
                                         autoComplete="password"
@@ -130,6 +159,7 @@ export default function RegisterPlayer() {
                                     <Input
                                         id="password_confirmation"
                                         name="password_confirmation"
+                                        type="password"
                                         value={data.password_confirmation}
                                         className="mt-1 block w-full"
                                         autoComplete="password_confirmation"
@@ -146,8 +176,14 @@ export default function RegisterPlayer() {
                                         className="mt-2"
                                     />
                                 </div>
-                                <Button type="button" className="w-full">
-                                    Enviar
+                                <Button
+                                    type="submit"
+                                    className="w-full"
+                                    disabled={processing}
+                                >
+                                    {processing
+                                        ? "Carregando ..."
+                                        : "Cadastrar"}
                                 </Button>
                             </form>
                             <div className="mt-4 text-center text-sm">

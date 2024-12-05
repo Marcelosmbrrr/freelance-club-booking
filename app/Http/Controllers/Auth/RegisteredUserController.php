@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Requests\Auth\Register\ClubRegisterRequest;
 use App\Http\Requests\Auth\Register\PlayerRegisterRequest;
+use App\Notifications\Club\RegisterRequestNotification;
 
 class RegisteredUserController extends Controller
 {
@@ -31,6 +32,7 @@ class RegisteredUserController extends Controller
      */
     public function storePlayer(PlayerRegisterRequest $request)
     {
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -40,9 +42,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return Inertia::render('Auth/Player/Login', [
-            'status' => session('status'),
-        ]);
+        return Inertia::render('Auth/Player/Register');
     }
 
     /**
@@ -63,9 +63,8 @@ class RegisteredUserController extends Controller
         ]);
 
         // Send notification to club
+        $club->notify(new RegisterRequestNotification($request->password));
 
-        return Inertia::render('Auth/Club/Register', [
-            'status' => session('status'),
-        ]);
+        return Inertia::render('Auth/Club/Register');
     } 
 }

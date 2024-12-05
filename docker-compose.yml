@@ -13,7 +13,7 @@ services:
         depends_on:
             - redis
         networks:
-            - orbio
+            - laravel
 
     # nginx
     nginx:
@@ -25,7 +25,7 @@ services:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks:
-            - orbio
+            - laravel
 
     # MySQL
     db:
@@ -41,7 +41,7 @@ services:
         ports:
             - 3307:3306
         networks:
-            - orbio
+            - laravel
 
     # PHPMyAdmin
     phpmyadmin:
@@ -55,18 +55,18 @@ services:
             PMA_PORT: 3306
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
         networks:
-            - orbio
+            - laravel
 
     # MailHog
     mailhog:
         image: mailhog/mailhog
         logging:
-            driver: "none" # disable saving logs
+            driver: "json-file" # disable saving logs
         ports:
             - "1025:1025" # smtp server
             - "8025:8025" # web ui
         networks:
-            - orbio
+            - laravel
 
     # Queue
     queue:
@@ -81,14 +81,14 @@ services:
             - redis
             - app
         networks:
-            - orbio
+            - laravel
 
     # Redis
     redis:
         image: redis:latest
         networks:
-            - orbio
+            - laravel
 
 networks:
-    orbio:
+    laravel:
         driver: bridge

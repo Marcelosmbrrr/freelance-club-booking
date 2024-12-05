@@ -25,7 +25,6 @@ export default function LoginPlayer({
     status,
 }: {
     status?: string;
-    canResetPassword: boolean;
 }) {
     const { toast } = useToast();
 
@@ -39,21 +38,21 @@ export default function LoginPlayer({
         e.preventDefault();
 
         post("/login", {
-            onFinish: () => reset("password"),
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Erro!",
+                    description:
+                        "Confira os dados informados e tente novamente.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
         });
     };
-
-    React.useEffect(() => {
-        if (status) {
-            toast({
-                title: "Status Update",
-                description: status,
-                action: (
-                    <ToastAction altText="Undo the action">Fechar</ToastAction>
-                ),
-            });
-        }
-    }, [status]);
 
     return (
         <GuestLayout>

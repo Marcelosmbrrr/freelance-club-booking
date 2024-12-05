@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Link } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
@@ -107,46 +107,7 @@ const Header = () => {
                         </div>
                     </div>
                     <div className="flex space-x-2">
-                        <NavigationMenu>
-                            <NavigationMenuList>
-                                <NavigationMenuItem className="text-muted-foreground text-black">
-                                    <NavigationMenuTrigger
-                                        className={cn(
-                                            "text-gray-900 bg-white hover:bg-gray-200 focus:ring-2 focus:ring-gray-400",
-                                            "dark:text-gray-900 dark:bg-white dark:hover:bg-neutral-400 dark:focus:ring-gray-400"
-                                        )}
-                                    >
-                                        <span>Acessar</span>
-                                    </NavigationMenuTrigger>
-                                    <NavigationMenuContent>
-                                        <ul className="w-80 p-3">
-                                            {selectItems.map((item, idx) => (
-                                                <li key={idx}>
-                                                    <Link
-                                                        href={item.href}
-                                                        className={cn(
-                                                            "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                                        )}
-                                                    >
-                                                        {item.icon}
-                                                        <div>
-                                                            <div className="text-sm font-semibold">
-                                                                {item.title}
-                                                            </div>
-                                                            <p className="text-sm leading-snug text-muted-foreground">
-                                                                {
-                                                                    item.description
-                                                                }
-                                                            </p>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </NavigationMenuContent>
-                                </NavigationMenuItem>
-                            </NavigationMenuList>
-                        </NavigationMenu>
+                        <Button className="bg-white text-neutral-800" onClick={() => router.get("/login")}>Acessar</Button>
                         <Button
                             onClick={handleChangeHomePage}
                             className="bg-amber-300 text-neutral-800 font-medium hover:bg-amber-200"

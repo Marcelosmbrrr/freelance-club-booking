@@ -16,11 +16,9 @@ class AuthenticatedSessionController extends Controller
      * Display the login view.
      * 
      */
-    public function create(string $user_type): Response
+    public function create(): Response
     {
-        $page = "Auth/" . ucfirst($user_type) . "/Login";
-        
-        return Inertia::render($page, [
+        return Inertia::render("Auth/Login", [
             'status' => session('status'),
         ]);
     }
@@ -34,10 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Route = "dashboard.admin" or "dashboard.club" or "dashboard.player"
-        $route_name = "dashboard." . Auth::user()->role;
-
-        return redirect()->intended(route($route_name, absolute: false));
+        return redirect()->intended(route("dashboard", absolute: false));
     }
 
     /**
@@ -45,14 +40,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $redirect_to = "/" . Auth::user()->role . "/login";
-
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect($redirect_to);
+        return redirect(route("login"));
     }
 }
