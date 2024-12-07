@@ -17,7 +17,8 @@ class Club extends Model
         'latitude',
         'longitude',
         'avatar',
-        'images',
+        'image_folder',
+        'logo'
     ];
     
     public function user()
@@ -28,5 +29,10 @@ class Club extends Model
     public function clients()
     {
         return $this->hasMany(Client::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasManyThrough(Reservation::class, Court::class, 'club_id', 'court_id', 'id', 'id');
     }
 }

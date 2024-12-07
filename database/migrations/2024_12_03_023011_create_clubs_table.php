@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string("longitude");
             $table->string("description")->nullable();
             $table->string("avatar")->nullable();
-            $table->string("images")->nullable();
+            $table->string("image_folder")->nullable();
             $table->timestamps();
         });
     }

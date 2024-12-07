@@ -6,16 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
+    /*
+        - court and time slot set must repeat 
+        - one court would have many time slots
+    */
+
     public function up(): void
     {
         Schema::create('court_time_slot', function (Blueprint $table) {
             $table->id();
             $table->foreignId('court_id')->constrained('courts');
             $table->foreignId('time_slot_id')->constrained('time_slots');
-            $table->boolean("available")->default(false);
             $table->timestamps();
         });
     }
