@@ -18,36 +18,29 @@ use App\Http\Controllers\Home\Club\Profile\ClubProfileController;
 
 // Player
 
-Route::get('/', function () {
-    return Inertia::render('Public/Welcome');
+Route::inertia("/", 'Public/Welcome');
+
+Route::middleware(['auth'])->group(function () {
+    // Shared
+    Route::get("/dashboard", DashboardController::class)->name("dashboard");
+    // Admin
+    Route::prefix("admin")->middleware(["user-access:admin", "verified"])->group(function () {
+        Route::resource("clubs", RegisteredClubController::class)->names("admin.clubs");
+        Route::resource("requests", ClubRequestController::class)->names("admin.requests");
+    });
+    // Club
+    Route::prefix("club")->middleware(["user-access:club", "verified"])->group(function () {
+        Route::resource("courts", ClubCourtController::class)->names("club.courts");
+        Route::resource("reservations", ClubReservationController::class)->names("club.reservations");
+        Route::resource("tournaments", ClubTournamentController::class)->names("club.tournaments");
+        Route::resource("clients", ClientsController::class)->names("club.clients");
+        Route::get("profile", [ClubProfileController::class, "index"]);
+    });
+    // Player
+    Route::prefix("player")->middleware(["useraccess:player", "verified"])->group(function () {
+        //
+    });
+
 });
-
-Route::get("/dashboard", DashboardController::class)->name("dashboard");
-
-Route::prefix("admin")->group(function () {
-    Route::resource("clubs", RegisteredClubController::class)->names("clubs.admin");
-    Route::resource("requests", ClubRequestController::class)->names("requests.admin");
-});
-
-Route::prefix("club")->group(function () {
-    Route::resource("courts", ClubCourtController::class)->names("courts.club");
-    Route::resource("reservations", ClubReservationController::class)->names("reservations.club");
-    Route::resource("tournaments", ClubTournamentController::class)->names("tournaments.club");
-    Route::resource("clients", ClientsController::class)->names("clients");
-    Route::get("profile", [ClubProfileController::class, "index"]);
-});
-
-Route::prefix("player")->group(function () {
-    //
-});
-
-
-/*
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get("/admin/dashboard", [DashboardAdminController::class, 'index'])->name("dashboard.admin");
-    Route::get("/club/dashboard", [DashboardClubController::class, 'index'])->name("dashboard.club");
-    Route::get("/player/dashboard", [DashboardPlayerController::class, 'index'])->name("dashboard.player");
-});
-*/
 
 require __DIR__.'/auth.php';

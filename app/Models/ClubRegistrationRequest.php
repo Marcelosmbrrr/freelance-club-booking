@@ -3,8 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class ClubRegistrationRequest extends Model
 {
-    protected $table = 'club_registration_requests';
+    use Notifiable;
+
+    protected $table = 'clubs_registration_requests';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'cnpj',
+        'trading_name',
+        'state',
+        'city',
+        'phonenumber',
+    ];
 }

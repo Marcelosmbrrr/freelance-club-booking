@@ -1,11 +1,10 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 import { SidebarContent } from "@/components/ui/sidebar";
 
 import {
     Map,
     PieChart,
-    Settings2,
     SquareTerminal,
     ChevronRight,
 } from "lucide-react";
@@ -31,13 +30,14 @@ const navMain = [
         title: "Dashboard",
         url: "#",
         icon: PieChart,
+        requiresVerification: false,
         items: null,
     },
     {
         title: "Clube",
         url: "#",
         icon: SquareTerminal,
-        isActive: true,
+        requiresVerification: true,
         items: [
             {
                 title: "Quadras e Horários",
@@ -57,13 +57,14 @@ const navMain = [
         title: "Torneios",
         url: "/club/tournaments",
         icon: Map,
+        requiresVerification: false,
         items: null,
     },
     {
         title: "Financeiro",
         url: "#",
         icon: SquareTerminal,
-        isActive: true,
+        requiresVerification: true,
         items: [
             {
                 title: "Pagamentos",
@@ -79,82 +80,84 @@ const navMain = [
         title: "Minha Conta",
         url: "/club/profile",
         icon: PieChart,
+        requiresVerification: false,
         items: null,
-    },
-    {
-        title: "Sistema",
-        url: "#",
-        icon: Settings2,
-        isActive: true,
-        items: [
-            {
-                title: "Usuários",
-                url: "#",
-            },
-            {
-                title: "Cargos",
-                url: "#",
-            },
-        ],
-    },
+    }
 ];
 
 export function NavClub() {
+    const user = usePage().props.auth.user;
+    const isEmailVerified = Boolean(user.email_verified_at);
+
     return (
         <SidebarContent>
             <SidebarGroup>
                 <SidebarGroupLabel>Sistema</SidebarGroupLabel>
                 <SidebarMenu>
-                    {navMain.map((item) =>
-                        item.items && item.items.length > 0 ? (
-                            <Collapsible
-                                key={item.title}
-                                asChild
-                                defaultOpen={item.isActive}
-                                className="group/collapsible"
-                            >
-                                <SidebarMenuItem>
-                                    <CollapsibleTrigger asChild>
-                                        <SidebarMenuButton tooltip={item.title}>
+                    {navMain
+                        .filter(
+                            (item) =>
+                                isEmailVerified || !item.requiresVerification
+                        )
+                        .map((item) =>
+                            item.items && item.items.length > 0 ? (
+                                <Collapsible
+                                    key={item.title}
+                                    asChild
+                                    defaultOpen={item.isActive}
+                                    className="group/collapsible"
+                                >
+                                    <SidebarMenuItem>
+                                        <CollapsibleTrigger asChild>
+                                            <SidebarMenuButton
+                                                tooltip={item.title}
+                                            >
+                                                {item.icon && <item.icon />}
+                                                <span>{item.title}</span>
+                                                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                            </SidebarMenuButton>
+                                        </CollapsibleTrigger>
+                                        <CollapsibleContent>
+                                            <SidebarMenuSub>
+                                                {item.items.map((subItem) => (
+                                                    <SidebarMenuSubItem
+                                                        key={subItem.title}
+                                                    >
+                                                        <SidebarMenuSubButton
+                                                            asChild
+                                                        >
+                                                            <Link
+                                                                href={
+                                                                    subItem.url
+                                                                }
+                                                            >
+                                                                <span>
+                                                                    {
+                                                                        subItem.title
+                                                                    }
+                                                                </span>
+                                                            </Link>
+                                                        </SidebarMenuSubButton>
+                                                    </SidebarMenuSubItem>
+                                                ))}
+                                            </SidebarMenuSub>
+                                        </CollapsibleContent>
+                                    </SidebarMenuItem>
+                                </Collapsible>
+                            ) : (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton
+                                        tooltip={item.title}
+                                        asChild
+                                    >
+                                        <Link href={item.url}>
                                             {item.icon && <item.icon />}
                                             <span>{item.title}</span>
-                                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                        </SidebarMenuButton>
-                                    </CollapsibleTrigger>
-                                    <CollapsibleContent>
-                                        <SidebarMenuSub>
-                                            {item.items.map((subItem) => (
-                                                <SidebarMenuSubItem
-                                                    key={subItem.title}
-                                                >
-                                                    <SidebarMenuSubButton
-                                                        asChild
-                                                    >
-                                                        <Link
-                                                            href={subItem.url}
-                                                        >
-                                                            <span>
-                                                                {subItem.title}
-                                                            </span>
-                                                        </Link>
-                                                    </SidebarMenuSubButton>
-                                                </SidebarMenuSubItem>
-                                            ))}
-                                        </SidebarMenuSub>
-                                    </CollapsibleContent>
+                                        </Link>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
-                            </Collapsible>
-                        ) : (
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton tooltip={item.title} asChild>
-                                    <Link href={item.url}>
-                                        {item.icon && <item.icon />}
-                                        <span>{item.title}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        )
-                    )}
+                            )
+                        )}
                 </SidebarMenu>
             </SidebarGroup>
         </SidebarContent>

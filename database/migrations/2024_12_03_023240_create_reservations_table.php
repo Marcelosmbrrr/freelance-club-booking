@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('player_id')->nullable()->constrained('players');
-            $table->foreignId('court_id')->nullable()->constrained('courts');
-            $table->foreignId('timetable_id')->nullable()->constrained('timetables');
+            $table->foreignId('player_id')->constrained('players'); 
+            $table->foreignId('court_id')->constrained('courts'); 
+            $table->foreignId('time_slot_id')->constrained('time_slots'); 
+            $table->enum("status", ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }

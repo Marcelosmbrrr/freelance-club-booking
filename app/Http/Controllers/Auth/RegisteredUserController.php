@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use App\Models\ClubRegistrationRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
@@ -31,8 +33,7 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function storePlayer(PlayerRegisterRequest $request)
-    {
-        
+    {  
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -42,7 +43,9 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return Inertia::render('Auth/Player/Register');
+        Auth::login($user);
+
+        return redirect(route('dashboard', absolute: false));
     }
 
     /**
@@ -58,12 +61,12 @@ class RegisteredUserController extends Controller
             'cnpj' => $request->cnpj,
             'trading_name' => $request->trading_name,
             'state' => $request->state,
-            'city' => $request->ciy,
+            'city' => $request->city,
             'phonenumber' => $request->phonenumber
         ]);
 
         // Send notification to club
-        $club->notify(new RegisterRequestNotification($request->password));
+        $club->notify(new RegisterRequestNotification());
 
         return Inertia::render('Auth/Club/Register');
     } 

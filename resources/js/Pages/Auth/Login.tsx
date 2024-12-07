@@ -1,6 +1,4 @@
-import * as React from "react";
-import { FormEventHandler } from "react";
-import { useForm, Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 import { ClubLogin } from "./_components/ClubLogin";
 
@@ -8,8 +6,6 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { AppIcon } from "@/components/icons/AppIcon";
 
-import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PlayerLogin from "./_components/PlayerLogin";
 
@@ -19,7 +15,11 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
+    const { url } = usePage();
+    const queryParams = new URLSearchParams(url.split("?")[1]);
 
+    const tab = queryParams.get('tab') ?? "player";
+    
     return (
         <GuestLayout>
             <Head title="Acesso" />
@@ -45,7 +45,7 @@ export default function Login({
                     </header>
                     <div className="grow w-full flex items-center">
                         <Tabs
-                            defaultValue="player"
+                            defaultValue={tab}
                             className="mx-auto w-full max-w-md shadow-none border-none"
                         >
                             <TabsList className="grid w-full grid-cols-2">

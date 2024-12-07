@@ -24,6 +24,7 @@ class PlayerSeeder extends Seeder
         ]);
 
         Player::create([
+            'user_id' => $user->id,
             'cpf' => '040.410.456-22'
         ]);
     }

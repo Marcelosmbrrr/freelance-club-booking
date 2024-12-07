@@ -1,6 +1,8 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
+import { applyCNPJMask } from "@/utils/applyCNPJMask";
+
 import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import InputError from "@/components/InputError";
@@ -50,6 +52,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                 });
             },
             onSuccess: () => {
+                reset();
                 toast({
                     title: "Sucesso!",
                     description:
@@ -126,7 +129,10 @@ export default function RegisterClub({ status }: { status?: string }) {
                                         className="mt-1 block w-full"
                                         autoComplete="cnpj"
                                         onChange={(e) =>
-                                            setData("cnpj", e.target.value)
+                                            setData(
+                                                "cnpj",
+                                                applyCNPJMask(e.target.value)
+                                            )
                                         }
                                         placeholder="Informe o CNPJ"
                                     />
@@ -164,18 +170,18 @@ export default function RegisterClub({ status }: { status?: string }) {
                                         <Combobox
                                             options={[
                                                 {
-                                                    value: "city-a",
+                                                    value: "state-a",
                                                     label: "Estado A",
                                                 },
                                                 {
-                                                    value: "city-b",
+                                                    value: "state-b",
                                                     label: "Estado B",
                                                 },
                                             ]}
                                             placeholder="Selecionar Estado"
                                             name="state"
                                             id="state"
-                                            value={data.city}
+                                            value={data.state}
                                             setValue={(value) =>
                                                 setData("state", value)
                                             }
@@ -234,7 +240,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="phonenumber">
-                                        Telefone
+                                        Telefone 
                                     </Label>
                                     <Input
                                         id="phonenumber"
@@ -256,7 +262,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                     />
                                 </div>
                                 <Button
-                                    type="button"
+                                    type="submit"
                                     className="w-full"
                                     disabled={processing}
                                 >
@@ -266,7 +272,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                             <div className="mt-4 text-center text-sm">
                                 Já tem uma conta?{" "}
                                 <Link
-                                    href="/club/login"
+                                    href="/login?tab=club"
                                     className="underline"
                                     disabled={processing}
                                 >

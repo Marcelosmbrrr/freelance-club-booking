@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('clubs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->string("phonenumber");
+            $table->foreignId('user_id')->unique()->nullable()->constrained('users');
+            $table->string("cnpj")->unique();
+            $table->string("trading_name")->unique();
+            $table->string("phonenumber")->unique();
             $table->string("address");
             $table->string("latitude");
             $table->string("longitude");
+            $table->string("description")->nullable();
             $table->string("avatar")->nullable();
             $table->string("images")->nullable();
             $table->timestamps();

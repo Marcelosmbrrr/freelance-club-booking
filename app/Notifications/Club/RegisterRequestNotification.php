@@ -35,9 +35,20 @@ class RegisterRequestNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Solicitação de Cadastro Recebida')
+            ->greeting('Olá, ' . $notifiable->name . '!')
+            ->line('Recebemos a sua solicitação para cadastrar o seu clube em nosso sistema. Aqui estão os dados enviados:')
+            ->line('**Nome do Clube:** ' . $notifiable->name)
+            ->line('**Nome Fantasia:** ' . $notifiable->trading_name)
+            ->line('**CNPJ:** ' . $notifiable->cnpj)
+            ->line('**E-mail:** ' . $notifiable->email)
+            ->line('**Telefone:** ' . $notifiable->phonenumber)
+            ->line('**Estado:** ' . $notifiable->state)
+            ->line('**Cidade:** ' . $notifiable->city)
+            ->line('Nosso time está analisando o pedido e, em breve, entraremos em contato para informar o status do cadastro.')
+            ->line('Se precisar de mais informações ou tiver dúvidas, não hesite em nos contatar por este mesmo e-mail.')
+            ->salutation('Atenciosamente, App');
+
     }
 
     /**

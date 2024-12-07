@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('club_id')->nullable()->constrained('clubs');
             $table->string("name");
-            $table->enum("sport", ["padel", "tenis", "squash"]);
+            $table->enum("sport", ["padel", "tennis", "beach tennis", "squash"]);
             $table->enum("type", ["indoor", "outdoor"]);
             $table->boolean("status");
+            $table->string("description")->nullable();
+            $table->string("image_folder");
             $table->timestamps();
         });
     }

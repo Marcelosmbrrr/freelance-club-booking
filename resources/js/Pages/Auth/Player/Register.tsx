@@ -46,6 +46,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                 });
             },
             onSuccess: () => {
+                reset();
                 toast({
                     title: "Sucesso!",
                     description:
@@ -189,7 +190,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                             <div className="mt-4 text-center text-sm">
                                 Já tem uma conta?{" "}
                                 <Link
-                                    href="/player/login"
+                                    href="/login?tab=player"
                                     className="underline"
                                     disabled={processing}
                                 >

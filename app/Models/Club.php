@@ -9,12 +9,14 @@ use App\Models\Client;
 class Club extends Model
 {
     protected $fillable = [
-        'user_id', 
-        'phonenumber', 
-        'address', 
-        'latitude', 
-        'longitude', 
-        'avatar', 
+        'user_id',
+        'cnpj',
+        'trading_name',
+        'phonenumber',
+        'address',
+        'latitude',
+        'longitude',
+        'avatar',
         'images',
     ];
     

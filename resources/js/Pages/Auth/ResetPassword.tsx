@@ -1,9 +1,13 @@
 import { Head, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
+import { AppIcon } from "@/components/icons/AppIcon";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/components/InputError";
 
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -22,6 +26,8 @@ export default function ResetPassword({
     token: string;
     email: string;
 }) {
+    const { toast } = useToast();
+
     const { data, setData, post, processing, errors, reset } = useForm({
         token: token,
         email: email,
@@ -33,6 +39,19 @@ export default function ResetPassword({
         e.preventDefault();
 
         post(route("password.store"), {
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Erro!",
+                    description:
+                        "Confira os dados informados e tente novamente.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
             onFinish: () => reset("password", "password_confirmation"),
         });
     };
@@ -40,9 +59,17 @@ export default function ResetPassword({
     return (
         <GuestLayout>
             <Head title="Alteração da senha" />
-
             <div className="flex h-screen w-full items-center justify-center px-4">
-                <Card className="mx-auto w-full max-w-md">
+                <header className="p-8 h-20 w-full flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <AppIcon w="28" h="28" />
+                        <span className="text-xl font-bold">App - Clube</span>
+                    </div>
+                    <div>
+                        <ThemeToggle />
+                    </div>
+                </header>
+                <Card className="mx-auto w-full max-w-md mt-40">
                     <CardHeader>
                         <CardTitle className="text-2xl">
                             Alteração da Senha
@@ -91,7 +118,7 @@ export default function ResetPassword({
                                 <Input
                                     id="password_confirmation"
                                     type="password"
-                                    value={data.password}
+                                    value={data.password_confirmation}
                                     placeholder="*********"
                                     onChange={(e) =>
                                         setData(
