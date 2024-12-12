@@ -16,7 +16,7 @@ return new class extends Migration
             - one reservation would have many court time slots
         */
 
-        Schema::create('reservation_court_time_slots', function (Blueprint $table) {
+        Schema::create('reservation_court_time_slot', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade'); 
             $table->foreignId('court_time_slot_id')->constrained('court_time_slot')->onDelete('cascade');

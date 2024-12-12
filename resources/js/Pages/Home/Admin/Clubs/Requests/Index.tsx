@@ -29,7 +29,6 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -144,6 +143,10 @@ export const columns: ColumnDef<ClubRegistration>[] = [
     },
 ];
 
+const breadCrumb = [
+    { name: "Requisições" }
+];
+
 export default function Requests() {
     const { pagination, queryParams = null, success }: any = usePage().props;
 
@@ -178,7 +181,7 @@ export default function Requests() {
     });
 
     return (
-        <AuthenticatedLayout pageName="Requisições">
+        <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Requisições" />
             <div className="w-full">
                 <div className="flex justify-between items-center py-4">

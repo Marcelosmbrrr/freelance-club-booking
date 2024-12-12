@@ -9,6 +9,11 @@ import { Label } from "@/components/ui/label";
 // CONSULTAR CNPJ: https://www.receitaws.com.br/
 // CONSULTAR CLUBE NO MAPA:
 
+const breadCrumb = [
+    { name: "Requisições", href: "/admin/requests" },
+    { name: "Editar" },
+];
+
 export default function EditRequest() {
     const { result }: any = usePage().props;
 
@@ -23,7 +28,7 @@ export default function EditRequest() {
     });
 
     return (
-        <AuthenticatedLayout pageName="Gerenciar Requisição">
+        <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Requisição" />
             <div className="max-w-4xl space-y-6 rounded-lg border p-10">
                 <form className="space-y-6">

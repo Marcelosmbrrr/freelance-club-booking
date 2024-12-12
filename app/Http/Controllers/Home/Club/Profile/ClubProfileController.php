@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
-use App\Http\Resources\Club\Profile\ClubProfileResource;
+use App\Http\Resources\Club\ClubProfileResource;
 
 class ClubProfileController extends Controller
 {

@@ -16,10 +16,15 @@ return new class extends Migration
             $table->foreignId('club_id')->nullable()->constrained('clubs');
             $table->string("name");
             $table->enum("sport", ["padel", "tennis", "beach tennis", "squash"]);
-            $table->enum("type", ["indoor", "outdoor"]);
-            $table->boolean("status");
+            $table->enum('structure_type', ['masonry', 'panoramic', 'mixed']); 
+            $table->string('grass_type')->nullable(); 
+            $table->boolean('can_play_outside')->default(false);
             $table->string("description")->nullable();
-            $table->string("image_folder");
+            $table->year('installation_year')->nullable();
+            $table->string('manufacturer')->nullable();
+            $table->boolean("status");
+            $table->string("images")->nullable();
+            $table->string("sponsor_images")->nullable();
             $table->timestamps();
         });
     }

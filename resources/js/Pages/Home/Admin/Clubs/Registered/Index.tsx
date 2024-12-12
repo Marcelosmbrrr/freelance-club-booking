@@ -178,7 +178,7 @@ export default function RegisteredClubs() {
     });
 
     return (
-        <AuthenticatedLayout pageName="Clubes Registrados">
+        <AuthenticatedLayout breadCrumb={[{ name: "Clubes Registrados" }]}>
             <Head title="Clubes" />
             <div className="w-full">
                 <div className="flex justify-between items-center py-4">

@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Court;
-use App\Http\Resources\CourtResource;
 use App\Models\TimeSlot;
 use App\Http\Requests\Club\Courts\CreateCourtRequest;
 use App\Http\Requests\Club\Courts\UpdateCourtRequest;
+use App\Http\Resources\Club\Courts\CourtsResource;
+use App\Http\Resources\Club\Courts\EditCourtResource;
+use App\Http\Resources\Club\Courts\ShowCourtResource;
 
 class ClubCourtController extends Controller
 {
@@ -36,8 +38,10 @@ class ClubCourtController extends Controller
 
         $query->where("club_id", Auth::user()->club->id);
 
+        $query->with(["reservations"]);
+
         if ($search) {
-            if (in_array($searchBy, ['name', 'sport', 'type', 'status'])) { 
+            if (in_array($searchBy, ['name', 'sport', 'structure_type', 'status', 'manufacturer'])) { 
                 $query->where($searchBy, 'like', '%' . $search . '%');
             }
         }
@@ -46,8 +50,8 @@ class ClubCourtController extends Controller
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
-        return Inertia::render('Home/Club/Management/Courts/Index', [
-            'pagination' => CourtResource::collection($data),
+        return Inertia::render('Home/Club/Courts/Index', [
+            'pagination' => CourtsResource::collection($data),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -58,7 +62,7 @@ class ClubCourtController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Home/Club/Management/Courts/CreateCourt', [
+        return Inertia::render('Home/Club/Courts/CreateCourt', [
             "time_slots" => $this->timeSlotModel->select(['id', 'time'])->get()
         ]);
     }
@@ -76,10 +80,16 @@ class ClubCourtController extends Controller
      */
     public function show(string $id)
     {
-        $court = $this->courtModel->where("id", $id)->with(["time_slots:id,time"])->firstOrFail();
+        $court = $this->courtModel
+        ->where("id", $id)
+        ->with([
+            "reservations",
+            "time_slots:id,time" 
+        ])
+        ->firstOrFail();
       
-        return Inertia::render('Home/Club/Management/Courts/ShowCourt', [
-            "court" => new CourtResource($court)
+        return Inertia::render('Home/Club/Courts/ShowCourt', [
+            "court" => new ShowCourtResource($court)
         ]);
     }
 
@@ -88,10 +98,18 @@ class ClubCourtController extends Controller
      */
     public function edit(string $id)
     {
-        $court = $this->courtModel->where("id", $id)->with(["time_slots:id"])->firstOrFail();
+        $court = $this->courtModel
+        ->where("id", $id)
+        ->with([
+            "reservations" => function($query) {
+                $query->with(["player", "courtTimeSlot"]);
+            },
+            "time_slots:id"
+        ])
+        ->firstOrFail();
       
-        return Inertia::render('Home/Club/Management/Courts/EditCourt', [
-            "court" => new CourtResource($court),
+        return Inertia::render('Home/Club/Courts/EditCourt', [
+            "court" => new EditCourtResource($court),
             "time_slots" => $this->timeSlotModel->select(['id', 'time'])->get()
         ]);
     }

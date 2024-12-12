@@ -14,7 +14,7 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Home/Club/Management/Clients/Index');
+        return Inertia::render('Home/Club/Clients/Index');
     }
 
     /**

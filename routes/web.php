@@ -6,8 +6,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Home\DashboardController;
 
 // Admin
-use App\Http\Controllers\Home\Admin\RegisteredClubController;
-use App\Http\Controllers\Home\Admin\ClubRequestController;
+use App\Http\Controllers\Home\Admin\Clubs\RegisteredClubController;
+use App\Http\Controllers\Home\Admin\RegistrationRequests\ClubRequestController;
 
 // Club
 use App\Http\Controllers\Home\Club\Reservations\ClubReservationController;
@@ -17,6 +17,9 @@ use App\Http\Controllers\Home\Club\Clients\ClientsController;
 use App\Http\Controllers\Home\Club\Profile\ClubProfileController;
 
 // Player
+use App\Http\Controllers\Home\Player\Reservations\PlayerReservationController;
+use App\Http\Controllers\Home\Player\Tournaments\PlayerTournamentController;
+use App\Http\Controllers\Home\Player\Profile\PlayerProfileController;
 
 Route::inertia("/", 'Public/Welcome');
 
@@ -37,8 +40,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get("profile", [ClubProfileController::class, "index"]);
     });
     // Player
-    Route::prefix("player")->middleware(["useraccess:player", "verified"])->group(function () {
-        //
+    Route::prefix("player")->middleware(["user-access:player", "verified"])->group(function () {
+        Route::resource("reservations", PlayerReservationController::class)->names("player.reservations");
+        Route::resource("tournaments", PlayerTournamentController::class)->names("player.tournaments");
+        Route::get("profile", [PlayerProfileController::class, "index"]);
     });
 
 });

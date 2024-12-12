@@ -11,11 +11,15 @@ class Court extends Model
         'club_id',
         'name',
         'sport',
-        'type',
-        'status',
+        'structure_type',
+        'grass_type',
+        'can_play_outside',
         'description',
-        'image_folder',
-        'logo'
+        'installation_year',
+        'manufacturer',
+        'status',
+        'images',
+        'sponsor_images'
     ];
     
     public function club() {
@@ -24,8 +28,18 @@ class Court extends Model
 
     public function time_slots()
     {
-        return $this->belongsToMany(TimeSlot::class, 'court_time_slot')
-                    ->withPivot('available')
-                    ->withTimestamps();
+        return $this->belongsToMany(TimeSlot::class, 'court_time_slot');
+    }
+
+    public function reservations()
+    {
+        return $this->hasManyThrough(
+            Reservation::class,
+            CourtTimeSlot::class,
+            'court_id', 
+            'id', 
+            'id', 
+            'id'  
+        );
     }
 }

@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique()->nullable()->constrained('users');
             $table->string("phonenumber")->unique()->nullable();
+            $table->string("sex")->nullable();
             $table->string("cpf")->unique()->nullable();
-            $table->string("birth_date")->nullable();
-            $table->string("avatar")->nullable();
+            $table->date("birth_date")->nullable();
+            $table->string("avatar_image")->nullable();
             $table->timestamps();
         });
     }

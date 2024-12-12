@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('player_id')->constrained('players'); 
             $table->foreignId('court_id')->constrained('courts');  
+            $table->date("date");
             $table->enum("status", ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });

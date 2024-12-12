@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useState } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
@@ -17,16 +17,23 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { router } from "@inertiajs/react";
 
 type AuthenticatedProps = PropsWithChildren<{
     header?: ReactNode;
-    pageName: string;
+    breadCrumb: { name: string; href?: string }[];
 }>;
 
 export default function Authenticated({
     children,
-    pageName,
+    breadCrumb,
 }: AuthenticatedProps) {
+    function onClick(item: { name: string; href?: string }) {
+        if (item.href) {
+            router.get(item.href);
+        }
+    }
+
     return (
         <SidebarProvider>
             <AppSidebar />
@@ -46,9 +53,20 @@ export default function Authenticated({
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
-                                <BreadcrumbItem>
-                                    <BreadcrumbPage>{pageName}</BreadcrumbPage>
-                                </BreadcrumbItem>
+                                {breadCrumb.map((item, index) => (
+                                    <>
+                                        <BreadcrumbItem
+                                            onClick={() => onClick(item)}
+                                        >
+                                            <BreadcrumbPage>
+                                                {item.name}
+                                            </BreadcrumbPage>
+                                        </BreadcrumbItem>
+                                        {index + 1 < breadCrumb.length && (
+                                            <BreadcrumbSeparator className="hidden md:block" />
+                                        )}
+                                    </>
+                                ))}
                             </BreadcrumbList>
                         </Breadcrumb>
                     </div>
@@ -57,7 +75,7 @@ export default function Authenticated({
                     </div>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                    <div className="p-4 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+                    <div className="p-4 min-h-[100vh] flex-1 flex-col rounded-xl md:min-h-min">
                         {children}
                     </div>
                 </div>

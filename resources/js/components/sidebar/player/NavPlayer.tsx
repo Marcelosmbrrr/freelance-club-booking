@@ -30,16 +30,16 @@ const navMain = [
     },
     {
         title: "Reservas",
-        url: "#",
+        url: "",
         icon: SquareTerminal,
         requiresVerification: true,
         items: [
             {
-                title: "Criar Reserva",
+                title: "Nova Reserva",
                 url: "/player/reservations/create",
             },
             {
-                title: "Minhas Reservas",
+                title: "Reservas",
                 url: "/player/reservations",
             },
         ],
@@ -51,12 +51,12 @@ const navMain = [
         requiresVerification: true,
         items: [
             {
-                title: "Criar Inscrição",
+                title: "Realizar inscrição",
                 url: "/player/tournaments/create",
             },
             {
                 title: "Inscrições",
-                url: "/player/tournaments/inscriptions",
+                url: "/player/tournaments",
             },
         ],
     },
@@ -82,7 +82,7 @@ const navMain = [
     },
     {
         title: "Minha Conta",
-        url: "/player/account",
+        url: "/player/profile",
         icon: PieChart,
         requiresVerification: false,
         items: null,

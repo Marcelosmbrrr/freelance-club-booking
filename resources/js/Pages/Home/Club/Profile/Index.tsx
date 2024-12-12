@@ -5,9 +5,11 @@ import { ProfileConfigurationsForm } from "./_components/ProfileConfigurationsFo
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+const breadCrumb = [{ name: "Minha Conta" }];
+
 export default function Profile() {
     return (
-        <AuthenticatedLayout pageName="Perfil">
+        <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Tabs defaultValue="account" className="max-w-screen-md">
                 <TabsList>
                     <TabsTrigger value="account">Dados do Clube</TabsTrigger>

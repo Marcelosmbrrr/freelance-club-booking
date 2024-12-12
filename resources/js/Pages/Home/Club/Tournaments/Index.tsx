@@ -1,5 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
+const breadCrumb = [{ name: "Torneios" }];
+
 export default function Tournaments() {
-    return <AuthenticatedLayout pageName="Torneios">TORNEIOS</AuthenticatedLayout>;
+    return (
+        <AuthenticatedLayout breadCrumb={breadCrumb}>TORNEIOS</AuthenticatedLayout>
+    );
 }

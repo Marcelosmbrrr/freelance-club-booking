@@ -1,5 +1,14 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
+const breadCrumb = [
+    { name: "Torneios", href: "/club/tournaments" },
+    { name: "Ver" },
+];
+
 export default function ShowTournament() {
-    return <AuthenticatedLayout pageName="Ver Torneio">MOSTRAR TORNEIO</AuthenticatedLayout>;
+    return (
+        <AuthenticatedLayout breadCrumb={breadCrumb}>
+            MOSTRAR TORNEIO
+        </AuthenticatedLayout>
+    );
 }
