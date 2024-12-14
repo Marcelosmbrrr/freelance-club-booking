@@ -57,6 +57,7 @@ export default function Authenticated({
                                     <>
                                         <BreadcrumbItem
                                             onClick={() => onClick(item)}
+                                            key={item.name}
                                         >
                                             <BreadcrumbPage>
                                                 {item.name}

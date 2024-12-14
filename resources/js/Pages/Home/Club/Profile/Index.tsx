@@ -1,3 +1,5 @@
+import { Head } from "@inertiajs/react";
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 import { ProfileForm } from "./_components/ProfileForm";
@@ -10,7 +12,11 @@ const breadCrumb = [{ name: "Minha Conta" }];
 export default function Profile() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
-            <Tabs defaultValue="account" className="max-w-screen-md">
+            <Head title="Minha Conta" />
+            <Tabs
+                defaultValue="account"
+                className="space-y-4 max-w-screen-md mx-auto"
+            >
                 <TabsList>
                     <TabsTrigger value="account">Dados do Clube</TabsTrigger>
                     <TabsTrigger value="config">Configurações</TabsTrigger>

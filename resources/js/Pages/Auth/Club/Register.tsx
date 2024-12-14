@@ -240,7 +240,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="phonenumber">
-                                        Telefone 
+                                        Telefone
                                     </Label>
                                     <Input
                                         id="phonenumber"

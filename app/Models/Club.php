@@ -13,13 +13,18 @@ class Club extends Model
         'cnpj',
         'trading_name',
         'phonenumber',
+        'zip_code',
         'address',
-        'latitude',
-        'longitude',
-        'avatar',
-        'image_folder',
-        'logo'
+        'city',
+        'state',
+        'images',
+        'logo_image',
+        'slug'
     ];
+
+    public function courts() {
+        return $this->hasMany(Court::class);
+    }
     
     public function user()
     {

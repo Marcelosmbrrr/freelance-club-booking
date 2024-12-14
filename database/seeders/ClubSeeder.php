@@ -5,6 +5,7 @@ namespace Database\Seeders;
 //use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Club;
@@ -26,9 +27,10 @@ class ClubSeeder extends Seeder
                 'phonenumber' => '123456789',
                 'cnpj' => '11.111.111/1111-11',
                 'trading_name' => 'Parque Tênis Clube',
+                'zip_code' => '12345-678',
                 'address' => 'Some Club Address 1',
-                'latitude' => '-31.708636360342698',
-                'longitude' => '-52.3397577498608',
+                'city' => 'São Paulo',
+                'state' => 'SP',
                 'description' => 'Pellentesque eget quam ligula. Sed felis ante, consequat nec ultrices ut, ornare quis metus. Vivamus sit amet tortor vel enim sollicitudin hendrerit.'
             ],
             [
@@ -40,9 +42,10 @@ class ClubSeeder extends Seeder
                 'phonenumber' => '987654321',
                 'cnpj' => '22.222.222/2222-22',
                 'trading_name' => 'Clube da Praia',
+                'zip_code' => '23456-789',
                 'address' => 'Some Club Address 2',
-                'latitude' => '-32.000000000000000',
-                'longitude' => '-52.0000000000000',
+                'city' => 'Rio de Janeiro',
+                'state' => 'RJ',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
             ],
             [
@@ -54,9 +57,10 @@ class ClubSeeder extends Seeder
                 'phonenumber' => '456123789',
                 'cnpj' => '33.333.333/3333-33',
                 'trading_name' => 'Montanha Esportes Clube',
+                'zip_code' => '34567-890',
                 'address' => 'Some Club Address 3',
-                'latitude' => '-33.333333333333333',
-                'longitude' => '-53.3333333333333',
+                'city' => 'Belo Horizonte',
+                'state' => 'MG',
                 'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
             ],
             [
@@ -68,14 +72,16 @@ class ClubSeeder extends Seeder
                 'phonenumber' => '321654987',
                 'cnpj' => '44.444.444/4444-44',
                 'trading_name' => 'Clube Aquático',
+                'zip_code' => '45678-901',
                 'address' => 'Some Club Address 4',
-                'latitude' => '-34.444444444444444',
-                'longitude' => '-54.4444444444444',
+                'city' => 'Curitiba',
+                'state' => 'PR',
                 'description' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
             ]
         ];
 
         foreach ($clubs as $clubData) {
+            // Criação do usuário
             $user = User::create([
                 'name' => $clubData['name'],
                 'email' => $clubData['email'],
@@ -84,28 +90,31 @@ class ClubSeeder extends Seeder
                 'role' => $clubData['role']
             ]);
 
+            // Criação do clube
             $club = Club::create([
                 'user_id' => $user->id,
                 'sports' => $clubData['sports'],
                 'phonenumber' => $clubData['phonenumber'],
                 'cnpj' => $clubData['cnpj'],
                 'trading_name' => $clubData['trading_name'],
+                'zip_code' => $clubData['zip_code'],
                 'address' => $clubData['address'],
-                'latitude' => $clubData['latitude'],
-                'longitude' => $clubData['longitude'],
-                'description' => $clubData['description']
+                'city' => $clubData['city'],
+                'state' => $clubData['state'],
+                'description' => $clubData['description'],
+                'slug' => Str::slug($user->name)
             ]);
 
+            // Configuração de imagens
             $clubImagesPath = "images/clubs/$club->id/";
-            $clubLogoPath = "$clubImagesPath/logo/logo.jpg";
 
             $club->update([
-                'images' => $clubImagesPath,
-                'logo_image' => $clubLogoPath
+                'images' => $clubImagesPath
             ]);
 
-            Storage::disk("public")->put($clubImagesPath . "image1.jpg", file_get_contents(public_path('images/no-image.jpg')));
-            Storage::disk("public")->put($clubLogoPath, file_get_contents(public_path('images/no-image.jpg')));
+            // Armazenamento das imagens
+            Storage::disk("public")->put($clubImagesPath . "main.jpg", file_get_contents(public_path('images/no-image.jpg')));
+            Storage::disk("public")->put($clubImagesPath . "background.jpg", file_get_contents(public_path('images/no-image.jpg')));
         }
     }
 

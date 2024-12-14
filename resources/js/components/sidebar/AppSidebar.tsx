@@ -4,6 +4,7 @@ import { usePage } from "@inertiajs/react";
 import { NavAdmin } from "./admin/NavAdmin";
 import { NavPlayer } from "./player/NavPlayer";
 import { NavClub } from "./club/NavClub";
+import ApplicationLogo from "../ApplicationLogo";
 
 import { NavUser } from "./NavUser";
 

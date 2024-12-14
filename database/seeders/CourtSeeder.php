@@ -26,19 +26,17 @@ class CourtSeeder extends Seeder
             'description' => 'Uma quadra de padel excelente para jogar futebol.',
             'installation_year' => 2022,
             'manufacturer' => 'XYZ Sports',
-            'status' => true
+            'status' => true,
+            'area_type' => 'open'
         ]);
 
         $courtImagesPath = "images/courts/$court->id/";
-        $courtSponsorImagesPath = "$courtImagesPath/sponsors/";
 
         $court->update([
-            'images' => $courtImagesPath,
-            'sponsor_images' => $courtSponsorImagesPath
+            'images' => $courtImagesPath
         ]);
 
-        Storage::disk("public")->put($courtImagesPath . "image1.jpg", file_get_contents(public_path('images/no-image.jpg')));
-        Storage::disk("public")->put($courtSponsorImagesPath . "sponsor1.jpg", file_get_contents(public_path('images/no-image.jpg')));
+        Storage::disk("public")->put($courtImagesPath . "main.jpg", file_get_contents("https://monteseunegocio.boasideias.com.br/wp-content/uploads/sites/8/2022/01/como-montar-quadra-de-tenisd.jpg"));
 
         $court->time_slots()->attach([1, 2, 3]);
     }

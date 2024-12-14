@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string("sports");
             $table->string("trading_name")->unique();
             $table->string("phonenumber")->unique();
+            $table->string("zip_code");
             $table->string("address");
-            $table->string("latitude");
-            $table->string("longitude");
+            $table->string("city");
+            $table->string("state");
             $table->string("description")->nullable();
             $table->string("images")->nullable();
-            $table->string("logo_image")->nullable();
+            $table->string("slug");
             $table->timestamps();
         });
     }

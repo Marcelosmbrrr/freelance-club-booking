@@ -17,26 +17,28 @@ class EditCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['images'] = [];
-        $data['sponsor_images'] = [];
-        $data['logo_image'] = null;
+        $data['images'] = $this->courtImages("court");
+        $data['sponsor_images'] = $this->courtImages("sponsor");
 
         return $data;
     }
 
     // Custom
 
-    function courtImages() {
+    function courtImages(string $type) {
 
-        $files = Storage::files($this->image_folder);
+        $urls = [];
 
-        $images = [];
+        if($type === "court") {
+            $images = Storage::disk('public')->allFiles($this->images);
+        } else {
+            $images = Storage::disk('public')->allFiles($this->sponsor_images);
+        }
 
-        if (count($files) === 0) {
-            $images = [];
-        } 
+        if (count($images) > 0) {
+            $urls = array_map(fn($image) => Storage::url($image), $images);
+        }
 
-        return $images;
-        
+        return $urls;
     }
 }

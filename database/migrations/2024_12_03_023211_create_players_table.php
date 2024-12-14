@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique()->nullable()->constrained('users');
             $table->string("phonenumber")->unique()->nullable();
-            $table->string("sex")->nullable();
+            $table->enum("sex", ["male", "female", "none"])->nullable();
             $table->string("cpf")->unique()->nullable();
             $table->date("birth_date")->nullable();
+            $table->enum("best_hand", ["right-handed", "left-handed", "both"])->nullable();
+            $table->enum("court_side", ["backhand", "forehand", "both"])->nullable();
+            $table->enum("match_type", ["competitive", "friendly", "both"])->nullable();
             $table->string("avatar_image")->nullable();
             $table->timestamps();
         });

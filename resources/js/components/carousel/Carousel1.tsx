@@ -19,8 +19,6 @@ export function Carousel1({ items }: Carousel1Props) {
         return null;
     }
 
-    console.log(items);
-
     return (
         <Carousel
             opts={{

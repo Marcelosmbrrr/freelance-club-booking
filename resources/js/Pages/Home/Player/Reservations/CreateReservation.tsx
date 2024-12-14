@@ -3,7 +3,6 @@ import { Head, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { SearchClub } from "./_components/SearchClub";
-
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,8 +12,7 @@ export type Club = {
     name: string;
     image: string;
     description: string;
-    latitude: string;
-    longitude: string;
+    zip_code: string;
     sports: string[];
     address: string;
 };
@@ -31,8 +29,7 @@ export default function CreateReservation() {
         pagination;
 
     const [localization, setLocalization] = React.useState<{
-        latitude: string;
-        longitude: string;
+        zip_code: string;
         address: string;
     }>();
 
@@ -71,8 +68,7 @@ export default function CreateReservation() {
                                 <Button
                                     onClick={() =>
                                         setLocalization({
-                                            latitude: club.latitude,
-                                            longitude: club.longitude,
+                                            zip_code: club.zip_code,
                                             address: club.address,
                                         })
                                     }

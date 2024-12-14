@@ -3,13 +3,6 @@ import { Head, router, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-import { CalendarIcon, Eye } from "lucide-react";
-
-import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { Badge } from "@/components/ui/badge";
 import {
     ColumnDef,
@@ -46,7 +39,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export type Reservation = {
     id: string;
@@ -102,7 +94,7 @@ export const columns: ColumnDef<Reservation>[] = [
         accessorKey: "club",
         header: "Clube",
         cell: ({ row }) => {
-            return <div>{row.getValue("club").name}</div>;
+            return <div>{row.original.club.name}</div>;
         },
     },
     {

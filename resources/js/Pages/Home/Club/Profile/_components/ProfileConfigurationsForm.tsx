@@ -1,60 +1,64 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler } from "react";
 
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { ChangePasswordForm } from "./ChangePasswordForm";
+import { DeactivateAccountForm } from "./DeactivateAccountForm";
+
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { Button } from "@/components/ui/button";
 
 export function ProfileConfigurationsForm() {
+    const { user }: any = usePage().props;
+    const { toast } = useToast();
+
+    const { data, setData, patch, processing, errors, reset } = useForm({
+        password: "",
+        new_password: "",
+        new_password_confirmation: "",
+    });
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        patch("/player/profile/" + user.data.id + "/change-password", {
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Erro!",
+                    description:
+                        "Confira os dados informados e tente novamente.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
+            onSuccess: () => {
+                reset();
+                toast({
+                    title: "Sucesso!",
+                    description: "A senha foi atualizada.",
+                    action: (
+                        <ToastAction altText="Undo the action">
+                            Fechar
+                        </ToastAction>
+                    ),
+                });
+            },
+        });
+    };
     return (
         <section className="space-y-4">
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
-                <form className="space-y-6">
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="name">Senha atual</Label>
-                        <Input
-                            type="text"
-                            id="name"
-                            placeholder="Informe a senha atual"
-                        />
-                    </div>
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="name">Nova Senha</Label>
-                        <Input
-                            type="text"
-                            id="name"
-                            placeholder="Informe a nova senha"
-                        />
-                    </div>
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="name">Confirmar nova senha</Label>
-                        <Input
-                            type="text"
-                            id="name"
-                            placeholder="Informe a senha novamente"
-                        />
-                    </div>
-                    <Button className="w-full">Alterar Senha</Button>
-                </form>
+            <div className="flex items-center rounded-lg border p-4">
+                <h1 className="text-xl font-semibold">Configurações</h1>
             </div>
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
-                <form className="space-y-6">
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="name">Senha</Label>
-                        <Input
-                            type="text"
-                            id="name"
-                            placeholder="Informe a senha atual"
-                        />
-                    </div>
-                    <Button variant="destructive">Deletar Conta</Button>
-                </form>
+            <div className="max-w-screen-md space-y-6 rounded-lg border p-8">
+                <ChangePasswordForm />
+            </div>
+            <div className="max-w-screen-md space-y-6 rounded-lg border p-8">
+                <DeactivateAccountForm />
             </div>
         </section>
     );

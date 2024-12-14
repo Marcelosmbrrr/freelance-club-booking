@@ -18,19 +18,32 @@ class ShowCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['images'] = [];
-        $data['sponsor_images'] = [];
-        $data['logo_image'] = null;
+        $data['images'] = $this->courtImages("court");
+        $data['sponsor_images'] = $this->courtImages("sponsor");
 
         $data["reservations"] = $this->reservationCourtTimeSlots();
+
 
         return $data;
     }
 
     // Custom
 
-    function courtImages(string $image_type) {
-        return [];
+    function courtImages(string $type) {
+
+        $urls = [];
+
+        if($type === "court") {
+            $images = Storage::disk('public')->allFiles($this->images);
+        } else {
+            $images = Storage::disk('public')->allFiles($this->sponsor_images);
+        }
+
+        if (count($images) > 0) {
+            $urls = array_map(fn($image) => Storage::url($image), $images);
+        }
+
+        return $urls;
     }
 
     function reservationCourtTimeSlots() {

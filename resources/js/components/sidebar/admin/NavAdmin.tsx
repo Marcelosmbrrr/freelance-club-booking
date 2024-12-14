@@ -37,8 +37,12 @@ const navMain = [
                 url: "/admin/clubs",
             },
             {
-                title: "Requisições",
-                url: "/admin/requests",
+                title: "Requisições de Cadastro",
+                url: "/admin/registration-requests",
+            },
+            {
+                title: "Requisições de Atualização",
+                url: "/admin/update-requests",
             },
         ],
     },

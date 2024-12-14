@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use App\Models\ClubRegistrationRequest;
 use App\Http\Resources\Admin\RegistrationRequests\ClubRegistrationRequestResource;
 
-class ClubRequestController extends Controller
+class ClubRegistrationRequestController extends Controller
 {
     function __construct(ClubRegistrationRequest $clubRegistrationRequestModel)
     {
@@ -39,7 +39,7 @@ class ClubRequestController extends Controller
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
-        return Inertia::render('Home/Admin/Clubs/Requests/Index', [
+        return Inertia::render('Home/Admin/Clubs/RegistrationRequests/Index', [
             'pagination' => ClubRegistrationRequestResource::collection($data),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
@@ -77,7 +77,7 @@ class ClubRequestController extends Controller
     {
         $club_request = $this->clubRegistrationRequestModel->find($id);
 
-        return Inertia::render('Home/Admin/Clubs/Requests/EditRequest',[
+        return Inertia::render('Home/Admin/Clubs/RegistrationRequests/EditRequest',[
             'result' => new ClubRegistrationRequestResource($club_request)
         ]);
     }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
-use App\Http\Resources\Club\UserClubResource;
+use App\Http\Resources\Admin\RegisteredClubs\RegisteredClubResource;
 
 class RegisteredClubController extends Controller
 {
@@ -44,7 +44,7 @@ class RegisteredClubController extends Controller
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
         return Inertia::render('Home/Admin/Clubs/Registered/Index', [
-            'pagination' => UserClubResource::collection([]),
+            'pagination' => RegisteredClubResource::collection([]),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

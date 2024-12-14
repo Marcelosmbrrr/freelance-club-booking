@@ -107,7 +107,12 @@ const Header = () => {
                         </div>
                     </div>
                     <div className="flex space-x-2">
-                        <Button className="bg-white hover:bg-white text-neutral-800" onClick={() => router.get("/login")}>Acessar</Button>
+                        <Button
+                            className="bg-white hover:bg-white text-neutral-800"
+                            onClick={() => router.get("/login")}
+                        >
+                            Acessar
+                        </Button>
                         <Button
                             onClick={handleChangeHomePage}
                             className="bg-amber-300 text-neutral-800 font-medium hover:bg-amber-200"

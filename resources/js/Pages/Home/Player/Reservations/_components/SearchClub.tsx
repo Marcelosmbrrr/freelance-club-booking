@@ -16,7 +16,7 @@ import {
 
 import { ptBR } from "date-fns/locale";
 import { format } from "date-fns";
-import { CalendarIcon, MapPin } from "lucide-react";
+import { CalendarIcon, ChevronDown, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
@@ -26,12 +26,17 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function SearchClub(props: {
-    club?: { latitude: string; longitude: string };
+    club?: { zip_code: string; address: string };
 }) {
     const [date, setDate] = React.useState<Date>(new Date());
-    const [map, setMap] = React.useState();
     const [openMap, setOpenMap] = React.useState<boolean>(false);
 
     return (
@@ -48,23 +53,23 @@ export function SearchClub(props: {
                         <Button type="submit">Procurar Clube</Button>
                     </div>
                     <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
-                        <Select>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Selecionar Esporte" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="padel">Padel</SelectItem>
-                                    <SelectItem value="tenis">Tênis</SelectItem>
-                                    <SelectItem value="tenis">
-                                        Beach Tênis
-                                    </SelectItem>
-                                    <SelectItem value="tenis">
-                                        Squash
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="ml-auto">
+                                    Selecionar Esporte <ChevronDown />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuCheckboxItem
+                                    className="capitalize"
+                                    onCheckedChange={(value) =>
+                                        console.log(value)
+                                    }
+                                >
+                                    OK
+                                </DropdownMenuCheckboxItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
@@ -213,11 +218,11 @@ export function SearchClub(props: {
                     </div>
                 </div>
                 {openMap && (
-                    <div className="mb-4">
+                    <div className="mb-4 sticky">
                         <iframe
                             src={
                                 props.club
-                                    ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGkVceXOyvDwgH5mYQRyXYD7bzi6W7ygg&q=${props.club.latitude},${props.club.longitude}`
+                                    ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGkVceXOyvDwgH5mYQRyXYD7bzi6W7ygg&q=${props.club.zip_code}`
                                     : `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGkVceXOyvDwgH5mYQRyXYD7bzi6W7ygg&q=São+Paulo`
                             }
                             className="w-full h-[250px]"

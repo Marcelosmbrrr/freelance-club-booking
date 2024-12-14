@@ -129,9 +129,7 @@ export const columns: ColumnDef<ClubRegistration>[] = [
                         <DropdownMenuLabel>Ações</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() =>
-                                router.get(
-                                    "/admin/requests/" + (row.original.id) + "/edit"
-                                )
+                                router.get(route("admin.registration-requests.edit", row.original.id))
                             }
                         >
                             Abrir Requisição

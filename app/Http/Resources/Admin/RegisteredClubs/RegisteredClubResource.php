@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Club;
+namespace App\Http\Resources\Admin\RegisteredClubs;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserClubResource extends JsonResource
+class RegisteredClubResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

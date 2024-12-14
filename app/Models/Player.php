@@ -12,7 +12,10 @@ class Player extends Model
         'phonenumber',
         'cpf',
         'birth_date',
-        'avatar',
+        'avatar_image',
+        'court_side',
+        'match_type',
+        'best_hand'
     ];
 
     public function user()

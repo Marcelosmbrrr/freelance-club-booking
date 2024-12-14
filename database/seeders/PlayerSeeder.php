@@ -35,6 +35,6 @@ class PlayerSeeder extends Seeder
             'avatar_image' => $playerAvatarPath
         ]);
 
-        Storage::disk("public")->put($playerAvatarPath, file_get_contents(public_path('images/no-image.jpg')));
+        Storage::disk("public")->put($playerAvatarPath, file_get_contents("https://facts.net/wp-content/uploads/2023/08/19-facts-about-bart-simpson-the-simpsons-1693479522.jpg"));
     }
 }
