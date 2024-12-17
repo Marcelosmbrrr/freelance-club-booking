@@ -19,7 +19,8 @@ class Club extends Model
         'state',
         'images',
         'logo_image',
-        'slug'
+        'slug',
+        'services'
     ];
 
     public function courts() {

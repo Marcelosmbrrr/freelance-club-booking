@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Home\Club\Clients;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Gate;
 
 class ClientsController extends Controller
 {
@@ -22,7 +21,7 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Home/Club/Clients/CreateClient');
     }
 
     /**
@@ -38,7 +37,7 @@ class ClientsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Inertia::render('Home/Club/Clients/ShowClient');
     }
 
     /**
@@ -46,7 +45,7 @@ class ClientsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Home/Club/Clients/EditClient');
     }
 
     /**

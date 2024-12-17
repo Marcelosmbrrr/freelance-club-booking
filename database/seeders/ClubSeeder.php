@@ -17,6 +17,7 @@ class ClubSeeder extends Seeder
      */
     public function run(): void
     {
+
         $clubs = [
             [
                 'name' => 'Parque Tênis Clube',
@@ -47,36 +48,6 @@ class ClubSeeder extends Seeder
                 'city' => 'Rio de Janeiro',
                 'state' => 'RJ',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-            ],
-            [
-                'name' => 'Montanha Esportes Clube',
-                'email' => 'club3@app.com',
-                'password' => 'club123',
-                'role' => 'club',
-                'sports' => 'hiking,climbing',
-                'phonenumber' => '456123789',
-                'cnpj' => '33.333.333/3333-33',
-                'trading_name' => 'Montanha Esportes Clube',
-                'zip_code' => '34567-890',
-                'address' => 'Some Club Address 3',
-                'city' => 'Belo Horizonte',
-                'state' => 'MG',
-                'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            ],
-            [
-                'name' => 'Clube Aquático',
-                'email' => 'club4@app.com',
-                'password' => 'club123',
-                'role' => 'club',
-                'sports' => 'swimming,water polo',
-                'phonenumber' => '321654987',
-                'cnpj' => '44.444.444/4444-44',
-                'trading_name' => 'Clube Aquático',
-                'zip_code' => '45678-901',
-                'address' => 'Some Club Address 4',
-                'city' => 'Curitiba',
-                'state' => 'PR',
-                'description' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
             ]
         ];
 

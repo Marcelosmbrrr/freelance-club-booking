@@ -8,14 +8,14 @@ class CourtTimeSlot extends Model
 {
    protected $table = "court_time_slot";
 
-   protected $fillable = ['court_id', 'time_slot_id', 'available'];
+   protected $fillable = ['court_id', 'time_slot_id', 'weekday', 'available'];
 
     public function court()
     {
         return $this->belongsTo(Court::class);
     }
 
-    public function timeSlot()
+    public function time_slot()
     {
         return $this->belongsTo(TimeSlot::class);
     }

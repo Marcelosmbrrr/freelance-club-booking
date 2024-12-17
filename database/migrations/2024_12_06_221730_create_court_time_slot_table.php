@@ -18,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('court_id')->constrained('courts');
             $table->foreignId('time_slot_id')->constrained('time_slots');
+            $table->enum('weekday', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
+            $table->boolean("available")->default(true);
             $table->timestamps();
         });
     }

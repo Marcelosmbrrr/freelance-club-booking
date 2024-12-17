@@ -19,10 +19,8 @@ class ShowCourtResource extends JsonResource
         $data = parent::toArray($request);
 
         $data['images'] = $this->courtImages("court");
-        $data['sponsor_images'] = $this->courtImages("sponsor");
-
         $data["reservations"] = $this->reservationCourtTimeSlots();
-
+        $data['time_slots'] = $this->courtTimeSlots();
 
         return $data;
     }
@@ -44,6 +42,39 @@ class ShowCourtResource extends JsonResource
         }
 
         return $urls;
+    }
+
+    function courtTimeSlots() {
+
+        $grouped_court_time_slots = $this->time_slots->groupBy('weekday');
+
+        $time_slots_array = [
+            'monday' => [],
+            'tuesday' => [],
+            'wednesday' => [],
+            'thursday' => [],
+            'friday' => [],
+            'saturday' => [],
+            'sunday' => [],
+        ];
+
+        foreach ($grouped_court_time_slots as $weekday => $slots) {
+
+            // Ordenar os horários
+            $sorted_slots = $slots->sortBy('start_time');
+    
+            // Pegar o primeiro e o último horário
+            $first_slot = $sorted_slots->first();
+            $last_slot = $sorted_slots->last();
+    
+            $time_slots_array[$weekday] = [
+                'start_time' => $first_slot ? $first_slot->start_time : null,
+                'end_time' => $last_slot ? $last_slot->end_time : null,
+            ];
+        }
+
+        return $time_slots_array;
+
     }
 
     function reservationCourtTimeSlots() {

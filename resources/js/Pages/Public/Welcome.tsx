@@ -5,13 +5,13 @@ import { useHomePage } from "@/context/HomePageContext";
 
 import { cn } from "@/lib/utils";
 
-import { Header } from "./_components/welcome/header/Header";
-import { Hero } from "./_components/welcome/hero/Hero";
-import { AppCarousel } from "./_components/welcome/carousel/Carousel";
-import { Features } from "./_components/welcome/features/Features";
-import { Features2 } from "./_components/welcome/features/Features2";
-import { Pricing } from "./_components/welcome/pricing/Pricing";
-import { Footer } from "./_components/welcome/footer/Footer";
+import { Header } from "./_components/header/Header";
+import { Hero } from "./_components/hero/Hero";
+import { AppCarousel } from "./_components/carousel/Carousel";
+import { Features } from "./_components/features/Features";
+import { Features2 } from "./_components/features/Features2";
+import { Pricing } from "./_components/pricing/Pricing";
+import { Footer } from "./_components/footer/Footer";
 
 import { Separator } from "@/components/ui/separator";
 

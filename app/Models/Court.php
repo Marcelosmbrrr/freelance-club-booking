@@ -28,8 +28,10 @@ class Court extends Model
 
     public function time_slots()
     {
-        return $this->belongsToMany(TimeSlot::class, 'court_time_slot');
+        return $this->belongsToMany(TimeSlot::class, 'court_time_slot')
+                    ->withPivot('weekday', 'available');
     }
+
 
     public function reservations()
     {

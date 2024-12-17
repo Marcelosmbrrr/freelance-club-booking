@@ -1,7 +1,12 @@
+import * as React from "react";
 import { Head, usePage, useForm, Link } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import InputError from "@/components/InputError";
+import { CourtImages } from "./_components/image-selector/CourtImages";
+
+import { Weekday } from "./types/types";
+import { CreateEditCourtSchema } from "./types/types";
 
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -17,7 +22,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CourtImages } from "./_components/image-selector/CourtImages";
 
 const breadCrumb = [
     { name: "Quadras", href: "/club/courts" },
@@ -26,21 +30,31 @@ const breadCrumb = [
 
 export default function CreateCourt() {
     const { time_slots }: any = usePage().props;
+    const [weekday, setWeekDay] = React.useState<Weekday>("monday");
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
-        sport: "",
-        description: "",
-        time_slots: [],
-        grass_type: "",
-        structure_type: "",
-        can_play_outside: true,
-        installation_year: "",
-        manufacturer: "",
-        area_type: "",
-        status: true,
-        images: [],
-    });
+    const { data, setData, post, processing, errors, reset } =
+        useForm<CreateEditCourtSchema>({
+            name: "",
+            sport: "",
+            description: "",
+            time_slots: {
+                monday: [],
+                tuesday: [],
+                wednesday: [],
+                thursday: [],
+                friday: [],
+                saturday: [],
+                sunday: [],
+            },
+            grass_type: "",
+            structure_type: "",
+            can_play_outside: true,
+            installation_year: "",
+            manufacturer: "",
+            area_type: "",
+            status: true,
+            images: [],
+        });
 
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
@@ -50,9 +64,7 @@ export default function CreateCourt() {
                 {/* Forms Container */}
                 <form className="space-y-4 w-full max-w-4xl">
                     <div className="flex justify-between items-center rounded-lg border p-4">
-                        <h1 className="text-xl font-semibold">
-                            Criar Quadra
-                        </h1>
+                        <h1 className="text-xl font-semibold">Criar Quadra</h1>
                     </div>
                     {/* Form 1 - Basic */}
                     <div className="grid gap-4 rounded-lg border p-8">
@@ -161,10 +173,10 @@ export default function CreateCourt() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectItem value="open">
+                                            <SelectItem value="indoor">
                                                 Aberto
                                             </SelectItem>
-                                            <SelectItem value="closed">
+                                            <SelectItem value="outdoor">
                                                 Fechado
                                             </SelectItem>
                                             <SelectItem value="covered">
@@ -294,40 +306,91 @@ export default function CreateCourt() {
                         </div>
                     </div>
                     {/* Form 2 - Time Slots */}
-                    <div className="rounded-lg space-y-8 border p-8">
+                    <div className="rounded-lg space-y-4 border p-8">
                         <div className="space-y-2">
                             <h1 className="text-xl font-semibold">
-                                Horários Disponíveis
+                                Disponibilidade
                             </h1>
                             <p className="text-gray-600">
                                 Selecione os blocos de horário disponíveis da
                                 quadra.
                             </p>
                         </div>
-                        <ToggleGroup
-                            type="multiple"
-                            variant="outline"
-                            className="w-full flex flex-wrap gap-4"
-                            value={data.time_slots}
-                            onValueChange={(values) =>
-                                setData("time_slots", values)
-                            }
-                        >
-                            {time_slots.map(
-                                (time_slot: { id: string; time: string }) => (
-                                    <ToggleGroupItem
-                                        key={time_slot.id}
-                                        value={time_slot.id}
-                                        aria-label="Toggle bold"
-                                        className="flex-grow md:flex-none md:w-1/4 p-2 text-center border rounded"
-                                    >
-                                        {time_slot.time}
-                                    </ToggleGroupItem>
-                                )
-                            )}
-                        </ToggleGroup>
+                        <div className="w-1/3">
+                            <Label htmlFor="sport">Dia da Semana</Label>
+                            <Select
+                                value={weekday}
+                                onValueChange={(value: Weekday) =>
+                                    setWeekDay(value)
+                                }
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Selecione o esporte" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value="monday">
+                                            Segunda
+                                        </SelectItem>
+                                        <SelectItem value="tuesday">
+                                            Terça
+                                        </SelectItem>
+                                        <SelectItem value="wednesday">
+                                            Quarta
+                                        </SelectItem>
+                                        <SelectItem value="thursday">
+                                            Quinta
+                                        </SelectItem>
+                                        <SelectItem value="friday">
+                                            Sexta
+                                        </SelectItem>
+                                        <SelectItem value="saturday">
+                                            Sábado
+                                        </SelectItem>
+                                        <SelectItem value="sunday">
+                                            Domingo
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            <InputError
+                                message={errors.sport}
+                                className="mt-2"
+                            />
+                        </div>
+                        <div>
+                            <ToggleGroup
+                                type="multiple"
+                                variant="outline"
+                                className="w-full flex flex-wrap gap-4"
+                                value={data.time_slots[weekday]}
+                                onValueChange={(values) =>
+                                    setData("time_slots", {
+                                        ...data.time_slots,
+                                        [weekday]: values,
+                                    })
+                                }
+                            >
+                                {time_slots.map(
+                                    (time_slot: {
+                                        id: string;
+                                        start_time: string;
+                                        end_time: string;
+                                    }) => (
+                                        <ToggleGroupItem
+                                            key={time_slot.id}
+                                            value={time_slot.id}
+                                            aria-label="Toggle bold"
+                                            className="flex-grow md:flex-none md:w-1/4 p-2 text-center border rounded"
+                                        >
+                                            {time_slot.start_time} -{" "}
+                                            {time_slot.end_time}
+                                        </ToggleGroupItem>
+                                    )
+                                )}
+                            </ToggleGroup>
+                        </div>
                     </div>
-
                     {/* Form 3 - Image */}
                     <div className="rounded-lg border p-8">
                         <div className="mb-2 space-y-2">
@@ -345,6 +408,7 @@ export default function CreateCourt() {
                                 setImages={(urls: string[]) =>
                                     setData("images", urls)
                                 }
+                                images={data.images}
                             />
                         </div>
                     </div>

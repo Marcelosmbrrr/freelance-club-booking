@@ -1,7 +1,6 @@
 import { Head, usePage, Link, router } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Carousel1 } from "@/components/carousel/Carousel1";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,7 +9,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,9 +37,7 @@ export default function ShowCourt() {
             {/* Container */}
             <div className="space-y-4 max-w-4xl mx-auto">
                 <div className="flex justify-between items-center rounded-lg border p-4">
-                    <h1 className="text-xl font-semibold">
-                        Visualizar {court.data.name}
-                    </h1>
+                    <h1 className="text-xl font-semibold">Visualizar Quadra</h1>
                 </div>
                 {/* Basic */}
                 <div className="grid gap-4 rounded-lg border p-8">
@@ -52,21 +48,20 @@ export default function ShowCourt() {
                         </p>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Nome da quadra *</Label>
+                        <Label htmlFor="name">Nome da quadra</Label>
                         <Input
                             id="name"
                             type="text"
                             name="name"
                             placeholder="Informe o nome da quadra"
                             value={court.data.name}
-                            onChange={(e) => setData("name", e.target.value)}
                             readOnly
                         />
                     </div>
                     {/* Linha com selects */}
                     <div className="flex gap-x-4">
                         <div className="w-full">
-                            <Label htmlFor="sport">Esporte *</Label>
+                            <Label htmlFor="sport">Esporte</Label>
                             <Input
                                 id="name"
                                 type="text"
@@ -78,7 +73,7 @@ export default function ShowCourt() {
                         </div>
                         <div className="w-full">
                             <Label htmlFor="structure_type">
-                                Tipo de Estrutura *
+                                Tipo de Estrutura
                             </Label>
                             <Input
                                 id="name"
@@ -90,7 +85,7 @@ export default function ShowCourt() {
                             />
                         </div>
                         <div className="w-full">
-                            <Label htmlFor="area_type">Tipo de Área *</Label>
+                            <Label htmlFor="area_type">Tipo de Área</Label>
                             <Input
                                 id="name"
                                 type="text"
@@ -103,7 +98,7 @@ export default function ShowCourt() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="grass_type">
-                            Tipo de grama (opcional)
+                            Tipo de grama
                         </Label>
                         <Input
                             id="grass_type"
@@ -116,7 +111,7 @@ export default function ShowCourt() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="manufacturer">
-                            Fabricante (opcional)
+                            Fabricante
                         </Label>
                         <Input
                             id="manufacturer"
@@ -129,7 +124,7 @@ export default function ShowCourt() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="installation_year">
-                            Ano de Instalação (opcional)
+                            Ano de Instalação
                         </Label>
                         <Input
                             id="installation_year"
@@ -143,7 +138,7 @@ export default function ShowCourt() {
                     <div className="flex gap-4">
                         <div className="grid w-full items-center gap-2">
                             <Label htmlFor="description">
-                                Descrição (opcional)
+                                Descrição
                             </Label>
                             <Textarea
                                 value={court.data.description}
@@ -193,29 +188,32 @@ export default function ShowCourt() {
                 </div>
                 {/* Time Slots */}
                 <div className="rounded-lg space-y-4 border p-8">
-                    <h1 className="text-xl font-semibold">
-                        Horários da Quadra
-                    </h1>
-                    <ToggleGroup
-                        type="multiple"
-                        variant="outline"
-                        className="w-full flex flex-wrap gap-4"
-                        value={court.data.time_slots}
-                        disabled
-                    >
-                        {court.data.time_slots.map(
-                            (time_slot: { id: string; time: string }) => (
-                                <ToggleGroupItem
-                                    key={time_slot.id}
-                                    value={time_slot.id}
-                                    aria-label="Toggle bold"
-                                    className="flex-grow md:flex-none md:w-1/4 p-2 text-center border rounded"
-                                >
-                                    {time_slot.time}
-                                </ToggleGroupItem>
-                            )
-                        )}
-                    </ToggleGroup>
+                    <h1 className="text-xl font-semibold">Disponibilidade</h1>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Dia</TableHead>
+                                <TableHead className="text-right">
+                                    Horário
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {Object.entries(court.data.time_slots).map(
+                                ([key, time_slot], index) => (
+                                    <TableRow key={index}>
+                                        <TableCell className="font-medium">
+                                            {key}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {time_slot.start_time}-{" "}
+                                            {time_slot.end_time}
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            )}
+                        </TableBody>
+                    </Table>
                 </div>
                 {/* Reservations */}
                 <div className="flex flex-col space-y-4 rounded-lg border p-8">

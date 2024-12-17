@@ -1,9 +1,11 @@
+import * as React from "react";
+
 import { useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import axios from "axios";
 
-import { applyCNPJMask } from "@/utils/applyCNPJMask";
-import { applyCEPMask } from "@/utils/applyCEPMask";
+import { applyCNPJMask } from "@/utils/functions/applyCNPJMask";
+import { applyCEPMask } from "@/utils/functions/applyCEPMask";
 
 import InputError from "@/components/InputError";
 import { ClubImages } from "./ClubImages";
@@ -14,10 +16,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 export function ProfileForm() {
     const { user }: any = usePage().props;
     const { toast } = useToast();
+
+    const [services, setServices] = React.useState<string[]>([]);
 
     const { data, setData, patch, processing, errors, reset } = useForm({
         name: user.data.name,
@@ -31,7 +44,7 @@ export function ProfileForm() {
         sports: user.data.club.sports,
         phonenumber: user.data.club.phonenumber,
         description: user.data.club.description,
-        images: [],
+        images: user.data.images,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -92,11 +105,6 @@ export function ProfileForm() {
         <section className="space-y-4">
             <div className="flex justify-between items-center rounded-lg border p-4">
                 <h1 className="text-xl font-semibold">Dados do Clube</h1>
-                <Button>
-                    <a href={"/" + user.data.club.slug + "/club"} target="_blank">
-                        Ver Clube
-                    </a>
-                </Button>
             </div>
 
             <div className="space-y-4 rounded-lg border p-8">
@@ -270,6 +278,7 @@ export function ProfileForm() {
                     </Button>
                 </form>
             </div>
+
             <div className="rounded-lg border p-8">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">Imagens</h1>
@@ -284,6 +293,7 @@ export function ProfileForm() {
                 <div>
                     <ClubImages
                         setImages={(urls: string[]) => setData("images", urls)}
+                        images={data.images}
                     />
                 </div>
             </div>

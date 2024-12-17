@@ -261,7 +261,7 @@ export default function Courts() {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        Nenhum resultado.
+                                        Nenhuma quadra encontrada.
                                     </TableCell>
                                 </TableRow>
                             )}

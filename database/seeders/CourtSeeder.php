@@ -5,6 +5,7 @@ namespace Database\Seeders;
 //use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use App\Models\TimeSlot;
 use App\Models\Court;
 use App\Models\Club;
 
@@ -27,7 +28,7 @@ class CourtSeeder extends Seeder
             'installation_year' => 2022,
             'manufacturer' => 'XYZ Sports',
             'status' => true,
-            'area_type' => 'open'
+            'area_type' => 'indoor'
         ]);
 
         $courtImagesPath = "images/courts/$court->id/";
@@ -38,6 +39,16 @@ class CourtSeeder extends Seeder
 
         Storage::disk("public")->put($courtImagesPath . "main.jpg", file_get_contents("https://monteseunegocio.boasideias.com.br/wp-content/uploads/sites/8/2022/01/como-montar-quadra-de-tenisd.jpg"));
 
-        $court->time_slots()->attach([1, 2, 3]);
+        // Court time slots
+        $timeSlot = TimeSlot::first();
+
+        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+        foreach ($weekdays as $weekday) {
+            $court->time_slots()->attach($timeSlot->id, [
+                'weekday' => $weekday,
+                'available' => true,
+            ]);
+        }
     }
 }

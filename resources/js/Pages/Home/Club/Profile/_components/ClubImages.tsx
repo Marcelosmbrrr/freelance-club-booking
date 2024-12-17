@@ -2,8 +2,8 @@ import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-export function ClubImages(props: { setImages: (urls: string[]) => void }) {
-    const [images, setImages] = React.useState<string[]>([]);
+export function ClubImages(props: { setImages: (urls: string[]) => void, images: string[]}) {
+    const [images, setImages] = React.useState<string[]>(props.images);
     const [mainImage, setMainImage] = React.useState<string | null>(null);
 
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

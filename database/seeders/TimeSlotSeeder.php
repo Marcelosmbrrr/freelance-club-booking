@@ -22,7 +22,8 @@ class TimeSlotSeeder extends Seeder
             $end = strtotime('+30 minutes', $startTime);
 
             $timeSlots[] = [
-                'time' => date('H:i', $startTime) . ' - ' . date('H:i', $end), 
+                'start_time' => date('H:i', $startTime),
+                'end_time' => date('H:i', $end),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

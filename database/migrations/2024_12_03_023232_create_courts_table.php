@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('club_id')->nullable()->constrained('clubs');
             $table->string("name");
             $table->enum("sport", ["padel", "tennis", "beach tennis", "squash"]);
-            $table->enum("area_type", ["open", "closed", "covered"]);
+            $table->enum("area_type", ["indoor", "outdoor", "covered"]);
             $table->enum('structure_type', ['masonry', 'panoramic', 'mixed']); 
             $table->string('grass_type')->nullable(); 
             $table->boolean('can_play_outside')->default(false);

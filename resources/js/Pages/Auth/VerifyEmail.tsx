@@ -1,12 +1,9 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
-import { AppIcon } from "@/components/icons/AppIcon";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import GuestLayout from "@/Layouts/GuestLayout";
 
 import { Button } from "@/components/ui/button";
-import PrimaryButton from "@/components/PrimaryButton";
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});

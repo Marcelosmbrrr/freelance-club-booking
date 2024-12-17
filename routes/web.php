@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Home\DashboardController;
+// Shared
+use App\Http\Controllers\Home\Shared\ClubHomepageController;
+use App\Http\Controllers\Home\Shared\DashboardController;
 
 // Admin
 use App\Http\Controllers\Home\Admin\Clubs\RegisteredClubController;
@@ -23,14 +25,13 @@ use App\Http\Controllers\Home\Player\Profile\PlayerProfileController;
 
 // Public
 use App\Http\Controllers\Public\WelcomeController;
-use App\Http\Controllers\Public\GuestClubController;
 
 Route::get("/", WelcomeController::class)->name("guest.welcome");
-Route::get("/{slug}/club", GuestClubController::class)->name("guest.club");
 
 Route::middleware(['auth'])->group(function () {
     // Shared
     Route::get("/dashboard", DashboardController::class)->name("dashboard");
+    Route::get("/{slug}/homepage", ClubHomepageController::class)->name("club.homepage");
     // Admin
     Route::prefix("admin")->middleware(["user-access:admin", "verified"])->group(function () {
         Route::resource("clubs", RegisteredClubController::class)->names("admin.clubs");

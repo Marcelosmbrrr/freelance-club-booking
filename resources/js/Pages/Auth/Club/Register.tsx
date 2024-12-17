@@ -1,7 +1,7 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
-import { applyCNPJMask } from "@/utils/applyCNPJMask";
+import { applyCNPJMask } from "@/utils/functions/applyCNPJMask";
 
 import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";

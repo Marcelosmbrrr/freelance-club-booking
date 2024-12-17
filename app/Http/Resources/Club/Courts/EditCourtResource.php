@@ -17,23 +17,41 @@ class EditCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['images'] = $this->courtImages("court");
-        $data['sponsor_images'] = $this->courtImages("sponsor");
+        $data['images'] = $this->courtImages();
+        $data['time_slots'] = $this->courtTimeSlots();
 
         return $data;
     }
 
     // Custom
 
-    function courtImages(string $type) {
+    function courtTimeSlots() {
+
+        $grouped_court_time_slots = $this->time_slots->groupBy('weekday');
+
+        $time_slots_array = [
+            'monday' => [],
+            'tuesday' => [],
+            'wednesday' => [],
+            'thursday' => [],
+            'friday' => [],
+            'saturday' => [],
+            'sunday' => [],
+        ];
+
+        foreach ($grouped_court_time_slots as $weekday => $slots) {
+            $time_slots_array[$weekday] = $slots->where('available', true)->pluck('id')->toArray();
+        }
+
+        return $time_slots_array;
+
+    }
+
+    function courtImages() {
 
         $urls = [];
 
-        if($type === "court") {
-            $images = Storage::disk('public')->allFiles($this->images);
-        } else {
-            $images = Storage::disk('public')->allFiles($this->sponsor_images);
-        }
+        $images = Storage::disk('public')->allFiles($this->images);
 
         if (count($images) > 0) {
             $urls = array_map(fn($image) => Storage::url($image), $images);

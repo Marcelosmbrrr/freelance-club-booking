@@ -1,6 +1,6 @@
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
-import { applyCPFMask } from "@/utils/applyCPFMask";
+import { applyCPFMask } from "@/utils/functions/applyCPFMask";
 
 import InputError from "@/components/InputError";
 

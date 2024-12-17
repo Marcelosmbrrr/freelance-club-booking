@@ -55,13 +55,22 @@ export default function Authenticated({
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 {breadCrumb.map((item, index) => (
                                     <>
-                                        <BreadcrumbItem
-                                            onClick={() => onClick(item)}
-                                            key={item.name}
-                                        >
-                                            <BreadcrumbPage>
-                                                {item.name}
-                                            </BreadcrumbPage>
+                                        <BreadcrumbItem key={item.name}>
+                                            {item.href ? (
+                                                <BreadcrumbLink
+                                                    href={item.href}
+                                                    className="hover:underline"
+                                                    onClick={() =>
+                                                        onClick(item)
+                                                    }
+                                                >
+                                                    {item.name}
+                                                </BreadcrumbLink>
+                                            ) : (
+                                                <BreadcrumbPage>
+                                                    {item.name}
+                                                </BreadcrumbPage>
+                                            )}
                                         </BreadcrumbItem>
                                         {index + 1 < breadCrumb.length && (
                                             <BreadcrumbSeparator className="hidden md:block" />
