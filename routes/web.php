@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 // Shared
-use App\Http\Controllers\Home\Shared\ClubHomepageController;
 use App\Http\Controllers\Home\Shared\DashboardController;
 
 // Admin
@@ -31,7 +30,6 @@ Route::get("/", WelcomeController::class)->name("guest.welcome");
 Route::middleware(['auth'])->group(function () {
     // Shared
     Route::get("/dashboard", DashboardController::class)->name("dashboard");
-    Route::get("/{slug}/homepage", ClubHomepageController::class)->name("club.homepage");
     // Admin
     Route::prefix("admin")->middleware(["user-access:admin", "verified"])->group(function () {
         Route::resource("clubs", RegisteredClubController::class)->names("admin.clubs");
