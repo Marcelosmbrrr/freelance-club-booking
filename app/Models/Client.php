@@ -10,6 +10,9 @@ class Client extends Model
 {
     protected $fillable = [
         'player_id',
+        'club_id',
+        'balance',
+        'debit',
     ];
 
     public function player()

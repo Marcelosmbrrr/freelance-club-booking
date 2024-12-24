@@ -70,6 +70,10 @@ export function ProfileForm() {
 
     return (
         <section className="space-y-4">
+            <div className="flex justify-between items-center rounded-lg border p-4">
+                <h1 className="text-xl font-semibold">Dados Pessoais</h1>
+            </div>
+
             <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
                 <div className="w-32 h-32 overflow-hidden rounded-xl">
                     <img
@@ -79,7 +83,7 @@ export function ProfileForm() {
                     />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="picture">Picture</Label>
+                    <Label htmlFor="picture">Avatar</Label>
                     <Input id="picture" type="file" />
                 </div>
             </div>

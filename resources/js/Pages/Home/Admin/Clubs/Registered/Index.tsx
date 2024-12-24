@@ -28,7 +28,6 @@ import {
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -50,6 +49,7 @@ export type ClubRegistered = {
     state: string;
     city: string;
     phonenumber: string;
+    club: any;
 };
 
 export const columns: ColumnDef<ClubRegistered>[] = [
@@ -90,33 +90,29 @@ export const columns: ColumnDef<ClubRegistered>[] = [
     {
         accessorKey: "cnpj",
         header: "CNPJ",
-        cell: ({ row }) => <div>{row.getValue("cnpj")}</div>,
+        cell: ({ row }) => <div>{row.original.club.cnpj}</div>,
     },
     {
         accessorKey: "trading_name",
         header: "Razão Social",
-        cell: ({ row }) => <div>{row.getValue("trading_name")}</div>,
+        cell: ({ row }) => <div>{row.original.club.trading_name}</div>,
     },
     {
         accessorKey: "state",
         header: "Estado",
-        cell: ({ row }) => <div>{row.getValue("state")}</div>,
+        cell: ({ row }) => <div>{row.original.club.state}</div>,
     },
     {
         accessorKey: "city",
         header: "Cidade",
-        cell: ({ row }) => <div>{row.getValue("city")}</div>,
-    },
-    {
-        accessorKey: "phonenumber",
-        header: "Telefone",
-        cell: ({ row }) => <div>{row.getValue("phonenumber")}</div>,
+        cell: ({ row }) => <div>{row.original.club.city}</div>,
     },
     {
         id: "actions",
+        header: "Ações",
         enableHiding: false,
         cell: ({ row }) => {
-            const club = row.original;
+            const user = row.original;
 
             return (
                 <DropdownMenu>
@@ -127,15 +123,19 @@ export const columns: ColumnDef<ClubRegistered>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Ações</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() =>
-                                router.get(
-                                    "/admin/requests/" + (row.id + 1) + "/edit"
-                                )
+                                router.get(route("admin.clubs.edit", user.id))
                             }
                         >
-                            Abrir Requisição
+                            Editar Clube
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                router.get(route("admin.clubs.show", user.id))
+                            }
+                        >
+                            Ver Clube
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -152,6 +152,8 @@ export default function RegisteredClubs() {
         meta,
         links,
     }: { data: ClubRegistered[]; meta: any; links: any } = pagination;
+
+    console.log(data);
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =

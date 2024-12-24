@@ -17,19 +17,23 @@ class Club extends Model
         'address',
         'city',
         'state',
+        'description',
         'images',
-        'logo_image',
         'slug',
-        'services'
-    ];
+        'instagram',
+        'facebook',
+        'whatsapp',
+        'geolocalization',
+    ];   
 
-    public function courts() {
-        return $this->hasMany(Court::class);
-    }
-    
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function courts()
+    {
+        return $this->hasMany(Court::class);
     }
 
     public function clients()

@@ -6,7 +6,6 @@ import { DeactivateAccountForm } from "./DeactivateAccountForm";
 
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { Button } from "@/components/ui/button";
 
 export function ProfileConfigurationsForm() {
     const { user }: any = usePage().props;

@@ -32,7 +32,8 @@ class ReservationsResource extends JsonResource
         foreach($this->courtTimeSlot as $index => $courtTimeSlot){
             $time_slots[$index] = [
                 "id" => $courtTimeSlot->timeSlot->id,
-                "time" => $courtTimeSlot->timeSlot->time
+                "start_time" => $courtTimeSlot->timeSlot->start_time,
+                "end_time" => $courtTimeSlot->timeSlot->end_time,
             ];
         }  
 

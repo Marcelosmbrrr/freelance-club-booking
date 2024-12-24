@@ -5,11 +5,15 @@ import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { ThemeProvider } from "./components/theme/ThemeProvider";
 import { HomePageProvider } from "@/context/HomePageContext";
 import { Toaster } from "@/components/ui/toaster";
 
 const appName = import.meta.env.VITE_APP_NAME || "App";
+
+const queryClient = new QueryClient();
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -29,7 +33,9 @@ createInertiaApp({
                 disableTransitionOnChange
             >
                 <HomePageProvider>
-                    <App {...props} />
+                    <QueryClientProvider client={queryClient}>
+                        <App {...props} />
+                    </QueryClientProvider>
                     <Toaster />
                 </HomePageProvider>
             </ThemeProvider>

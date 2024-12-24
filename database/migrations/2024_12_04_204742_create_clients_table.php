@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('player_id')->nullable()->constrained('players');
             $table->foreignId('club_id')->nullable()->constrained('clubs');
-            $table->decimal("balance");
-            $table->decimal("debit");
+            $table->decimal("balance")->default(0);
+            $table->decimal("debit")->default(0);;
             $table->timestamps();
         });
     }

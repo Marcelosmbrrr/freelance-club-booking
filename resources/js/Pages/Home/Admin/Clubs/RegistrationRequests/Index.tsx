@@ -90,27 +90,22 @@ export const columns: ColumnDef<ClubRegistration>[] = [
     {
         accessorKey: "cnpj",
         header: "CNPJ",
-        cell: ({ row }) => <div>{row.getValue("cnpj")}</div>,
+        cell: ({ row }) => <div>{row.original.cnpj}</div>,
     },
     {
         accessorKey: "trading_name",
         header: "Razão Social",
-        cell: ({ row }) => <div>{row.getValue("trading_name")}</div>,
+        cell: ({ row }) => <div>{row.original.trading_name}</div>,
     },
     {
         accessorKey: "state",
         header: "Estado",
-        cell: ({ row }) => <div>{row.getValue("state")}</div>,
+        cell: ({ row }) => <div>{row.original.state}</div>,
     },
     {
         accessorKey: "city",
         header: "Cidade",
-        cell: ({ row }) => <div>{row.getValue("city")}</div>,
-    },
-    {
-        accessorKey: "phonenumber",
-        header: "Telefone",
-        cell: ({ row }) => <div>{row.getValue("phonenumber")}</div>,
+        cell: ({ row }) => <div>{row.original.city}</div>,
     },
     {
         id: "actions",
@@ -126,7 +121,6 @@ export const columns: ColumnDef<ClubRegistration>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Ações</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() =>
                                 router.get(route("admin.registration-requests.edit", row.original.id))

@@ -44,26 +44,10 @@ class RegisteredClubController extends Controller
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
         return Inertia::render('Home/Admin/Clubs/Registered/Index', [
-            'pagination' => RegisteredClubResource::collection([]),
+            'pagination' => RegisteredClubResource::collection($data),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -71,7 +55,11 @@ class RegisteredClubController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = $this->userModel->with("club")->find($id);
+
+        return Inertia::render('Home/Admin/Clubs/Registered/ShowClub', [
+            'club' => $user
+        ]);
     }
 
     /**
@@ -79,7 +67,12 @@ class RegisteredClubController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = $this->userModel->find($id);
+
+        return Inertia::render('Home/Admin/Clubs/Registered/EditClub', [
+            'club' => $user
+        ]);
+
     }
 
     /**
@@ -87,7 +80,10 @@ class RegisteredClubController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $user = $this->userModel->find($id);
+
         //
+
     }
 
     /**
@@ -95,6 +91,11 @@ class RegisteredClubController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = $this->userModel->find($id);
+
+        $user->delete();
+
+        return to_route('admin.clubs')
+            ->with('success', 'O clube foi excluído com sucesso.');
     }
 }

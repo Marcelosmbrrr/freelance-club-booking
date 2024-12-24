@@ -3,10 +3,12 @@ import { Link, usePage } from "@inertiajs/react";
 import { SidebarContent } from "@/components/ui/sidebar";
 
 import {
-    Map,
     PieChart,
-    SquareTerminal,
     ChevronRight,
+    Store,
+    Trophy,
+    Wallet,
+    CircleUser
 } from "lucide-react";
 
 import {
@@ -36,7 +38,7 @@ const navMain = [
     {
         title: "Clube",
         url: "#",
-        icon: SquareTerminal,
+        icon: Store,
         requiresVerification: true,
         items: [
             {
@@ -56,14 +58,14 @@ const navMain = [
     {
         title: "Torneios",
         url: "/club/tournaments",
-        icon: Map,
+        icon: Trophy,
         requiresVerification: false,
         items: null,
     },
     {
         title: "Financeiro",
         url: "#",
-        icon: SquareTerminal,
+        icon: Wallet,
         requiresVerification: true,
         items: [
             {
@@ -79,7 +81,7 @@ const navMain = [
     {
         title: "Minha Conta",
         url: "/club/profile",
-        icon: PieChart,
+        icon: CircleUser,
         requiresVerification: false,
         items: null,
     }

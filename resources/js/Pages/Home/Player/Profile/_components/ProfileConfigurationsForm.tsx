@@ -53,6 +53,9 @@ export function ProfileConfigurationsForm() {
     };
     return (
         <section className="space-y-4">
+            <div className="flex justify-between items-center rounded-lg border p-4">
+                <h1 className="text-xl font-semibold">Configurações</h1>
+            </div>
             <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
                 <ChangePasswordForm />
             </div>

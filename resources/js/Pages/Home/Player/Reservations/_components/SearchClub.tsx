@@ -53,156 +53,37 @@ export function SearchClub(props: {
                         <Button type="submit">Procurar Clube</Button>
                     </div>
                     <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="ml-auto">
-                                    Selecionar Esporte <ChevronDown />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuCheckboxItem
-                                    className="capitalize"
-                                    onCheckedChange={(value) =>
-                                        console.log(value)
-                                    }
-                                >
-                                    OK
-                                </DropdownMenuCheckboxItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                        "w-[240px] justify-start text-left font-normal",
-                                        !date && "text-muted-foreground"
-                                    )}
-                                >
-                                    <CalendarIcon />
-                                    {date ? (
-                                        format(date, "PPP")
-                                    ) : (
-                                        <span>Selecionar Data</span>
-                                    )}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                            >
-                                <Calendar
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={setDate}
-                                    initialFocus
-                                    locale={ptBR}
-                                />
-                            </PopoverContent>
-                        </Popover>
                         <Select>
                             <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Selecionar Horário" />
+                                <SelectValue placeholder="Selecionar horário" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Manhã</SelectLabel>
-                                    {/* Manhã: 06:30 até 11:30 */}
-                                    {[
-                                        "06:00",
-                                        "06:30",
-                                        "07:00",
-                                        "07:30",
-                                        "08:00",
-                                        "08:30",
-                                        "09:00",
-                                        "09:30",
-                                        "10:00",
-                                        "10:30",
-                                        "11:00",
-                                        "11:30",
-                                    ].map((time, index) => (
-                                        <SelectItem
-                                            key={`morning-${index}`}
-                                            value={`morning-${index}`}
-                                        >
-                                            {time}
-                                        </SelectItem>
-                                    ))}
-
-                                    <SelectLabel>Tarde</SelectLabel>
-                                    {/* Tarde: 12:00 até 17:30 */}
-                                    {[
-                                        "12:00",
-                                        "12:30",
-                                        "13:00",
-                                        "13:30",
-                                        "14:00",
-                                        "14:30",
-                                        "15:00",
-                                        "15:30",
-                                        "16:00",
-                                        "16:30",
-                                        "17:00",
-                                        "17:30",
-                                    ].map((time, index) => (
-                                        <SelectItem
-                                            key={`afternoon-${index}`}
-                                            value={`afternoon-${index}`}
-                                        >
-                                            {time}
-                                        </SelectItem>
-                                    ))}
-
-                                    <SelectLabel>Noite</SelectLabel>
-                                    {/* Noite: 18:00 até 00:00 */}
-                                    {[
-                                        "18:00",
-                                        "18:30",
-                                        "19:00",
-                                        "19:30",
-                                        "20:00",
-                                        "20:30",
-                                        "21:00",
-                                        "21:30",
-                                        "22:00",
-                                        "22:30",
-                                        "23:00",
-                                        "23:30",
-                                    ].map((time, index) => (
-                                        <SelectItem
-                                            key={`night-${index}`}
-                                            value={`night-${index}`}
-                                        >
-                                            {time}
-                                        </SelectItem>
-                                    ))}
+                                    <SelectItem value="morning">Manhã</SelectItem>
+                                    <SelectItem value="afternoon">
+                                        Tarde
+                                    </SelectItem>
+                                    <SelectItem value="night">
+                                       Noite
+                                    </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                         <Select>
                             <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Estrutura, Área, ...." />
+                                <SelectValue placeholder="Selecionar Esporte" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Estrutura</SelectLabel>
-                                    <SelectItem value="padel">
-                                        Alverania
+                                    <SelectItem value="padel">Padel</SelectItem>
+                                    <SelectItem value="tennis">
+                                        Tennis
                                     </SelectItem>
-                                    <SelectItem value="tenis">
-                                        Panorâmica
+                                    <SelectItem value="grapes">
+                                        Beach Tennis
                                     </SelectItem>
-                                    <SelectItem value="tenis">Mista</SelectItem>
-                                    <SelectLabel>Área</SelectLabel>
-                                    <SelectItem value="tenis">
-                                        Fechado
-                                    </SelectItem>
-                                    <SelectItem value="tenis">
-                                        Aberto
-                                    </SelectItem>
-                                    <SelectItem value="tenis">
-                                        Cobertura
+                                    <SelectItem value="pineapple">
+                                        Squash
                                     </SelectItem>
                                 </SelectGroup>
                             </SelectContent>

@@ -62,9 +62,7 @@ export default function LoginAdmin({
                     <CardContent>
                         <form className="grid gap-4" onSubmit={submit}>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">
-                                    Endereço de e-mail
-                                </Label>
+                                <Label htmlFor="email">E-mail</Label>
                                 <Input
                                     id="email"
                                     type="email"

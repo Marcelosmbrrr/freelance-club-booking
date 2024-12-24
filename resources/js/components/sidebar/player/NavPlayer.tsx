@@ -2,7 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 
 import { SidebarContent } from "@/components/ui/sidebar";
 
-import { PieChart, SquareTerminal, ChevronRight } from "lucide-react";
+import { PieChart, ChevronRight, CalendarDays, Wallet, Trophy, CircleUser } from "lucide-react";
 
 import {
     Collapsible,
@@ -31,7 +31,7 @@ const navMain = [
     {
         title: "Reservas",
         url: "",
-        icon: SquareTerminal,
+        icon: CalendarDays,
         requiresVerification: true,
         items: [
             {
@@ -47,7 +47,7 @@ const navMain = [
     {
         title: "Torneios",
         url: "#",
-        icon: SquareTerminal,
+        icon: Trophy,
         requiresVerification: true,
         items: [
             {
@@ -63,7 +63,7 @@ const navMain = [
     {
         title: "Pagamentos",
         url: "#",
-        icon: SquareTerminal,
+        icon: Wallet,
         requiresVerification: true,
         items: [
             {
@@ -83,7 +83,7 @@ const navMain = [
     {
         title: "Minha Conta",
         url: "/player/profile",
-        icon: PieChart,
+        icon: CircleUser,
         requiresVerification: false,
         items: null,
     },

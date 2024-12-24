@@ -53,14 +53,14 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function player()
-    {
-        return $this->hasOne(Player::class);
-    }
-
     public function club()
     {
         return $this->hasOne(Club::class);
+    }
+
+    public function player()
+    {
+        return $this->hasOne(Player::class);
     }
 
 }

@@ -95,7 +95,8 @@ class ShowCourtResource extends JsonResource
                 foreach($reservation->courtTimeSlot as $indexx => $courtTimeSlot){
                     $time_slots[$indexx] = [
                         "id" => $courtTimeSlot->timeSlot->id,
-                        "time" => $courtTimeSlot->timeSlot->time
+                        "start_time" => $courtTimeSlot->timeSlot->start_time,
+                        "end_time" => $courtTimeSlot->timeSlot->end_time
                     ];
                 }   
                 

@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $fillable = ['player_id', 'court_id', 'status', 'date'];
+    protected $fillable = [
+        'player_id',
+        'court_id',
+        'total_players',
+        'is_public',
+        'date',
+        'is_filled',
+        'status',
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -35,12 +43,14 @@ class Reservation extends Model
         return $this->hasOneThrough(Club::class, Court::class, 'id', 'id', 'court_id', 'club_id');
     }
 
-    /* 
-        - reservation_court_time_slot is an intermediary table
-    */
-    public function courtTimeSlot()
+    public function timeSlots()
     {
         return $this->belongsToMany(CourtTimeSlot::class, 'reservation_court_time_slot', 'reservation_id', 'court_time_slot_id');
+    }
+
+    public function slots()
+    {
+        return $this->hasMany(ReservationSlot::class);
     }
 
 }

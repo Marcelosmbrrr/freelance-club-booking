@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Reservation;
 use App\Models\Club;
-use App\Http\Resources\Player\Reservations\CreateReservationResource;
+use App\Http\Resources\Player\Reservations\Create\ClubListForReservationResource;
+use App\Http\Resources\Player\Reservations\Create\CreateReservationForSelectedClubResource;
 use App\Http\Resources\Player\Reservations\ReservationsResource;
 use App\Http\Resources\Player\Reservations\EditReservationResource;
 use App\Http\Resources\Player\Reservations\ShowReservationResource;
@@ -62,30 +63,41 @@ class PlayerReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request, string $club_id = null)
     {
-        $search = $request->input('search');
-        $searchBy = $request->input('search_by', 'id');
-        $orderBy = $request->input('order_by', 'id');
-        $order = $request->input('order', 'asc');
-        $limit = $request->input('limit', 10);
-        $page = $request->input('page', 1);
+        if(!$club_id) {
 
-        $query = $this->clubModel->query();
+            $search = $request->input('search');
+            $searchBy = $request->input('search_by', 'id');
+            $orderBy = $request->input('order_by', 'id');
+            $order = $request->input('order', 'asc');
+            $limit = $request->input('limit', 10);
+            $page = $request->input('page', 1);
 
-        if ($search && $searchBy) {
-            $query->where($searchBy, 'like', '%' . $search . '%');
+            $query = $this->clubModel->query();
+
+            if ($search && $searchBy) {
+                $query->where($searchBy, 'like', '%' . $search . '%');
+            }
+
+            $query->orderBy('clubs.' . $orderBy, $order);
+
+            $data = $query->paginate($limit, ['*'], 'page', $page);
+
+            return Inertia::render('Home/Player/Reservations/Create/ClubListForReservation', [
+                'pagination' =>  ClubListForReservationResource::collection($data),
+                'queryParams' => request()->query() ?: null,
+                'success' => session('success')
+            ]);
+
         }
 
-        $query->orderBy('clubs.' . $orderBy, $order);
+        $club = $this->clubModel->with(['user', 'courts'])->find($club_id);
 
-        $data = $query->paginate($limit, ['*'], 'page', $page);
-
-        return Inertia::render('Home/Player/Reservations/CreateReservation', [
-            'pagination' =>  CreateReservationResource::collection($data),
-            'queryParams' => request()->query() ?: null,
-            'success' => session('success')
+        return Inertia::render('Home/Player/Reservations/Create/CreateReservationForSelectedClub', [
+            'club' =>  new CreateReservationForSelectedClubResource($club)
         ]);
+        
     }
 
     /**

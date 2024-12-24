@@ -10,16 +10,22 @@ class Player extends Model
     protected $fillable = [
         'user_id',
         'phonenumber',
+        'sex',
         'cpf',
         'birth_date',
-        'avatar_image',
+        'best_hand',
         'court_side',
         'match_type',
-        'best_hand'
+        'avatar_image',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

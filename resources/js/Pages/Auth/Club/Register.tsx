@@ -1,7 +1,10 @@
+import * as React from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { FormEventHandler } from "react";
+import axios from "axios";
 
 import { applyCNPJMask } from "@/utils/functions/applyCNPJMask";
+import { statesList } from "@/utils/data/statesList";
 
 import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
@@ -23,6 +26,7 @@ import { Label } from "@/components/ui/label";
 
 export default function RegisterClub({ status }: { status?: string }) {
     const { toast } = useToast();
+    const [cities, setCities] = React.useState<string[]>([]);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
@@ -66,6 +70,25 @@ export default function RegisterClub({ status }: { status?: string }) {
             },
         });
     };
+
+    React.useEffect(() => {
+        getCities();
+    }, [data.state]);
+
+    function getCities() {
+        axios
+            .get(
+                "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" +
+                    data.state +
+                    "/municipios"
+            )
+            .then((response) => {
+                setCities(response.data.map((item: any) => item.nome));
+            })
+            .catch(() => {
+                setCities([]);
+            });
+    }
 
     return (
         <div className="h-screen w-full flex">
@@ -168,16 +191,10 @@ export default function RegisterClub({ status }: { status?: string }) {
                                     <div className="grid gap-2">
                                         <Label htmlFor="email">Estado</Label>
                                         <Combobox
-                                            options={[
-                                                {
-                                                    value: "state-a",
-                                                    label: "Estado A",
-                                                },
-                                                {
-                                                    value: "state-b",
-                                                    label: "Estado B",
-                                                },
-                                            ]}
+                                            options={statesList.map((item) => ({
+                                                value: item,
+                                                label: item,
+                                            }))}
                                             placeholder="Selecionar Estado"
                                             name="state"
                                             id="state"
@@ -194,16 +211,10 @@ export default function RegisterClub({ status }: { status?: string }) {
                                     <div className="grid gap-2">
                                         <Label htmlFor="city">Cidade</Label>
                                         <Combobox
-                                            options={[
-                                                {
-                                                    value: "city-a",
-                                                    label: "Cidade A",
-                                                },
-                                                {
-                                                    value: "city-b",
-                                                    label: "Cidade B",
-                                                },
-                                            ]}
+                                            options={cities.map((item) => ({
+                                                value: item,
+                                                label: item,
+                                            }))}
                                             placeholder="Selecionar Cidade"
                                             name="city"
                                             id="city"

@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
 import InputError from "@/components/InputError";

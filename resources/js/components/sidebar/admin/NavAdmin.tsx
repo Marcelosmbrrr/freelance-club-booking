@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react";
 
-import { Map, SquareTerminal, ChevronRight } from "lucide-react";
+import { ChevronRight, PieChart, Store } from "lucide-react";
 
 import { SidebarContent } from "@/components/ui/sidebar";
 import {
@@ -22,14 +22,14 @@ import {
 const navMain = [
     {
         title: "Dashboard",
-        url: "/admin/dashboard",
-        icon: Map,
+        url: "/dashboard",
+        icon: PieChart,
         items: null,
     },
     {
         title: "Clubes",
         url: "#",
-        icon: SquareTerminal,
+        icon: Store,
         isActive: true,
         items: [
             {
@@ -39,11 +39,7 @@ const navMain = [
             {
                 title: "Requisições de Cadastro",
                 url: "/admin/registration-requests",
-            },
-            {
-                title: "Requisições de Atualização",
-                url: "/admin/update-requests",
-            },
+            }
         ],
     },
 ];

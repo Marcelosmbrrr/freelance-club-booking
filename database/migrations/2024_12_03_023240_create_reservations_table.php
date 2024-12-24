@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('player_id')->constrained('players'); 
             $table->foreignId('court_id')->constrained('courts');  
-            $table->json("guests")->nullable();
+            $table->integer('total_players'); 
+            $table->boolean('is_public');
             $table->date("date");
+            $table->boolean("is_filled");
             $table->enum("status", ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });

@@ -15,16 +15,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique()->nullable()->constrained('users');
             $table->string("cnpj")->unique();
-            $table->string("sports");
             $table->string("trading_name")->unique();
             $table->string("phonenumber")->unique();
-            $table->string("zip_code");
-            $table->string("address");
+            $table->string("zip_code")->nullable();
+            $table->string("address")->nullable();
             $table->string("city");
             $table->string("state");
             $table->string("description")->nullable();
             $table->string("images")->nullable();
             $table->string("slug");
+            $table->string("instagram")->nullable();
+            $table->string("facebook")->nullable();
+            $table->string("whatsapp")->nullable();
+            $table->string("geolocalization")->nullable();
             $table->timestamps();
         });
     }

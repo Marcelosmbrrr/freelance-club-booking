@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { SearchClub } from "./_components/SearchClub";
+
+import { SearchClub } from "../_components/SearchClub";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,11 +19,10 @@ export type Club = {
 };
 
 const breadCrumb = [
-    { name: "Reservas", href: "/player/reservations" },
-    { name: "Criar" },
+    { name: "Clubes" },
 ];
 
-export default function CreateReservation() {
+export default function ClubListForReservation() {
     const { pagination, queryParams = null, success }: any = usePage().props;
 
     const { data, meta, links }: { data: Club[]; meta: any; links: any } =
@@ -47,11 +47,10 @@ export default function CreateReservation() {
                             <div className="size-full">
                                 <img
                                     src={club.image}
-                                    className="aspect-[3/2] size-full object-cover object-center rounded-t-lg"
+                                    className="aspect-[3/2] size-full object-cover object-centered rounded-t-lg"
                                 />
                             </div>
                         </div>
-
                         <div className="px-4">
                             <div className="space-x-1">
                                 {club.sports.map((sport) => (
@@ -75,7 +74,7 @@ export default function CreateReservation() {
                                 >
                                     <MapPin />
                                 </Button>
-                                <Button>Reservar</Button>
+                                <Button onClick={() => router.get(route("player.reservations.create.club", club.id))}>Reservar</Button>
                             </div>
                         </div>
                     </a>

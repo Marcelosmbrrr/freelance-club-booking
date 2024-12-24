@@ -128,7 +128,7 @@ export default function CreateCourt() {
                             </div>
                             <div className="w-full">
                                 <Label htmlFor="structure_type">
-                                    Tipo de Estrutura *
+                                    Tipo de Quadra *
                                 </Label>
                                 <Select
                                     value={data.structure_type}
@@ -193,7 +193,7 @@ export default function CreateCourt() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="grass_type">
-                                Tipo de grama (opcional)
+                                Tipo de Superfície (opcional)
                             </Label>
                             <Input
                                 id="grass_type"
@@ -309,7 +309,7 @@ export default function CreateCourt() {
                     <div className="rounded-lg space-y-4 border p-8">
                         <div className="space-y-2">
                             <h1 className="text-xl font-semibold">
-                                Disponibilidade
+                                Horário de Funcionamento
                             </h1>
                             <p className="text-gray-600">
                                 Selecione os blocos de horário disponíveis da
@@ -394,7 +394,7 @@ export default function CreateCourt() {
                     {/* Form 3 - Image */}
                     <div className="rounded-lg border p-8">
                         <div className="mb-2 space-y-2">
-                            <h1 className="text-xl font-semibold">Imagens</h1>
+                            <h1 className="text-xl font-semibold">Fotos da Quadra</h1>
                             <p className="text-gray-600">
                                 Clique no botão abaixo para carregar e organizar
                                 as imagens da quadra.
