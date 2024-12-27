@@ -62,9 +62,7 @@ class ClubCourtController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Home/Club/Courts/CreateCourt', [
-            "time_slots" => $this->timeSlotModel->select(['id', 'start_time', 'end_time'])->get()
-        ]);
+        return Inertia::render('Home/Club/Courts/CreateCourt');
     }
 
     /**
@@ -82,11 +80,7 @@ class ClubCourtController extends Controller
     {
         $court = $this->courtModel
         ->where("id", $id)
-        ->with([
-            "reservations" => function($query) {
-                $query->with(["player", "courtTimeSlot"]);
-            },
-            "time_slots" => function($query) {
+        ->with(["timeSlots" => function($query) {
                 $query->select('time_slots.id', 'time_slots.start_time', 'time_slots.end_time') 
                     ->addSelect('court_time_slot.weekday', 'court_time_slot.available'); 
             }
@@ -105,12 +99,8 @@ class ClubCourtController extends Controller
     {
         $court = $this->courtModel
         ->where("id", $id)
-        ->with([
-            "reservations" => function($query) {
-                $query->with(["player", "courtTimeSlot"]);
-            },
-            "time_slots" => function($query) {
-                $query->select('time_slots.id') 
+        ->with(["timeSlots" => function($query) {
+                $query->select(['time_slots.id', 'time_slots.start_time', 'time_slots.end_time']) 
                     ->addSelect('court_time_slot.weekday', 'court_time_slot.available'); 
             }
         ])

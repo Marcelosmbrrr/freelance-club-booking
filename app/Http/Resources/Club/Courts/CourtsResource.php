@@ -18,10 +18,6 @@ class CourtsResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['images'] = [];
-        $data['sponsor_images'] = [];
-        $data['logo_image'] = null;
-
         return $data;
     }
 }

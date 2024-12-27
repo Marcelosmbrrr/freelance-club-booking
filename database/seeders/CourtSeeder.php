@@ -39,16 +39,23 @@ class CourtSeeder extends Seeder
         ]);
 
         // Configura imagens da quadra
-        $courtImagesPath = "images/courts/$court->id/";
+        $courtImagesPath = "images/courts/$court->id/general/";
+        $sponsorImagePath = "images/courts/$court->id/sponsor/img.jpg";
 
         $court->update([
-            'images' => $courtImagesPath
+            'images' => $courtImagesPath,
+            'sponsor_image' => $sponsorImagePath
         ]);
 
-        // Adiciona imagem principal
+        // Adicionar imagens
         Storage::disk('public')->put(
-            $courtImagesPath . 'main.jpg',
+            $courtImagesPath . 'img1.jpg',
             file_get_contents("https://monteseunegocio.boasideias.com.br/wp-content/uploads/sites/8/2022/01/como-montar-quadra-de-tenisd.jpg")
+        );
+
+        Storage::disk('public')->put(
+            $sponsorImagePath,
+            file_get_contents("https://www.logotipo.pt/wp-content/uploads/2016/09/coca-cola-classic-1.jpg")
         );
 
         // Obtém todos os horários disponíveis
@@ -61,10 +68,8 @@ class CourtSeeder extends Seeder
 
         // Define uma lista de horários diferentes por dia
         $weekdaysTimeSlotMap = [
-            'monday'    => $timeSlots->whereBetween('start_time', ['06:30', '12:00'])->pluck('id'),
-            'tuesday'   => $timeSlots->whereBetween('start_time', ['14:00', '20:00'])->pluck('id'),
-            'wednesday' => $timeSlots->whereIn('id', [3, 4, 5]), // Exemplo com IDs específicos
-            'thursday'  => $timeSlots->whereBetween('start_time', ['08:00', '16:00'])->pluck('id'),
+            'monday'    => [1,2,3,4,5,6,7,8,14,15,16,17,18],
+            'wednesday' => $timeSlots->whereIn('id', [3, 4, 5])->pluck('id'),
             'friday'    => $timeSlots->whereNotBetween('start_time', ['12:00', '18:00'])->pluck('id'),
         ];
 

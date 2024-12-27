@@ -30,7 +30,7 @@ import {
 const navMain = [
     {
         title: "Dashboard",
-        url: "#",
+        url: "/dashboard",
         icon: PieChart,
         requiresVerification: false,
         items: null,

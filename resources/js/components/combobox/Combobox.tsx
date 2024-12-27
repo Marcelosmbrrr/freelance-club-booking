@@ -42,7 +42,7 @@ export function Combobox({
     setValue,
 }: ComboboxProps) {
     const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState<string>("");
+    const [selectedValue, setSelectedValue] = React.useState<string>(value ?? "");
 
     function onSelect(newValue: string) {
         setSelectedValue(newValue);

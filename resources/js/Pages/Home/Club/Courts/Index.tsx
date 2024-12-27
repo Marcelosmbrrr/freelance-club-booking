@@ -89,11 +89,11 @@ export const columns: ColumnDef<Court>[] = [
         cell: ({ row }) => <div>{row.getValue("sport")}</div>,
     },
     {
-        accessorKey: "structure_type",
-        header: "Estrutura",
+        accessorKey: "type",
+        header: "Tipo",
         cell: ({ row }) => (
             <div>
-                {row.getValue("structure_type")}
+                {row.getValue("type")}
             </div>
         ),
     },
@@ -109,7 +109,7 @@ export const columns: ColumnDef<Court>[] = [
                 >
                     {row.getValue("status") ? "Ativo" : "Inativo"}
                 </Badge>
-                {Boolean(row.original.reservations) && (
+                {Boolean(row.original.reservations.length) && (
                     <Badge>Reservado</Badge>
                 )}
             </div>

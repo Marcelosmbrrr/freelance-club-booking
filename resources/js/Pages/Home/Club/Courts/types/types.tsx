@@ -1,27 +1,29 @@
 export type Weekday =
+    | "sunday"
     | "monday"
     | "tuesday"
     | "wednesday"
     | "thursday"
     | "friday"
-    | "saturday"
-    | "sunday";
+    | "saturday";
 
 export type TimeSlot = {
-    [key in Weekday]: string[];
+    [key in Weekday]: { start_time: string; end_time: string }[];
 };
 
-export type CreateEditCourtSchema = {
+export interface CreateEditCourtSchema {
     name: string;
     sport: string;
     description: string;
     time_slots: TimeSlot;
     grass_type: string;
-    structure_type: string;
+    floor_type: string;
+    type: string;
     can_play_outside: boolean;
     installation_year: string;
     manufacturer: string;
-    area_type: string;
+    is_covered: boolean;
     status: boolean;
     images: string[];
-};
+    sponsor_image: string[];
+}

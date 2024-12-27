@@ -18,7 +18,8 @@ class ShowCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['images'] = $this->courtImages("court");
+        $data['images'] = $this->courtImages();
+        $data['sponsor_image'] = Storage::url($this->sponsor_image);
         $data["reservations"] = $this->reservationCourtTimeSlots();
         $data['time_slots'] = $this->courtTimeSlots();
 
@@ -27,15 +28,11 @@ class ShowCourtResource extends JsonResource
 
     // Custom
 
-    function courtImages(string $type) {
+    function courtImages() {
 
         $urls = [];
 
-        if($type === "court") {
-            $images = Storage::disk('public')->allFiles($this->images);
-        } else {
-            $images = Storage::disk('public')->allFiles($this->sponsor_images);
-        }
+        $images = Storage::disk('public')->allFiles($this->images);
 
         if (count($images) > 0) {
             $urls = array_map(fn($image) => Storage::url($image), $images);
@@ -46,7 +43,7 @@ class ShowCourtResource extends JsonResource
 
     function courtTimeSlots() {
 
-        $grouped_court_time_slots = $this->time_slots->groupBy('weekday');
+        $grouped_court_time_slots = $this->timeSlots->groupBy('weekday');
 
         $time_slots_array = [
             'monday' => [],

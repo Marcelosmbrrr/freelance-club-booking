@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('manufacturer')->nullable();
             $table->boolean("status")->default(true);
             $table->string("images")->nullable();
+            $table->string("sponsor_image")->nullable();
             $table->decimal("price")->nullable();
             $table->timestamps();
         });

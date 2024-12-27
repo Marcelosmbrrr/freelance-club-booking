@@ -22,8 +22,9 @@ class Court extends Model
         'manufacturer',
         'status',
         'images',
+        'sponsor_image',
         'price',
-    ];   
+    ]; 
     
     public function club()
     {

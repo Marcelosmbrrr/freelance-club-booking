@@ -1,12 +1,17 @@
 import * as React from "react";
 import { Head, usePage, useForm, Link } from "@inertiajs/react";
-
+// Components
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import InputError from "@/components/InputError";
-
-import { Weekday } from "./types/types";
+import { CourtImages } from "./_components/image-selector/CourtImages";
+import { TimeSlotSelector } from "./_components/time-slot-selector/TimeSlotSelector";
+// Types
+import { TimeSlot } from "./types/types";
 import { CreateEditCourtSchema } from "./types/types";
-
+// Shadcn
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
     Select,
     SelectContent,
@@ -15,13 +20,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { CourtImages } from "./_components/image-selector/CourtImages";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const breadCrumb = [
     { name: "Quadras", href: "/club/courts" },
@@ -29,24 +36,31 @@ const breadCrumb = [
 ];
 
 export default function EditCourt() {
-    const { court, time_slots }: any = usePage().props;
-    const [weekday, setWeekDay] = React.useState<Weekday>("monday");
+    const { court }: any = usePage().props;
 
     const { data, setData, post, processing, errors, reset } =
         useForm<CreateEditCourtSchema>({
             name: court.data.name,
             sport: court.data.sport,
-            area_type: court.data.area_type,
             description: court.data.description,
             time_slots: court.data.time_slots,
             grass_type: court.data.grass_type,
-            structure_type: court.data.structure_type,
+            floor_type: court.data.floor_type,
+            type: court.data.type,
             can_play_outside: court.data.can_play_outside,
             installation_year: court.data.installation_year,
             manufacturer: court.data.manufacturer,
+            is_covered: court.data.is_covered,
             status: court.data.status,
             images: court.data.images,
+            sponsor_image: court.data.sponsor_image,
         });
+
+    const submit: React.FormEventHandler = (e) => {
+        e.preventDefault();
+
+        // post
+    };
 
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
@@ -54,7 +68,7 @@ export default function EditCourt() {
             {/* Container */}
             <div className="flex justify-center items-center">
                 {/* Forms Container */}
-                <form className="space-y-4 w-full max-w-4xl">
+                <form className="space-y-4 w-full max-w-4xl" onSubmit={submit}>
                     <div className="flex justify-between items-center rounded-lg border p-4">
                         <h1 className="text-xl font-semibold">Editar Quadra</h1>
                     </div>
@@ -63,11 +77,12 @@ export default function EditCourt() {
                         <div className="space-y-2">
                             <h1 className="text-xl font-semibold">Básico</h1>
                             <p className="text-gray-600">
-                                Informe os dados básicos da quadra.
+                                Insira as informações essenciais sobre a quadra
+                                no formulário abaixo.
                             </p>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Nome da quadra *</Label>
+                            <Label htmlFor="name">Nome da Quadra</Label>
                             <Input
                                 id="name"
                                 type="text"
@@ -86,7 +101,7 @@ export default function EditCourt() {
                         {/* Linha com selects */}
                         <div className="flex gap-x-4">
                             <div className="w-full">
-                                <Label htmlFor="sport">Esporte *</Label>
+                                <Label htmlFor="sport">Esporte</Label>
                                 <Select
                                     value={data.sport}
                                     onValueChange={(value) =>
@@ -98,17 +113,8 @@ export default function EditCourt() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectItem value="tennis">
-                                                Tênis
-                                            </SelectItem>
-                                            <SelectItem value="beach tennis">
-                                                Beach Tênis
-                                            </SelectItem>
                                             <SelectItem value="padel">
                                                 Padel
-                                            </SelectItem>
-                                            <SelectItem value="squash">
-                                                Squash
                                             </SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
@@ -120,12 +126,12 @@ export default function EditCourt() {
                             </div>
                             <div className="w-full">
                                 <Label htmlFor="structure_type">
-                                    Tipo de Quadra *
+                                    Tipo de Quadra
                                 </Label>
                                 <Select
-                                    value={data.structure_type}
+                                    value={data.type}
                                     onValueChange={(value) =>
-                                        setData("structure_type", value)
+                                        setData("type", value)
                                     }
                                 >
                                     <SelectTrigger className="w-full">
@@ -146,112 +152,30 @@ export default function EditCourt() {
                                     </SelectContent>
                                 </Select>
                                 <InputError
-                                    message={errors.structure_type}
-                                    className="mt-2"
-                                />
-                            </div>
-                            <div className="w-full">
-                                <Label htmlFor="area_type">
-                                    Tipo de Área *
-                                </Label>
-                                <Select
-                                    value={data.area_type}
-                                    onValueChange={(value) =>
-                                        setData("area_type", value)
-                                    }
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Selecione a área" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="indoor">
-                                                Aberto
-                                            </SelectItem>
-                                            <SelectItem value="outdoor">
-                                                Fechado
-                                            </SelectItem>
-                                            <SelectItem value="covered">
-                                                Cobertura
-                                            </SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                                <InputError
-                                    message={errors.area_type}
+                                    message={errors.type}
                                     className="mt-2"
                                 />
                             </div>
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="grass_type">
-                                Tipo de Superfície (opcional)
-                            </Label>
-                            <Input
-                                id="grass_type"
-                                type="text"
-                                name="grass_type"
-                                placeholder="Informe o tipo de grama"
-                                value={data.grass_type}
-                                onChange={(e) =>
-                                    setData("grass_type", e.target.value)
-                                }
-                            />
-                            <InputError
-                                message={errors.grass_type}
-                                className="mt-2"
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="manufacturer">
-                                Fabricante (opcional)
-                            </Label>
-                            <Input
-                                id="manufacturer"
-                                type="text"
-                                name="manufacturer"
-                                placeholder="Informe o fabricante"
-                                value={data.name}
-                                onChange={(e) =>
-                                    setData("manufacturer", e.target.value)
-                                }
-                            />
-                            <InputError
-                                message={errors.manufacturer}
-                                className="mt-2"
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="installation_year">
-                                Ano de Instalação (opcional)
-                            </Label>
-                            <Input
-                                id="installation_year"
-                                type="text"
-                                name="installation_year"
-                                placeholder="Informe o ano de instalação"
-                                value={data.installation_year}
-                                onChange={(e) =>
-                                    setData("installation_year", e.target.value)
-                                }
-                            />
-                            <InputError
-                                message={errors.installation_year}
-                                className="mt-2"
-                            />
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="grid w-full items-center gap-2">
-                                <Label htmlFor="description">
-                                    Descrição (opcional)
+                        <div className="flex flex-col space-y-4">
+                            <div>
+                                <Label htmlFor="is_covered">
+                                    Cobertura da quadra
                                 </Label>
-                                <Textarea
-                                    value={data.description}
-                                    placeholder="Informe a descrição da quadra"
-                                    onChange={(e) =>
-                                        setData("description", e.target.value)
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Switch
+                                    id="is_covered"
+                                    checked={data.is_covered}
+                                    onCheckedChange={(v) =>
+                                        setData("is_covered", v)
                                     }
                                 />
+                                <Label htmlFor="is_covered">
+                                    {data.is_covered
+                                        ? "Com cobertura"
+                                        : "Sem cobertura"}
+                                </Label>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-4">
@@ -296,6 +220,120 @@ export default function EditCourt() {
                                 </Label>
                             </div>
                         </div>
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger>
+                                    Informações Opcionais
+                                </AccordionTrigger>
+                                <AccordionContent className="grid gap-4 rounded-lg py-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="floor_type">
+                                            Tipo de Superfície (opcional)
+                                        </Label>
+                                        <Input
+                                            id="floor_type"
+                                            type="text"
+                                            name="floor_type"
+                                            placeholder="Informe o tipo de superfície"
+                                            value={data.floor_type}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "floor_type",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.floor_type}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="grass_type">
+                                            Tipo de Grama (opcional)
+                                        </Label>
+                                        <Input
+                                            id="grass_type"
+                                            type="text"
+                                            name="grass_type"
+                                            placeholder="Informe o tipo de grama"
+                                            value={data.grass_type}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "grass_type",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.grass_type}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="manufacturer">
+                                            Fabricante (opcional)
+                                        </Label>
+                                        <Input
+                                            id="manufacturer"
+                                            type="text"
+                                            name="manufacturer"
+                                            placeholder="Informe o fabricante"
+                                            value={data.name}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "manufacturer",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.manufacturer}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="installation_year">
+                                            Ano de Instalação (opcional)
+                                        </Label>
+                                        <Input
+                                            id="installation_year"
+                                            type="text"
+                                            name="installation_year"
+                                            placeholder="Informe o ano de instalação"
+                                            value={data.installation_year}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "installation_year",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={errors.installation_year}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="grid w-full items-center gap-2">
+                                            <Label htmlFor="description">
+                                                Descrição (opcional)
+                                            </Label>
+                                            <Textarea
+                                                value={data.description}
+                                                placeholder="Informe a descrição da quadra"
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "description",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     </div>
                     {/* Form 2 - Time Slots */}
                     <div className="rounded-lg space-y-4 border p-8">
@@ -304,104 +342,67 @@ export default function EditCourt() {
                                 Horário de Funcionamento
                             </h1>
                             <p className="text-gray-600">
-                                Selecione os blocos de horário disponíveis da
-                                quadra.
+                                Selecione os dias da semana e blocos de horário
+                                disponíveis da quadra.
                             </p>
                         </div>
-                        <div className="w-1/3">
-                            <Label htmlFor="sport">Dia da Semana</Label>
-                            <Select
-                                value={weekday}
-                                onValueChange={(value: Weekday) =>
-                                    setWeekDay(value)
-                                }
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Selecione o esporte" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="monday">
-                                            Segunda
-                                        </SelectItem>
-                                        <SelectItem value="tuesday">
-                                            Terça
-                                        </SelectItem>
-                                        <SelectItem value="wednesday">
-                                            Quarta
-                                        </SelectItem>
-                                        <SelectItem value="thursday">
-                                            Quinta
-                                        </SelectItem>
-                                        <SelectItem value="friday">
-                                            Sexta
-                                        </SelectItem>
-                                        <SelectItem value="saturday">
-                                            Sábado
-                                        </SelectItem>
-                                        <SelectItem value="sunday">
-                                            Domingo
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                            <InputError
-                                message={errors.sport}
-                                className="mt-2"
-                            />
-                        </div>
-                        <div>
-                            <ToggleGroup
-                                type="multiple"
-                                variant="outline"
-                                className="w-full flex flex-wrap gap-4"
-                                value={data.time_slots[weekday]}
-                                onValueChange={(values) =>
-                                    setData("time_slots", {
-                                        ...data.time_slots,
-                                        [weekday]: values,
-                                    })
-                                }
-                            >
-                                {time_slots.map(
-                                    (time_slot: {
-                                        id: string;
-                                        start_time: string;
-                                        end_time: string;
-                                    }) => (
-                                        <ToggleGroupItem
-                                            key={time_slot.id}
-                                            value={time_slot.id}
-                                            aria-label="Toggle bold"
-                                            className="flex-grow md:flex-none md:w-1/4 p-2 text-center border rounded"
-                                        >
-                                            {time_slot.start_time} -{" "}
-                                            {time_slot.end_time}
-                                        </ToggleGroupItem>
-                                    )
-                                )}
-                            </ToggleGroup>
-                        </div>
+                        <TimeSlotSelector
+                            data={data.time_slots}
+                            setData={(time_slots: TimeSlot) =>
+                                setData("time_slots", time_slots)
+                            }
+                        />
                     </div>
                     {/* Form 3 - Image */}
                     <div className="rounded-lg border p-8">
-                        <div className="mb-2 space-y-2">
-                            <h1 className="text-xl font-semibold">Fotos da Quadra</h1>
-                            <p className="text-gray-600">
-                                Clique no botão abaixo para carregar e organizar
-                                as imagens da quadra.
-                            </p>
+                        <div>
+                            <div className="mb-2 space-y-2">
+                                <h1 className="text-xl font-semibold">
+                                    Fotos da Quadra (opcional)
+                                </h1>
+                                <p className="text-gray-600">
+                                    Clique no botão abaixo para carregar e
+                                    organizar as fotos da quadra.
+                                </p>
+                            </div>
+                            <div>
+                                <InputError message={errors.images} />
+                            </div>
+                            <div>
+                                <CourtImages
+                                    setImages={(urls: string[]) =>
+                                        setData("images", urls)
+                                    }
+                                    images={data.images}
+                                    multiple
+                                />
+                            </div>
+                        </div>
+                        <div className="py-6">
+                            <Separator />
                         </div>
                         <div>
-                            <InputError message={errors.images} />
-                        </div>
-                        <div>
-                            <CourtImages
-                                setImages={(urls: string[]) =>
-                                    setData("images", urls)
-                                }
-                                images={data.images}
-                            />
+                            <div className="mb-2 space-y-2">
+                                <h1 className="text-xl font-semibold">
+                                    Patrocinador da Quadra (opcional)
+                                </h1>
+                                <p className="text-gray-600">
+                                    Clique no botão abaixo para carregar a foto
+                                    do patrocinador da quadra.
+                                </p>
+                            </div>
+                            <div>
+                                <InputError message={errors.images} />
+                            </div>
+                            <div>
+                                <CourtImages
+                                    setImages={(url: string[]) =>
+                                        setData("images", url)
+                                    }
+                                    images={data.sponsor_image}
+                                    saveAs="sponsor"
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-end gap-x-2">
