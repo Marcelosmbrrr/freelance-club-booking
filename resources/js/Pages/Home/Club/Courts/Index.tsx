@@ -15,11 +15,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    Trash2,
-    MoreHorizontal,
-    CirclePlus,
-} from "lucide-react";
+import { Trash2, MoreHorizontal, CirclePlus } from "lucide-react";
 import {
     Tooltip,
     TooltipContent,
@@ -47,7 +43,7 @@ import {
 export type Court = {
     id: string;
     name: string;
-    sport: "padel" | "tenis" | "squash";
+    sport: "padel" | "tennis" | "squash";
     type: "indoor" | "outdoor";
     reservations: [];
     status: string;
@@ -80,22 +76,18 @@ export const columns: ColumnDef<Court>[] = [
     },
     {
         accessorKey: "name",
-        header: "Nome",
+        header: "Name",
         cell: ({ row }) => <div>{row.getValue("name")}</div>,
     },
     {
-        accessorKey: "sport",
-        header: "Esporte",
-        cell: ({ row }) => <div>{row.getValue("sport")}</div>,
+        accessorKey: "price",
+        header: "Price",
+        cell: ({ row }) => <div>{row.getValue("price")}</div>,
     },
     {
-        accessorKey: "type",
-        header: "Tipo",
-        cell: ({ row }) => (
-            <div>
-                {row.getValue("type")}
-            </div>
-        ),
+        accessorKey: "sport",
+        header: "Sport",
+        cell: ({ row }) => <div>{row.getValue("sport")}</div>,
     },
     {
         accessorKey: "status",
@@ -104,27 +96,29 @@ export const columns: ColumnDef<Court>[] = [
             <div className="flex gap-x-2">
                 <Badge
                     className={
-                        row.getValue("status") ? "bg-green-500 hover:bg-green-400" : "bg-red-500"
+                        row.getValue("status")
+                            ? "bg-green-500 hover:bg-green-400"
+                            : "bg-red-500"
                     }
                 >
-                    {row.getValue("status") ? "Ativo" : "Inativo"}
+                    {row.getValue("status") ? "Active" : "Inactive"}
                 </Badge>
                 {Boolean(row.original.reservations.length) && (
-                    <Badge>Reservado</Badge>
+                    <Badge>Reserved</Badge>
                 )}
             </div>
         ),
     },
     {
         id: "actions",
-        header: "Ações",
+        header: "Actions",
         enableHiding: false,
         cell: ({ row }) => {
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Abrir Menu</span>
+                            <span className="sr-only">Open Menu</span>
                             <MoreHorizontal />
                         </Button>
                     </DropdownMenuTrigger>
@@ -134,7 +128,7 @@ export const columns: ColumnDef<Court>[] = [
                                 router.get("/club/courts/" + row.original.id)
                             }
                         >
-                            Ver Quadra
+                            View Court
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() =>
@@ -143,7 +137,7 @@ export const columns: ColumnDef<Court>[] = [
                                 )
                             }
                         >
-                            Editar Quadra
+                            Edit Court
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -152,9 +146,7 @@ export const columns: ColumnDef<Court>[] = [
     },
 ];
 
-const breadCrumb = [
-    { name: "Quadras" }
-];
+const breadCrumb = [{ name: "Courts" }];
 
 export default function Courts() {
     const { pagination, queryParams = null, success }: any = usePage().props;
@@ -188,10 +180,10 @@ export default function Courts() {
 
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
-            <Head title="Clubes" />
+            <Head title="Clubs" />
             <div className="w-full">
                 <div className="flex justify-between items-center py-4">
-                    <Input placeholder="Pesquisar" className="max-w-sm"/>
+                    <Input placeholder="Search" className="max-w-sm" />
                     <div className="flex items-center space-x-2">
                         <TooltipProvider>
                             <Tooltip>
@@ -205,7 +197,7 @@ export default function Courts() {
                                         <Trash2 />
                                     </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>Deletar</TooltipContent>
+                                <TooltipContent>Delete</TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                         <Button
@@ -213,7 +205,7 @@ export default function Courts() {
                             className="ml-auto"
                             onClick={() => router.get("/club/courts/create")}
                         >
-                            Criar Quadra <CirclePlus />
+                            Create Court <CirclePlus />
                         </Button>
                     </div>
                 </div>
@@ -261,7 +253,7 @@ export default function Courts() {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        Nenhuma quadra encontrada.
+                                        No courts found.
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -270,9 +262,9 @@ export default function Courts() {
                 </div>
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <div className="flex-1 text-sm text-muted-foreground">
-                        {table.getFilteredSelectedRowModel().rows.length} de{" "}
-                        {table.getFilteredRowModel().rows.length} linha(s)
-                        selecionadas.
+                        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                        {table.getFilteredRowModel().rows.length} row(s)
+                        selected.
                     </div>
                     <div className="space-x-2">
                         <Button
@@ -281,7 +273,7 @@ export default function Courts() {
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
                         >
-                            Anterior
+                            Previous
                         </Button>
                         <Button
                             variant="outline"
@@ -289,7 +281,7 @@ export default function Courts() {
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
                         >
-                            Próximo
+                            Next
                         </Button>
                     </div>
                 </div>

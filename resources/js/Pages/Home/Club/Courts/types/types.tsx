@@ -26,4 +26,5 @@ export interface CreateEditCourtSchema {
     status: boolean;
     images: string[];
     sponsor_image: string[];
+    price: string;
 }

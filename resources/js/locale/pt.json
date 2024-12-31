@@ -1,0 +1,84 @@
+{
+    "translation": {
+
+        "welcome": {
+
+            "player": {
+                "header": {
+                    "begin": "Início",
+                    "features": "Funcionalidades",
+                    "advantages": "Vantagens",
+                    "advantage": "Vantagem",
+                    "pricing": "Planos",
+                    "page-toggle": "Sou Clube",
+                    "mobile-login": "Acesso para Jogadores"
+                },
+                "hero": {
+                    "title": "Agende suas partidas com facilidade",
+                    "description": "Nosso aplicativo facilita o agendamento de reservas, permitindo que jogadores se conectem, escolham clubes e horários de forma fácil e rápida"
+                },
+                "features": {
+                    "hint": "O que oferecemos?",
+                    "title": "Oferecemos o melhor do setor para você"
+                },
+                "advantages": {
+                    "hint": "Por que somos únicos?",
+                    "title": "Oferecemos o melhor do setor para você",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo. Voluptatum amet architecto suscipit pariatur eligendi repellendus mollitia dolore unde sint?"
+                },
+                "plans": {
+                    "title": "Planos para jogadores",
+                    "description": "Reserve quadras, encontre partidas e conecte-se com outros jogadores agora mesmo!"
+                }
+            },
+
+            "club": {
+                "header": {
+                    "begin": "Início",
+                    "features": "Funcionalidades",
+                    "pricing": "Planos",
+                    "advantages": "Vantagens",
+                    "advantage": "Vantagem",
+                    "page-toggle": "Sou Jogador",
+                    "mobile-login": "Acesso para Clubes"
+                },
+                "hero": {
+                    "title": "Gerencie seu clube com facilidade",
+                    "description": "Nosso aplicativo oferece ferramentas práticas para clubes, facilitando o gerenciamento de reservas, acompanhamento de horários e conexão com seus clientes"
+                },
+                "features": {
+                    "hint": "O que oferecemos?",
+                    "title": "Oferecemos o melhor do setor para você"
+                },
+                "advantages": {
+                    "hint": "Por que somos únicos?",
+                    "title": "Oferecemos o melhor do setor para você",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo. Voluptatum amet architecto suscipit pariatur eligendi repellendus mollitia dolore unde sint?",
+                    "advantages": "Vantagens",
+                    "advantage": "Vantagem"
+                },
+                "plans": {
+                    "title": "Planos para Clubes",
+                    "description": "Gerencie reservas, organize eventos e conecte-se com os clientes do seu clube agora mesmo!"
+                }
+            },
+
+            "login": "Login",
+            "all-rights-reserved": "Todos os direitos reservados",
+            "terms-and-conditions": "Termos e condições",
+            "privacy-policy": "Política de privacidade",
+            "per-month": "Por mês",
+            "free": "Gratuito",
+            "basic": "Básico",
+            "professional": "Profissional",
+            "start-with-free-plan": "Comece com o plano gratuito",
+            "start-with-basic-plan": "Comece com o plano básico",
+            "start-with-professional-plan": "Comece com o plano Pro",
+            "features": "Funcionalidades",
+            "feature": "Funcionalidade",
+            "advantages": "Vantagens",
+            "advantage": "Vantagem",
+            "footer": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis accusantium tempore consequuntur perspiciatis."
+        }
+    }
+}

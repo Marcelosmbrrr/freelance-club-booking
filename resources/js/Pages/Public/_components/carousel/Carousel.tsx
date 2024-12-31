@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Carousel,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 
 export function AppCarousel() {
+    const { t } = useTranslation();
     return (
         <Carousel className="w-full mx-auto max-w-4xl -mt-44">
             <CarouselContent>

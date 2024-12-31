@@ -1,8 +1,8 @@
-"use client";
-
 import { useHomePage } from "@/context/HomePageContext";
 
 import { Check } from "lucide-react";
+
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -46,24 +46,27 @@ const data = {
 
 const Pricing = () => {
     const { homePageType } = useHomePage();
+    const { t } = useTranslation();
     return (
         <section id="pricing" className="py-32 border-t">
             <div className="container mx-auto">
                 <div className="mx-auto flex max-w-screen-xl flex-col gap-6">
                     <h2 className="text-pretty text-4xl font-bold lg:text-5xl">
-                        {data[homePageType].title}
+                        {t(`welcome.${homePageType}.plans.title`)}
                     </h2>
                     <div className="flex flex-col justify-between gap-10 md:flex-row">
                         <p className="max-w-screen-md text-muted-foreground lg:text-xl">
-                            {data[homePageType].description}
+                            {t(`welcome.${homePageType}.plans.description`)}
                         </p>
                     </div>
                     <div className="flex w-full flex-col items-stretch gap-6 md:flex-row">
                         <div className="flex w-full flex-col rounded-lg border p-6 text-left">
-                            <Badge className="mb-8 block w-fit">FREE</Badge>
+                            <Badge className="mb-8 block w-fit">
+                                {t(`welcome.free`)}
+                            </Badge>
                             <span className="text-4xl font-medium">R$0</span>
                             <p className="invisible text-muted-foreground">
-                                Por mês
+                                {t(`welcome.per-month`)}
                             </p>
                             <Separator className="my-6" />
                             <div className="flex flex-col justify-between gap-20">
@@ -91,9 +94,13 @@ const Pricing = () => {
                             </div>
                         </div>
                         <div className="flex w-full flex-col rounded-lg border p-6 text-left">
-                            <Badge className="mb-8 block w-fit">BÁSICO</Badge>
+                            <Badge className="mb-8 block w-fit">
+                                {t(`welcome.basic`)}
+                            </Badge>
                             <span className="text-4xl font-medium">R$9</span>
-                            <p className="text-muted-foreground">Por mês</p>
+                            <p className="text-muted-foreground">
+                                {t(`welcome.per-month`)}
+                            </p>
                             <Separator className="my-6" />
                             <div className="flex h-full flex-col justify-between gap-20">
                                 <ul className="space-y-4 text-muted-foreground">
@@ -117,11 +124,11 @@ const Pricing = () => {
                         </div>
                         <div className="flex w-full flex-col rounded-lg border bg-muted p-6 text-left">
                             <Badge className="mb-8 block w-fit">
-                                PROFISSIONAL
+                                {t(`welcome.professional`)}
                             </Badge>
                             <span className="text-4xl font-medium">R$19</span>
                             <p className="text-muted-foreground">
-                                Por usuário/mês
+                                {t(`welcome.per-month`)}
                             </p>
                             <Separator className="my-6" />
                             <div className="flex h-full flex-col justify-between gap-20">

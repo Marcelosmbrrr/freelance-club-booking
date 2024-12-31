@@ -1,26 +1,30 @@
+import { useHomePage } from "@/context/HomePageContext";
+
 import { Infinity, MessagesSquare, Zap, ZoomIn } from "lucide-react";
+
+import { useTranslation } from "react-i18next";
 
 const feature = [
     {
-        title: "Vantagem 1",
+        title: "Vantagem",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo.",
         icon: <ZoomIn className="size-6" />,
     },
     {
-        title: "Vantagem 2",
+        title: "Vantagem",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo.",
         icon: <Zap className="size-6" />,
     },
     {
-        title: "Vantagem 3",
+        title: "Vantagem",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo.",
         icon: <MessagesSquare className="size-6" />,
     },
     {
-        title: "Vantagem 4",
+        title: "Vantagem",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo.",
         icon: <Infinity className="size-6" />,
@@ -28,6 +32,8 @@ const feature = [
 ];
 
 const Features = () => {
+    const { homePageType } = useHomePage();
+    const { t } = useTranslation();
     return (
         <section
             id="advantages"
@@ -37,18 +43,16 @@ const Features = () => {
                 <div className="flex w-full flex-col items-center">
                     <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6 md:max-w-3xl md:text-center">
                         <p className="text-sm text-muted-foreground">
-                            Por que somos únicos?
+                            {t(`welcome.${homePageType}.advantages.hint`)}
                         </p>
                         <h2 className="text-3xl font-medium md:text-5xl">
-                            Oferecemos o melhor do setor para você
+                            {t(`welcome.${homePageType}.advantages.title`)}
                         </h2>
 
                         <p className="text-muted-foreground md:max-w-2xl">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Quasi necessitatibus, culpa at vitae molestias
-                            tenetur explicabo. Voluptatum amet architecto
-                            suscipit pariatur eligendi repellendus mollitia
-                            dolore unde sint?
+                            {t(
+                                `welcome.${homePageType}.advantages.description`
+                            )}
                         </p>
                     </div>
                 </div>
@@ -63,7 +67,7 @@ const Features = () => {
                             </span>
                             <div>
                                 <h3 className="text-lg font-medium md:text-2xl">
-                                    {feature.title}
+                                    {t("welcome.advantage")}
                                 </h3>
                                 <p className="mt-2 text-muted-foreground">
                                     {feature.description}

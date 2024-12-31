@@ -1,5 +1,6 @@
 import "../css/app.css";
 import "./bootstrap";
+import "./lib/i18next";
 
 import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
@@ -12,7 +13,6 @@ import { HomePageProvider } from "@/context/HomePageContext";
 import { Toaster } from "@/components/ui/toaster";
 
 const appName = import.meta.env.VITE_APP_NAME || "App";
-
 const queryClient = new QueryClient();
 
 createInertiaApp({

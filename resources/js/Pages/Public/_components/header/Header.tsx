@@ -4,21 +4,14 @@ import * as React from "react";
 import { router } from "@inertiajs/react";
 
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
 import { useHomePage } from "@/context/HomePageContext";
 import { AppIcon } from "@/components/icons/AppIcon";
 
-import { Menu, User, Store } from "lucide-react";
+import { Menu, Store } from "lucide-react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
 import {
     Sheet,
     SheetContent,
@@ -27,41 +20,14 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
-const menuOptions: { name: string; href: string }[] = [
-    { name: "Início", href: "begin" },
-    { name: "Funcionalidades", href: "features" },
-    { name: "Vantagens", href: "advantages" },
-    { name: "Planos", href: "pricing" },
-];
-
-const selectItems = [
-    {
-        title: "Acesso de Jogador",
-        description: "Aplicativo para jogadores",
-        icon: <User className="size-5 shrink-0" />,
-        href: "player/login",
-    },
-    {
-        title: "Acesso de Clube",
-        description: "Aplicativo para clubes",
-        icon: <Store className="size-5 shrink-0" />,
-        href: "club/login",
-    },
-];
-
-const data = {
-    player: {
-        button: "Sou Clube",
-    },
-    club: {
-        button: "Sou Jogador",
-    },
-};
+const menuOptions: string[] = ["begin", "features", "advantages", "pricing"];
 
 const Header = () => {
     const { handleChangeHomePage, homePageType } = useHomePage();
     const [isScrolled, setIsScrolled] = React.useState(false);
+    const { t } = useTranslation();
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -92,17 +58,18 @@ const Header = () => {
                         </div>
                         <div className="flex items-center">
                             {menuOptions.map((option, idx) => (
-                                <a
+                                <Button
                                     key={idx}
-                                    href={`#${option.href}`}
-                                    className={cn(
-                                        "text-muted-foreground text-gray-300",
-                                        navigationMenuTriggerStyle,
-                                        buttonVariants({ variant: "ghost" })
-                                    )}
+                                    variant="ghost"
+                                    className="hover:bg-transparent"
                                 >
-                                    {option.name}
-                                </a>
+                                    <a
+                                        href={`#${option}`}
+                                        className="text-gray-300 hover:text-white"
+                                    >
+                                        {t(`welcome.${homePageType}.header.${option}`)}
+                                    </a>
+                                </Button>
                             ))}
                         </div>
                     </div>
@@ -111,16 +78,17 @@ const Header = () => {
                             className="bg-white hover:bg-white text-neutral-800"
                             onClick={() => router.get("/login")}
                         >
-                            Acessar
+                            {t("welcome.login")}
                         </Button>
                         <Button
                             onClick={handleChangeHomePage}
                             className="bg-amber-300 text-neutral-800 font-medium hover:bg-amber-200"
                         >
                             <Store />
-                            {data[homePageType].button}
+                            {t(`welcome.${homePageType}.header.page-toggle`)}
                         </Button>
                         <ThemeToggle />
+                        <LanguageSelector />
                     </div>
                 </nav>
                 {/* Menu Mobile */}
@@ -133,8 +101,12 @@ const Header = () => {
                         <div className="flex space-x-2">
                             <Sheet>
                                 <SheetTrigger asChild>
-                                    <Button variant="outline" size="icon">
-                                        <Menu className="size-4" />
+                                    <Button
+                                        className="bg-white dark:bg-white border-none"
+                                        variant="outline"
+                                        size="icon"
+                                    >
+                                        <Menu className="size-4 text-neutral-900 dark:text-neutral-900" />
                                     </Button>
                                 </SheetTrigger>
                                 <SheetContent className="overflow-y-auto">
@@ -152,20 +124,21 @@ const Header = () => {
                                         {menuOptions.map((option, idx) => (
                                             <a
                                                 key={idx}
-                                                href={`#${option.href}`}
+                                                href={`#${option}`}
                                                 className="font-semibold"
                                             >
-                                                {option.name}
+                                                {t(`welcome.${homePageType}.header.${option}`)}
                                             </a>
                                         ))}
                                     </div>
                                     <div className="border-t pt-4">
                                         <div className="mt-2 flex flex-col gap-3">
-                                            {selectItems.map((item, idx) => (
-                                                <Button key={idx}>
-                                                    {item.title}
-                                                </Button>
-                                            ))}
+                                            <Button>
+                                                {t(`welcome.player.header.mobile-login`)}
+                                            </Button>
+                                            <Button>
+                                                {t(`welcome.club.header.mobile-login`)}
+                                            </Button>
                                         </div>
                                     </div>
                                 </SheetContent>
@@ -175,9 +148,10 @@ const Header = () => {
                                 className="bg-amber-300 text-neutral-800 font-medium hover:bg-amber-200"
                             >
                                 <Store />
-                                {data[homePageType].button}
+                                {t(`welcome.${homePageType}.header.page-toggle`)}
                             </Button>
                             <ThemeToggle />
+                            <LanguageSelector />
                         </div>
                     </div>
                 </div>

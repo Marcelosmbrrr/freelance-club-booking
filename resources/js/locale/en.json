@@ -1,0 +1,82 @@
+{
+    "translation": {
+        "welcome": {
+            "player": {
+                "header": {
+                    "begin": "Home",
+                    "features": "Features",
+                    "advantages": "Benefits",
+                    "advantage": "Benefit",
+                    "pricing": "Plans",
+                    "page-toggle": "I’m a Club",
+                    "mobile-login": "Player Access"
+                },
+                "hero": {
+                    "title": "Easily schedule your matches",
+                    "description": "Our app makes it easy to book reservations, connect with players, and choose clubs and times quickly and effortlessly."
+                },
+                "features": {
+                    "hint": "What do we offer?",
+                    "title": "We bring you the best in the game"
+                },
+                "advantages": {
+                    "hint": "Why choose us?",
+                    "title": "We bring you the best in the game",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo. Voluptatum amet architecto suscipit pariatur eligendi repellendus mollitia dolore unde sint?"
+                },
+                "plans": {
+                    "title": "Player Plans",
+                    "description": "Book courts, find matches, and connect with other players today!"
+                }
+            },
+
+            "club": {
+                "header": {
+                    "begin": "Home",
+                    "features": "Features",
+                    "pricing": "Plans",
+                    "advantages": "Benefits",
+                    "advantage": "Benefit",
+                    "page-toggle": "I’m a Player",
+                    "mobile-login": "Club Access"
+                },
+                "hero": {
+                    "title": "Manage your club effortlessly",
+                    "description": "Our app offers practical tools for clubs, making it easy to manage bookings, track schedules, and connect with your customers."
+                },
+                "features": {
+                    "hint": "What do we offer?",
+                    "title": "We bring you the best in the game"
+                },
+                "advantages": {
+                    "hint": "Why choose us?",
+                    "title": "We bring you the best in the game",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi necessitatibus, culpa at vitae molestias tenetur explicabo. Voluptatum amet architecto suscipit pariatur eligendi repellendus mollitia dolore unde sint?",
+                    "advantages": "Benefits",
+                    "advantage": "Benefit"
+                },
+                "plans": {
+                    "title": "Club Plans",
+                    "description": "Manage bookings, organize events, and connect with your club's customers today!"
+                }
+            },
+
+            "login": "Login",
+            "all-rights-reserved": "All rights reserved",
+            "terms-and-conditions": "Terms and Conditions",
+            "privacy-policy": "Privacy Policy",
+            "per-month": "Per month",
+            "free": "Free",
+            "basic": "Basic",
+            "professional": "Professional",
+            "start-with-free-plan": "Start with the free plan",
+            "start-with-basic-plan": "Start with the basic plan",
+            "start-with-professional-plan": "Start with the Pro plan",
+            "features": "Features",
+            "feature": "Feature",
+            "advantages": "Benefits",
+            "advantage": "Benefit",
+            "footer": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis accusantium tempore consequuntur perspiciatis."
+        }
+    }
+}

@@ -60,6 +60,7 @@ export default function CreateCourt() {
             status: true,
             images: [],
             sponsor_image: [],
+            price: "",
         });
 
     const submit: React.FormEventHandler = (e) => {
@@ -76,24 +77,24 @@ export default function CreateCourt() {
                 {/* Forms Container */}
                 <form className="space-y-4 w-full max-w-4xl" onSubmit={submit}>
                     <div className="flex justify-between items-center rounded-lg border p-4">
-                        <h1 className="text-xl font-semibold">Criar Quadra</h1>
+                        <h1 className="text-xl font-semibold">Create Court</h1>
                     </div>
                     {/* Form 1 - Basic */}
                     <div className="grid gap-4 rounded-lg border p-8">
                         <div className="space-y-2">
-                            <h1 className="text-xl font-semibold">Básico</h1>
+                            <h1 className="text-xl font-semibold">Basic</h1>
                             <p className="text-gray-600">
-                                Insira as informações essenciais sobre a quadra
-                                no formulário abaixo.
+                                Enter essential court information in the form
+                                below.
                             </p>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Nome da Quadra</Label>
+                            <Label htmlFor="name">Court name</Label>
                             <Input
                                 id="name"
                                 type="text"
                                 name="name"
-                                placeholder="Informe o nome da quadra"
+                                placeholder="Court name"
                                 value={data.name}
                                 onChange={(e) =>
                                     setData("name", e.target.value)
@@ -107,7 +108,7 @@ export default function CreateCourt() {
                         {/* Linha com selects */}
                         <div className="flex gap-x-4">
                             <div className="w-full">
-                                <Label htmlFor="sport">Esporte</Label>
+                                <Label htmlFor="sport">Sport</Label>
                                 <Select
                                     value={data.sport}
                                     onValueChange={(value) =>
@@ -115,7 +116,7 @@ export default function CreateCourt() {
                                     }
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Selecione o esporte" />
+                                        <SelectValue placeholder="Select an option" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -131,9 +132,7 @@ export default function CreateCourt() {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="structure_type">
-                                    Tipo de Quadra
-                                </Label>
+                                <Label htmlFor="type">Court type</Label>
                                 <Select
                                     value={data.type}
                                     onValueChange={(value) =>
@@ -141,18 +140,18 @@ export default function CreateCourt() {
                                     }
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Selecione a estrutura" />
+                                        <SelectValue placeholder="Select an option" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectItem value="masonry">
-                                                Alvenaria
+                                                Masonry
                                             </SelectItem>
                                             <SelectItem value="panoramic">
-                                                Paranorâmica
+                                                Panoramic
                                             </SelectItem>
                                             <SelectItem value="mixed">
-                                                Mista
+                                                Mixed
                                             </SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
@@ -166,7 +165,7 @@ export default function CreateCourt() {
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <Label htmlFor="is_covered">
-                                    Cobertura da quadra
+                                    Court coverage
                                 </Label>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -179,15 +178,15 @@ export default function CreateCourt() {
                                 />
                                 <Label htmlFor="is_covered">
                                     {data.is_covered
-                                        ? "Com cobertura"
-                                        : "Sem cobertura"}
+                                        ? "With cover"
+                                        : "Without cover"}
                                 </Label>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <Label htmlFor="description">
-                                    Jogadas fora dos limites da quadra
+                                    Off-court plays
                                 </Label>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -200,15 +199,15 @@ export default function CreateCourt() {
                                 />
                                 <Label htmlFor="can_play_outside">
                                     {data.can_play_outside
-                                        ? "Permitido"
-                                        : "Não Permitido"}
+                                        ? "Allowed"
+                                        : "Not allowed"}
                                 </Label>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <Label htmlFor="description">
-                                    Disponibilidade para uso
+                                    Availability
                                 </Label>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -220,27 +219,25 @@ export default function CreateCourt() {
                                     }
                                 />
                                 <Label htmlFor="status">
-                                    {data.status
-                                        ? "Disponível"
-                                        : "Indisponível"}
+                                    {data.status ? "Available" : "Unavailable"}
                                 </Label>
                             </div>
                         </div>
                         <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
                                 <AccordionTrigger>
-                                    Informações Opcionais
+                                    Optional Information
                                 </AccordionTrigger>
                                 <AccordionContent className="grid gap-4 rounded-lg py-4">
                                     <div className="grid gap-2">
                                         <Label htmlFor="floor_type">
-                                            Tipo de Superfície (opcional)
+                                            Surface Type (optional)
                                         </Label>
                                         <Input
                                             id="floor_type"
                                             type="text"
                                             name="floor_type"
-                                            placeholder="Informe o tipo de superfície"
+                                            placeholder="Surface type"
                                             value={data.floor_type}
                                             onChange={(e) =>
                                                 setData(
@@ -256,13 +253,13 @@ export default function CreateCourt() {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="grass_type">
-                                            Tipo de Grama (opcional)
+                                            Grass type (optional)
                                         </Label>
                                         <Input
                                             id="grass_type"
                                             type="text"
                                             name="grass_type"
-                                            placeholder="Informe o tipo de grama"
+                                            placeholder="Grass type"
                                             value={data.grass_type}
                                             onChange={(e) =>
                                                 setData(
@@ -278,13 +275,13 @@ export default function CreateCourt() {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="manufacturer">
-                                            Fabricante (opcional)
+                                            Manufacturer (optional)
                                         </Label>
                                         <Input
                                             id="manufacturer"
                                             type="text"
                                             name="manufacturer"
-                                            placeholder="Informe o fabricante"
+                                            placeholder="Manufacturer"
                                             value={data.name}
                                             onChange={(e) =>
                                                 setData(
@@ -300,13 +297,13 @@ export default function CreateCourt() {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="installation_year">
-                                            Ano de Instalação (opcional)
+                                            Installation year (optional)
                                         </Label>
                                         <Input
                                             id="installation_year"
                                             type="text"
                                             name="installation_year"
-                                            placeholder="Informe o ano de instalação"
+                                            placeholder="Installation year"
                                             value={data.installation_year}
                                             onChange={(e) =>
                                                 setData(
@@ -323,11 +320,11 @@ export default function CreateCourt() {
                                     <div className="flex gap-4">
                                         <div className="grid w-full items-center gap-2">
                                             <Label htmlFor="description">
-                                                Descrição (opcional)
+                                                Description (optional)
                                             </Label>
                                             <Textarea
                                                 value={data.description}
-                                                placeholder="Informe a descrição da quadra"
+                                                placeholder="Description"
                                                 onChange={(e) =>
                                                     setData(
                                                         "description",
@@ -345,11 +342,11 @@ export default function CreateCourt() {
                     <div className="rounded-lg space-y-4 border p-8">
                         <div className="space-y-2">
                             <h1 className="text-xl font-semibold">
-                                Horário de Funcionamento
+                                Opening Hours
                             </h1>
                             <p className="text-gray-600">
-                                Selecione os dias da semana e blocos de horário
-                                disponíveis da quadra.
+                                Select the days of the week and time blocks
+                                available from the court.
                             </p>
                         </div>
                         <TimeSlotSelector
@@ -358,16 +355,47 @@ export default function CreateCourt() {
                             }
                         />
                     </div>
+                    {/* Form 3 - Precification */}
+                    <div className="grid gap-4 rounded-lg border p-8">
+                        <div className="space-y-2">
+                            <h1 className="text-xl font-semibold">Pricing</h1>
+                            <p className="text-gray-600">
+                                Fill in the pricing information for court and
+                                promotions available.
+                            </p>
+                        </div>
+                        <div>
+                            <div className="w-64">
+                                <Label htmlFor="name">Court price</Label>
+                                <Input
+                                    id="price"
+                                    type="number"
+                                    min={0}
+                                    step=".01"
+                                    name="price"
+                                    placeholder="Court price"
+                                    value={data.price}
+                                    onChange={(e) =>
+                                        setData("price", e.target.value)
+                                    }
+                                />
+                                <InputError
+                                    message={errors.name}
+                                    className="mt-2"
+                                />
+                            </div>
+                        </div>
+                    </div>
                     {/* Form 3 - Image */}
                     <div className="rounded-lg border p-8">
                         <div>
                             <div className="mb-2 space-y-2">
                                 <h1 className="text-xl font-semibold">
-                                    Fotos da Quadra (opcional)
+                                    Photos of the Court (optional)
                                 </h1>
                                 <p className="text-gray-600">
-                                    Clique no botão abaixo para carregar e
-                                    organizar as fotos da quadra.
+                                    Click the button below to upload and
+                                    Organize the photos of the court.
                                 </p>
                             </div>
                             <div>
@@ -389,11 +417,11 @@ export default function CreateCourt() {
                         <div>
                             <div className="mb-2 space-y-2">
                                 <h1 className="text-xl font-semibold">
-                                    Patrocinador da Quadra (opcional)
+                                    Court Sponsor (optional)
                                 </h1>
                                 <p className="text-gray-600">
-                                    Clique no botão abaixo para carregar a foto
-                                    do patrocinador da quadra.
+                                    Click the button below to upload the photo
+                                    of the sponsor of the court.
                                 </p>
                             </div>
                             <div>
@@ -413,10 +441,10 @@ export default function CreateCourt() {
                     <div className="flex justify-end gap-x-2">
                         <Button>
                             <Link href={route("club.courts.index")}>
-                                Cancelar
+                                Cancel
                             </Link>
                         </Button>
-                        <Button disabled={processing}>Criar</Button>
+                        <Button disabled={processing}>Create</Button>
                     </div>
                 </form>
             </div>

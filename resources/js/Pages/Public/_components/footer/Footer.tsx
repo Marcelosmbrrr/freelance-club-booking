@@ -2,6 +2,8 @@ import { AppIcon } from "@/components/icons/AppIcon";
 
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 
+import { useTranslation } from "react-i18next";
+
 const sections = [
     {
         title: "Produto",
@@ -21,6 +23,7 @@ const sections = [
 ];
 
 const Footer = () => {
+    const { t } = useTranslation();
     return (
         <section className="py-24 border-t">
             <div className="container mx-auto">
@@ -35,9 +38,7 @@ const Footer = () => {
                                     </p>
                                 </span>
                                 <p className="mt-6 text-sm text-muted-foreground">
-                                    Lorem ipsum dolor sit amet consectetur,
-                                    adipisicing elit. Quis accusantium tempore
-                                    consequuntur perspiciatis.
+                                    {t("welcome.footer")}
                                 </p>
                             </div>
                             <ul className="flex items-center space-x-6 text-muted-foreground">
@@ -86,13 +87,15 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className="mt-20 flex flex-col justify-between gap-4 border-t pt-8 text-center text-sm font-medium text-muted-foreground lg:flex-row lg:items-center lg:text-left">
-                        <p>© 2024 App. Todos os direitos reservados.</p>
+                        <p>© 2024 App. {t("welcome.all-rights-reserved")}.</p>
                         <ul className="flex justify-center gap-4 lg:justify-start">
                             <li className="hover:text-primary">
-                                <a href="#"> Termos e condições</a>
+                                <a href="#">
+                                    {t("welcome.terms-and-conditions")}
+                                </a>
                             </li>
                             <li className="hover:text-primary">
-                                <a href="#"> Política de privacidade</a>
+                                <a href="#">{t("welcome.privacy-policy")}</a>
                             </li>
                         </ul>
                     </div>

@@ -21,123 +21,117 @@ const breadCrumb = [{ name: "Quadras", href: "/club/courts" }, { name: "Ver" }];
 export default function ShowCourt() {
     const { court }: any = usePage().props;
 
-    console.log(court)
-
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
-            <Head title="Requisição" />
+            <Head title="Request" />
             {/* Container */}
             <div className="space-y-4 max-w-4xl mx-auto">
                 <div className="flex justify-between items-center rounded-lg border p-4">
-                    <h1 className="text-xl font-semibold">Visualizar Quadra</h1>
+                    <h1 className="text-xl font-semibold">View Court</h1>
                 </div>
                 {/* Basic */}
                 <div className="grid gap-4 rounded-lg border p-8">
                     <div className="space-y-2">
-                        <h1 className="text-xl font-semibold">Básico</h1>
+                        <h1 className="text-xl font-semibold">Basic</h1>
                         <p className="text-gray-600">
-                            Informe os dados básicos da quadra.
+                            Enter the basic data of the court.
                         </p>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Nome da Quadra</Label>
+                        <Label htmlFor="name">Court Name</Label>
                         <Input
                             id="name"
                             type="text"
                             name="name"
-                            placeholder="Informe o nome da quadra"
+                            placeholder="Name"
                             value={court.data.name}
                             readOnly
                         />
                     </div>
-                    {/* Linha com selects */}
+                    {/* Row with selects */}
                     <div className="flex gap-x-4">
                         <div className="w-full">
-                            <Label htmlFor="sport">Esporte</Label>
+                            <Label htmlFor="sport">Sport</Label>
                             <Input
-                                id="name"
+                                id="sport"
                                 type="text"
-                                name="name"
-                                placeholder="Informe o nome da quadra"
+                                name="sport"
+                                placeholder="Sport"
                                 value={court.data.sport}
                                 readOnly
                             />
                         </div>
                         <div className="w-full">
-                            <Label htmlFor="structure_type">
-                                Tipo de Quadra
-                            </Label>
+                            <Label htmlFor="type">Court Type</Label>
                             <Input
-                                id="name"
+                                id="type"
                                 type="text"
-                                name="name"
-                                placeholder="Informe o nome da quadra"
+                                name="type"
+                                placeholder="Type"
                                 value={court.data.type}
                                 readOnly
                             />
                         </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="grass_type">Tipo de Superfície</Label>
+                        <Label htmlFor="surface_type">Surface Type</Label>
                         <Input
-                            id="grass_type"
+                            id="surface_type"
                             type="text"
-                            name="grass_type"
-                            placeholder="Informe o tipo de superfície"
+                            name="surface_type"
+                            placeholder="Surface type"
                             value={court.data.floor_type}
                             readOnly
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="grass_type">Tipo de Grama</Label>
+                        <Label htmlFor="grass_type">Grass Type</Label>
                         <Input
                             id="grass_type"
                             type="text"
                             name="grass_type"
-                            placeholder="Informe o tipo de grama"
+                            placeholder="Enter the grass type"
                             value={court.data.grass_type}
                             readOnly
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="manufacturer">Fabricante</Label>
+                        <Label htmlFor="manufacturer">Manufacturer</Label>
                         <Input
                             id="manufacturer"
                             type="text"
                             name="manufacturer"
-                            placeholder="Informe o fabricante"
+                            placeholder="Manufacturer"
                             value={court.data.manufacturer}
                             readOnly
                         />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="installation_year">
-                            Ano de Instalação
+                            Installation Year
                         </Label>
                         <Input
                             id="installation_year"
                             type="text"
                             name="installation_year"
-                            placeholder="Informe o ano de instalação"
+                            placeholder="Installation year"
                             value={court.data.installation_year}
                             readOnly
                         />
                     </div>
                     <div className="flex gap-4">
                         <div className="grid w-full items-center gap-2">
-                            <Label htmlFor="description">Descrição</Label>
+                            <Label htmlFor="description">Description</Label>
                             <Textarea
                                 value={court.data.description}
-                                placeholder="Informe a descrição da quadra"
+                                placeholder="Description"
                                 readOnly
                             />
                         </div>
                     </div>
                     <div className="flex flex-col space-y-4">
                         <div>
-                            <Label htmlFor="is_covered">
-                                Cobertura da quadra
-                            </Label>
+                            <Label htmlFor="is_covered">Court Covering</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <Switch
@@ -147,15 +141,15 @@ export default function ShowCourt() {
                             />
                             <Label htmlFor="is_covered">
                                 {court.data.is_covered
-                                    ? "Com cobertura"
-                                    : "Sem cobertura"}
+                                    ? "With coverage"
+                                    : "Without coverage"}
                             </Label>
                         </div>
                     </div>
                     <div className="flex flex-col space-y-4">
                         <div>
-                            <Label htmlFor="description">
-                                Jogadas fora dos limites da quadra
+                            <Label htmlFor="can_play_outside">
+                                Play Outside Court Limits
                             </Label>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -166,15 +160,15 @@ export default function ShowCourt() {
                             />
                             <Label htmlFor="can_play_outside">
                                 {court.data.can_play_outside
-                                    ? "Permitido"
-                                    : "Não Permitido"}
+                                    ? "Allowed"
+                                    : "Not allowed"}
                             </Label>
                         </div>
                     </div>
                     <div className="flex flex-col space-y-4">
                         <div>
                             <Label htmlFor="description">
-                                Disponibilidade para uso
+                                Availability for Use
                             </Label>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -185,23 +179,21 @@ export default function ShowCourt() {
                             />
                             <Label htmlFor="status">
                                 {court.data.status
-                                    ? "Disponível"
-                                    : "Indisponível"}
+                                    ? "Available"
+                                    : "Unavailable"}
                             </Label>
                         </div>
                     </div>
                 </div>
                 {/* Time Slots */}
                 <div className="rounded-lg space-y-4 border p-8">
-                    <h1 className="text-xl font-semibold">
-                        Horário de Funcionamento
-                    </h1>
+                    <h1 className="text-xl font-semibold">Operating Hours</h1>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">Dia</TableHead>
+                                <TableHead className="w-[100px]">Day</TableHead>
                                 <TableHead className="text-right">
-                                    Horário
+                                    Hours
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -222,12 +214,28 @@ export default function ShowCourt() {
                         </TableBody>
                     </Table>
                 </div>
+                <div className="rounded-lg space-y-4 border p-8">
+                    <h1 className="text-xl font-semibold">Pricing</h1>
+                    <div>
+                        <div className="w-64">
+                            <Label htmlFor="name">Court Price</Label>
+                            <Input
+                                id="price"
+                                type="number"
+                                min={0}
+                                step=".01"
+                                name="price"
+                                placeholder="Court price"
+                                value={court.data.price}
+                                readOnly
+                            />
+                        </div>
+                    </div>
+                </div>
                 {/* Images */}
                 <div>
                     <div className="mb-2 space-y-2">
-                        <h1 className="text-xl font-semibold">
-                            Fotos da Quadra
-                        </h1>
+                        <h1 className="text-xl font-semibold">Court Photos</h1>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {court.data.images.map((image_src, index) => (
@@ -243,9 +251,7 @@ export default function ShowCourt() {
                 </div>
                 <div>
                     <div className="mb-2 space-y-2">
-                        <h1 className="text-xl font-semibold">
-                            Patrocinador da Quadra
-                        </h1>
+                        <h1 className="text-xl font-semibold">Court Sponsor</h1>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         <div>
@@ -259,7 +265,7 @@ export default function ShowCourt() {
                 </div>
                 <div className="flex justify-end gap-x-2">
                     <Button>
-                        <Link href={route("club.courts.index")}>Voltar</Link>
+                        <Link href={route("club.courts.index")}>Back</Link>
                     </Button>
                 </div>
             </div>

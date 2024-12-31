@@ -5,6 +5,7 @@ import { ClubLogin } from "./_components/ClubLogin";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { AppIcon } from "@/components/icons/AppIcon";
+import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PlayerLogin from "./_components/PlayerLogin";
@@ -18,8 +19,8 @@ export default function Login({
     const { url } = usePage();
     const queryParams = new URLSearchParams(url.split("?")[1]);
 
-    const tab = queryParams.get('tab') ?? "player";
-    
+    const tab = queryParams.get("tab") ?? "player";
+
     return (
         <GuestLayout>
             <Head title="Acesso" />
@@ -41,6 +42,9 @@ export default function Login({
                         </div>
                         <div>
                             <ThemeToggle />
+                        </div>
+                        <div>
+                            <LanguageSelector />
                         </div>
                     </header>
                     <div className="grow w-full flex items-center">

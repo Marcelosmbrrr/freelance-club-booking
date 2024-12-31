@@ -1,7 +1,13 @@
+import { useHomePage } from "@/context/HomePageContext";
+
 import { Lightbulb, ListChecks, MessageCircleMore } from "lucide-react";
+
+import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Features2 = () => {
+    const { homePageType } = useHomePage();
+    const { t } = useTranslation();
     return (
         <section
             id="features"
@@ -11,10 +17,10 @@ const Features2 = () => {
                 <div className="flex w-full flex-col items-center mb-12">
                     <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6 md:max-w-3xl md:text-center">
                         <p className="text-sm text-muted-foreground">
-                            O que oferecemos?
+                            {t(`welcome.${homePageType}.features.hint`)}
                         </p>
                         <h2 className="text-3xl font-medium md:text-5xl">
-                            Funcionalidades
+                        {t(`welcome.${homePageType}.features.title`)}
                         </h2>
                     </div>
                 </div>
@@ -29,7 +35,7 @@ const Features2 = () => {
                                     <MessageCircleMore className="size-4 text-primary" />
                                 </span>
                                 <p className="text-lg font-semibold md:text-2xl lg:text-xl">
-                                    Funcionalidade 1
+                                    {t("welcome.feature")}
                                 </p>
                             </div>
                             <p className="font-normal text-muted-foreground md:block">
@@ -46,7 +52,7 @@ const Features2 = () => {
                                     <Lightbulb className="size-4 text-primary" />
                                 </span>
                                 <p className="text-lg font-semibold md:text-2xl lg:text-xl">
-                                    Funcionalidade 2
+                                    {t("welcome.feature")}
                                 </p>
                             </div>
                             <p className="font-normal text-muted-foreground md:block">
@@ -63,7 +69,7 @@ const Features2 = () => {
                                     <ListChecks className="size-4 text-primary" />
                                 </span>
                                 <p className="text-lg font-semibold md:text-2xl lg:text-xl">
-                                    Funcionalidade 3
+                                    {t("welcome.feature")}
                                 </p>
                             </div>
                             <p className="font-normal text-muted-foreground md:block">

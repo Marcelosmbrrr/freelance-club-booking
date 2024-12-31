@@ -5,6 +5,7 @@ import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/components/InputError";
+import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -67,6 +68,9 @@ export default function ResetPassword({
                     </div>
                     <div>
                         <ThemeToggle />
+                    </div>
+                    <div>
+                        <LanguageSelector />
                     </div>
                 </header>
                 <Card className="mx-auto w-full max-w-md mt-40">
