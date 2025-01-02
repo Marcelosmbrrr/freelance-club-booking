@@ -10,7 +10,9 @@ import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import InputError from "@/components/InputError";
 import { Combobox } from "@/components/combobox/Combobox";
+import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,7 @@ import { Label } from "@/components/ui/label";
 export default function RegisterClub({ status }: { status?: string }) {
     const { toast } = useToast();
     const [cities, setCities] = React.useState<string[]>([]);
+    const { t } = useTranslation();
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
@@ -108,25 +111,27 @@ export default function RegisterClub({ status }: { status?: string }) {
                         <AppIcon w="28" h="28" />
                         <span className="text-xl font-bold">App - Clube</span>
                     </div>
-                    <div>
-                        <ThemeToggle />
+                    <div className="flex">
+                        <ThemeToggle colorToggle />
+                        <LanguageSelector colorToggle />
                     </div>
                 </header>
                 <div className="grow w-full flex items-center">
                     <Card className="mx-auto w-full max-w-md shadow-none border-none">
                         <CardHeader>
                             <CardTitle className="text-2xl">
-                                Cadastrar
+                                {t("auth.club.register.title")}
                             </CardTitle>
                             <CardDescription>
-                                Informe os dados abaixo para requisitar o
-                                cadastro do seu clube.
+                                {t("auth.club.register.description")}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form className="grid gap-4" onSubmit={submit}>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Nome do Clube</Label>
+                                    <Label htmlFor="name">
+                                        {t("general.club-name")}
+                                    </Label>
                                     <Input
                                         id="name"
                                         name="name"
@@ -136,7 +141,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                         onChange={(e) =>
                                             setData("name", e.target.value)
                                         }
-                                        placeholder="Informe o nome do clube"
+                                        placeholder={t("general.club-name")}
                                     />
                                     <InputError
                                         message={errors.name}
@@ -144,7 +149,9 @@ export default function RegisterClub({ status }: { status?: string }) {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="cnpj">CNPJ</Label>
+                                    <Label htmlFor="cnpj">
+                                        {t("general.EIN")}
+                                    </Label>
                                     <Input
                                         id="cnpj"
                                         name="cnpj"
@@ -157,7 +164,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                                 applyCNPJMask(e.target.value)
                                             )
                                         }
-                                        placeholder="Informe o CNPJ"
+                                        placeholder={t("general.EIN")}
                                     />
                                     <InputError
                                         message={errors.cnpj}
@@ -166,7 +173,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="trading-name">
-                                        Razão Social
+                                        {t("general.trading-name")}
                                     </Label>
                                     <Input
                                         id="trading-name"
@@ -180,7 +187,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                                 e.target.value
                                             )
                                         }
-                                        placeholder="Informe a razão social"
+                                        placeholder={t("general.trading-name")}
                                     />
                                     <InputError
                                         message={errors.trading_name}
@@ -189,13 +196,18 @@ export default function RegisterClub({ status }: { status?: string }) {
                                 </div>
                                 <div className="flex gap-2">
                                     <div className="grid gap-2">
-                                        <Label htmlFor="email">Estado</Label>
+                                        <Label htmlFor="email">
+                                            {" "}
+                                            {t("general.state")}
+                                        </Label>
                                         <Combobox
                                             options={statesList.map((item) => ({
                                                 value: item,
                                                 label: item,
                                             }))}
-                                            placeholder="Selecionar Estado"
+                                            placeholder={t(
+                                                "general.select-option"
+                                            )}
                                             name="state"
                                             id="state"
                                             value={data.state}
@@ -209,13 +221,17 @@ export default function RegisterClub({ status }: { status?: string }) {
                                         />
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label htmlFor="city">Cidade</Label>
+                                        <Label htmlFor="city">
+                                            {t("general.city")}
+                                        </Label>
                                         <Combobox
                                             options={cities.map((item) => ({
                                                 value: item,
                                                 label: item,
                                             }))}
-                                            placeholder="Selecionar Cidade"
+                                            placeholder={t(
+                                                "general.select-option"
+                                            )}
                                             name="city"
                                             id="city"
                                             value={data.city}
@@ -230,9 +246,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                     </div>
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">
-                                        Endereço de e-mail
-                                    </Label>
+                                    <Label htmlFor="email">E-mail</Label>
                                     <Input
                                         id="email"
                                         name="email"
@@ -242,7 +256,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                         onChange={(e) =>
                                             setData("email", e.target.value)
                                         }
-                                        placeholder="Informe o endereço de e-mail"
+                                        placeholder="E-mail"
                                     />
                                     <InputError
                                         message={errors.email}
@@ -265,7 +279,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                                 e.target.value
                                             )
                                         }
-                                        placeholder="Informe o número de telefone"
+                                        placeholder={t("general.telephone")}
                                     />
                                     <InputError
                                         message={errors.phonenumber}
@@ -281,13 +295,13 @@ export default function RegisterClub({ status }: { status?: string }) {
                                 </Button>
                             </form>
                             <div className="mt-4 text-center text-sm">
-                                Já tem uma conta?{" "}
+                                {t("general.already-have-an-account")}{" "}
                                 <Link
                                     href="/login?tab=club"
                                     className="underline"
                                     disabled={processing}
                                 >
-                                    Acessar
+                                    {t("general.login")}
                                 </Link>
                             </div>
                         </CardContent>

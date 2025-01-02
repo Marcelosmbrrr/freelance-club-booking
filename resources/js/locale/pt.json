@@ -1,8 +1,49 @@
 {
     "translation": {
+        "general": {
+            "player": "Jogador",
+            "club": "Clube",
+            "close": "Fechar",
+            "loading": "Carregando...",
+            "confirm": "Confirmar",
+            "cancel": "Cancelar",
+            "create": "Criar",
+            "exit": "Sair",
+            "email": "E-mail",
+            "password": "Senha",
+            "password-confirmation": "Confirmação da senha",
+            "change-password": "Alterar senha",
+            "complete-name": "Nome Completo",
+            "remember": "Lembrar",
+            "access": "Acessar",
+            "forgot-password": "Esqueceu a senha?",
+            "login": "Login",
+            "all-rights-reserved": "Todos os direitos reservados",
+            "terms-and-conditions": "Termos e condições",
+            "privacy-policy": "Política de privacidade",
+            "per-month": "Por mês",
+            "free": "Gratuito",
+            "basic": "Básico",
+            "professional": "Profissional",
+            "start-with-free-plan": "Comece com o plano gratuito",
+            "start-with-basic-plan": "Comece com o plano básico",
+            "start-with-professional-plan": "Comece com o plano Pro",
+            "features": "Funcionalidades",
+            "feature": "Funcionalidade",
+            "advantages": "Vantagens",
+            "advantage": "Vantagem",
+            "already-have-an-account": "Já tem uma conta?",
+            "EIN": "CNPJ",
+            "trading-name": "Razão Social",
+            "telephone": "Telefone",
+            "state": "Estado",
+            "city": "Cidade",
+            "select-option": "Selecionar opção",
+            "name": "Nome",
+            "club-name": "Nome do clube"
+        },
 
         "welcome": {
-
             "player": {
                 "header": {
                     "begin": "Início",
@@ -63,22 +104,60 @@
                 }
             },
 
-            "login": "Login",
-            "all-rights-reserved": "Todos os direitos reservados",
-            "terms-and-conditions": "Termos e condições",
-            "privacy-policy": "Política de privacidade",
-            "per-month": "Por mês",
-            "free": "Gratuito",
-            "basic": "Básico",
-            "professional": "Profissional",
-            "start-with-free-plan": "Comece com o plano gratuito",
-            "start-with-basic-plan": "Comece com o plano básico",
-            "start-with-professional-plan": "Comece com o plano Pro",
-            "features": "Funcionalidades",
-            "feature": "Funcionalidade",
-            "advantages": "Vantagens",
-            "advantage": "Vantagem",
             "footer": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis accusantium tempore consequuntur perspiciatis."
+        },
+
+        "auth": {
+            "player": {
+                "login": {
+                    "title": "Acesso de Jogador",
+                    "dont-have-account": "Não tem uma conta de jogador?"
+                },
+                "register": {
+                    "title": "Cadastro de Jogador",
+                    "description": "Informe os dados abaixo para cadastrar a sua conta."
+                }
+            },
+
+            "club": {
+                "login": {
+                    "title": "Acesso de Clube",
+                    "dont-have-account": "Não tem uma conta de clube?"
+                },
+                "register": {
+                    "title": "Cadastro de Clube",
+                    "description": "Informe os dados abaixo para requisitar o cadastro do seu clube."
+                }
+            },
+
+            "admin": {
+                "login": {
+                    "title": "Acesso de Administrador"
+                }
+            },
+
+            "login": {
+                "register-link": "Criar conta",
+                "inform-credentials": "Informe suas credenciais abaixo para realizar o acesso."
+            },
+
+            "forgot-password": {
+                "title": "Recuperação da Conta",
+                "description": "Informe o seu e-mail abaixo para receber o link de alteração da senha.",
+                "submit-button": "Enviar Link"
+            },
+
+            "reset-password": {
+                "title": "Alteração da Senha",
+                "description": "Informe a nova senha abaixo.",
+                "submit-button": "Alterar Senha"
+            },
+
+            "verify-email": {
+                "submit-button": "Reenviar Confirmação de E-mail",
+                "after-registration-description": "Obrigado por se registrar! Antes de começar, poderia verificar seu endereço de e-mail clicando no link que acabamos de enviar para você? Se não recebeu o e-mail, podemos enviar outro com prazer.",
+                "new-link-verification-description": "Um novo link de verificação foi enviado para o endereço de e-mail que você forneceu durante o registro."
+            }
         }
     }
 }

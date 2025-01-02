@@ -7,6 +7,7 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { AppIcon } from "@/components/icons/AppIcon";
 import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
+import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PlayerLogin from "./_components/PlayerLogin";
 
@@ -18,6 +19,7 @@ export default function Login({
 }) {
     const { url } = usePage();
     const queryParams = new URLSearchParams(url.split("?")[1]);
+    const { t } = useTranslation();
 
     const tab = queryParams.get("tab") ?? "player";
 
@@ -40,11 +42,9 @@ export default function Login({
                             <AppIcon w="28" h="28" />
                             <span className="text-xl font-bold">App</span>
                         </div>
-                        <div>
-                            <ThemeToggle />
-                        </div>
-                        <div>
-                            <LanguageSelector />
+                        <div className="flex">
+                            <ThemeToggle colorToggle />
+                            <LanguageSelector colorToggle />
                         </div>
                     </header>
                     <div className="grow w-full flex items-center">
@@ -54,9 +54,11 @@ export default function Login({
                         >
                             <TabsList className="grid w-full grid-cols-2">
                                 <TabsTrigger value="player">
-                                    Jogador
+                                    {t("general.player")}
                                 </TabsTrigger>
-                                <TabsTrigger value="club">Clube</TabsTrigger>
+                                <TabsTrigger value="club">
+                                    {t("general.club")}
+                                </TabsTrigger>
                             </TabsList>
                             <TabsContent value="player">
                                 <PlayerLogin />

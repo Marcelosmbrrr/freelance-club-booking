@@ -35,7 +35,7 @@ const Features2 = () => {
                                     <MessageCircleMore className="size-4 text-primary" />
                                 </span>
                                 <p className="text-lg font-semibold md:text-2xl lg:text-xl">
-                                    {t("welcome.feature")}
+                                    {t("general.feature")}
                                 </p>
                             </div>
                             <p className="font-normal text-muted-foreground md:block">
@@ -52,7 +52,7 @@ const Features2 = () => {
                                     <Lightbulb className="size-4 text-primary" />
                                 </span>
                                 <p className="text-lg font-semibold md:text-2xl lg:text-xl">
-                                    {t("welcome.feature")}
+                                    {t("general.feature")}
                                 </p>
                             </div>
                             <p className="font-normal text-muted-foreground md:block">
@@ -69,7 +69,7 @@ const Features2 = () => {
                                     <ListChecks className="size-4 text-primary" />
                                 </span>
                                 <p className="text-lg font-semibold md:text-2xl lg:text-xl">
-                                    {t("welcome.feature")}
+                                    {t("general.feature")}
                                 </p>
                             </div>
                             <p className="font-normal text-muted-foreground md:block">

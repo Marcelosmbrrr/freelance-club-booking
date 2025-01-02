@@ -78,7 +78,7 @@ const Header = () => {
                             className="bg-white hover:bg-white text-neutral-800"
                             onClick={() => router.get("/login")}
                         >
-                            {t("welcome.login")}
+                            {t("general.login")}
                         </Button>
                         <Button
                             onClick={handleChangeHomePage}

@@ -12,6 +12,7 @@ import { Features } from "./_components/features/Features";
 import { Features2 } from "./_components/features/Features2";
 import { Pricing } from "./_components/pricing/Pricing";
 import { Footer } from "./_components/footer/Footer";
+import { AppIcon } from "@/components/icons/AppIcon";
 
 import { Separator } from "@/components/ui/separator";
 
@@ -29,11 +30,7 @@ export default function Welcome() {
                 )}
                 role="status"
             >
-                <img
-                    src="https://www.shadcnblocks.com/images/block/block-1.svg"
-                    className="w-20 animate-pulseScale"
-                    alt="logo"
-                />
+                <AppIcon h="40" w="40" />
                 <span className="sr-only">Loading...</span>
             </div>
 

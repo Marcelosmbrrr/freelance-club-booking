@@ -87,15 +87,15 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className="mt-20 flex flex-col justify-between gap-4 border-t pt-8 text-center text-sm font-medium text-muted-foreground lg:flex-row lg:items-center lg:text-left">
-                        <p>© 2024 App. {t("welcome.all-rights-reserved")}.</p>
+                        <p>© 2024 App. {t("general.all-rights-reserved")}.</p>
                         <ul className="flex justify-center gap-4 lg:justify-start">
                             <li className="hover:text-primary">
                                 <a href="#">
-                                    {t("welcome.terms-and-conditions")}
+                                    {t("general.terms-and-conditions")}
                                 </a>
                             </li>
                             <li className="hover:text-primary">
-                                <a href="#">{t("welcome.privacy-policy")}</a>
+                                <a href="#">{t("general.privacy-policy")}</a>
                             </li>
                         </ul>
                     </div>

@@ -6,7 +6,9 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { AppIcon } from "@/components/icons/AppIcon";
 import InputError from "@/components/InputError";
+import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -18,12 +20,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginAdmin({
+export default function Login({
     status,
 }: {
     status?: string;
     canResetPassword: boolean;
 }) {
+    const { t } = useTranslation();
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
         password: "",
@@ -46,17 +50,19 @@ export default function LoginAdmin({
                     <AppIcon w="28" h="28" />
                     <span className="text-xl font-bold">App - Admin</span>
                 </div>
-                <div>
-                    <ThemeToggle />
+                <div className="flex">
+                    <ThemeToggle colorToggle />
+                    <LanguageSelector colorToggle />
                 </div>
             </header>
             <div className="w-full flex justify-center items-center px-4 mt-40">
                 <Card className="mx-auto max-w-sm">
                     <CardHeader>
-                        <CardTitle className="text-2xl">Acessar</CardTitle>
+                        <CardTitle className="text-2xl">
+                            {t("auth.admin.login.title")}
+                        </CardTitle>
                         <CardDescription>
-                            Informe suas credenciais abaixo para realizar o
-                            acesso.
+                            {t("auth.login.inform-credentials")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -79,12 +85,14 @@ export default function LoginAdmin({
                             </div>
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password">
+                                        {t("general.password")}
+                                    </Label>
                                     <Link
                                         href={route("password.request")}
                                         className="ml-auto inline-block text-sm underline"
                                     >
-                                        Esqueceu a senha?
+                                        {t("general.forgot-password")}
                                     </Link>
                                 </div>
                                 <Input
@@ -107,7 +115,7 @@ export default function LoginAdmin({
                                 className="w-full"
                                 disabled={processing}
                             >
-                                {processing ? "Carregando ..." : "Acessar"}
+                                {processing ? t("general.loading") : t("general.access")}
                             </Button>
                         </form>
                     </CardContent>

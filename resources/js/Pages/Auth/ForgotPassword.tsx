@@ -7,6 +7,7 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/components/InputError";
 import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ import { Label } from "@/components/ui/label";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { toast } = useToast();
+    const { t } = useTranslation();
 
     const { data, setData, post, processing, errors } = useForm({
         email: "",
@@ -54,31 +56,26 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 <header className="p-8 h-20 w-full flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <AppIcon w="28" h="28" />
-                        <span className="text-xl font-bold">App - Clube</span>
+                        <span className="text-xl font-bold">App</span>
                     </div>
-                    <div>
-                        <ThemeToggle />
-                    </div>
-                    <div>
-                        <LanguageSelector />
+                    <div className="flex">
+                        <ThemeToggle colorToggle />
+                        <LanguageSelector colorToggle />
                     </div>
                 </header>
                 <Card className="mx-auto w-full max-w-md mt-40">
                     <CardHeader>
                         <CardTitle className="text-2xl">
-                            Recuperação da Conta
+                            {t("auth.forgot-password.title")}
                         </CardTitle>
                         <CardDescription>
-                            Informe o seu e-mail abaixo para receber o link de
-                            alteração da senha.
+                            {t("auth.forgot-password.description")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form className="grid gap-4" onSubmit={submit}>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">
-                                    Endereço de e-mail
-                                </Label>
+                                <Label htmlFor="email">E-mail</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -98,7 +95,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                 className="w-full"
                                 disabled={processing}
                             >
-                                {processing ? "Carregando..." : "Enviar Link"}
+                                {processing ? t("general.loading") : t("auth.forgot-password.submit-button")}
                             </Button>
                         </form>
                     </CardContent>

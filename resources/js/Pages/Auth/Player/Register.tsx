@@ -4,7 +4,9 @@ import { FormEventHandler } from "react";
 import { AppIcon } from "@/components/icons/AppIcon";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import InputError from "@/components/InputError";
+import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
@@ -19,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function RegisterPlayer({ status }: { status?: string }) {
+    const { t } = useTranslation();
+
     const { toast } = useToast();
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -40,7 +44,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                         "Confira os dados informados e tente novamente.",
                     action: (
                         <ToastAction altText="Undo the action">
-                            Fechar
+                            {t("general.close")}
                         </ToastAction>
                     ),
                 });
@@ -53,7 +57,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                         "Verifique o seu e-mail para efetivar o cadastro.",
                     action: (
                         <ToastAction altText="Undo the action">
-                            Fechar
+                            {t("general.close")}
                         </ToastAction>
                     ),
                 });
@@ -79,25 +83,27 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                         <AppIcon w="28" h="28" />
                         <span className="text-xl font-bold">App - Jogador</span>
                     </div>
-                    <div>
-                        <ThemeToggle />
+                    <div className="flex">
+                        <ThemeToggle colorToggle />
+                        <LanguageSelector colorToggle />
                     </div>
                 </header>
                 <div className="grow w-full flex items-center">
                     <Card className="mx-auto w-full max-w-md shadow-none border-none">
                         <CardHeader>
                             <CardTitle className="text-2xl">
-                                Cadastrar
+                                {t("auth.player.register.title")}
                             </CardTitle>
                             <CardDescription>
-                                Informe os dados abaixo para cadastrar a sua
-                                conta.
+                                {t("auth.player.register.description")}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form className="grid gap-4" onSubmit={submit}>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Nome Completo</Label>
+                                    <Label htmlFor="name">
+                                        {t("general.complete-name")}
+                                    </Label>
                                     <Input
                                         id="name"
                                         name="name"
@@ -107,7 +113,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                         onChange={(e) =>
                                             setData("name", e.target.value)
                                         }
-                                        placeholder="Informe o nome do clube"
+                                        placeholder={t("general.complete-name")}
                                     />
                                     <InputError
                                         message={errors.name}
@@ -115,9 +121,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">
-                                        Endereço de e-mail
-                                    </Label>
+                                    <Label htmlFor="email">E-mail</Label>
                                     <Input
                                         id="email"
                                         name="email"
@@ -127,7 +131,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                         onChange={(e) =>
                                             setData("email", e.target.value)
                                         }
-                                        placeholder="Informe o endereço de e-mail"
+                                        placeholder="E-mail"
                                     />
                                     <InputError
                                         message={errors.email}
@@ -135,7 +139,9 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="password">Senha</Label>
+                                    <Label htmlFor="password">
+                                        {t("general.password")}
+                                    </Label>
                                     <Input
                                         id="password"
                                         name="password"
@@ -146,7 +152,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                         onChange={(e) =>
                                             setData("password", e.target.value)
                                         }
-                                        placeholder="Informe a senha"
+                                        placeholder= {t("general.password")}
                                     />
                                     <InputError
                                         message={errors.password}
@@ -155,7 +161,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="password-confirmation">
-                                        Confirmação da senha
+                                        {t("general.password-confirmation")}
                                     </Label>
                                     <Input
                                         id="password_confirmation"
@@ -170,7 +176,7 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                                 e.target.value
                                             )
                                         }
-                                        placeholder="Informe a senha novamente"
+                                        placeholder={t("general.password-confirmation")}
                                     />
                                     <InputError
                                         message={errors.password_confirmation}
@@ -183,18 +189,18 @@ export default function RegisterPlayer({ status }: { status?: string }) {
                                     disabled={processing}
                                 >
                                     {processing
-                                        ? "Carregando ..."
-                                        : "Cadastrar"}
+                                        ? t("general.loading")
+                                        : t("general.create")}
                                 </Button>
                             </form>
                             <div className="mt-4 text-center text-sm">
-                                Já tem uma conta?{" "}
+                                {t("general.already-have-an-account")}{" "}
                                 <Link
                                     href="/login?tab=player"
                                     className="underline"
                                     disabled={processing}
                                 >
-                                    Acessar
+                                    {t("general.login")}
                                 </Link>
                             </div>
                         </CardContent>

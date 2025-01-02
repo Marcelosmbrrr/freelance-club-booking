@@ -62,11 +62,11 @@ const Pricing = () => {
                     <div className="flex w-full flex-col items-stretch gap-6 md:flex-row">
                         <div className="flex w-full flex-col rounded-lg border p-6 text-left">
                             <Badge className="mb-8 block w-fit">
-                                {t(`welcome.free`)}
+                                {t(`general.free`)}
                             </Badge>
                             <span className="text-4xl font-medium">R$0</span>
                             <p className="invisible text-muted-foreground">
-                                {t(`welcome.per-month`)}
+                                {t(`general.per-month`)}
                             </p>
                             <Separator className="my-6" />
                             <div className="flex flex-col justify-between gap-20">
@@ -95,11 +95,11 @@ const Pricing = () => {
                         </div>
                         <div className="flex w-full flex-col rounded-lg border p-6 text-left">
                             <Badge className="mb-8 block w-fit">
-                                {t(`welcome.basic`)}
+                                {t(`general.basic`)}
                             </Badge>
                             <span className="text-4xl font-medium">R$9</span>
                             <p className="text-muted-foreground">
-                                {t(`welcome.per-month`)}
+                                {t(`general.per-month`)}
                             </p>
                             <Separator className="my-6" />
                             <div className="flex h-full flex-col justify-between gap-20">
@@ -124,11 +124,11 @@ const Pricing = () => {
                         </div>
                         <div className="flex w-full flex-col rounded-lg border bg-muted p-6 text-left">
                             <Badge className="mb-8 block w-fit">
-                                {t(`welcome.professional`)}
+                                {t(`general.professional`)}
                             </Badge>
                             <span className="text-4xl font-medium">R$19</span>
                             <p className="text-muted-foreground">
-                                {t(`welcome.per-month`)}
+                                {t(`general.per-month`)}
                             </p>
                             <Separator className="my-6" />
                             <div className="flex h-full flex-col justify-between gap-20">

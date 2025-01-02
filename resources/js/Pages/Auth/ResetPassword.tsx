@@ -7,6 +7,7 @@ import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/components/InputError";
 import { LanguageSelector } from "@/components/translator/LanguageSelector";
 
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ export default function ResetPassword({
     email: string;
 }) {
     const { toast } = useToast();
+    const { t } = useTranslation();
 
     const { data, setData, post, processing, errors, reset } = useForm({
         token: token,
@@ -66,28 +68,24 @@ export default function ResetPassword({
                         <AppIcon w="28" h="28" />
                         <span className="text-xl font-bold">App - Clube</span>
                     </div>
-                    <div>
-                        <ThemeToggle />
-                    </div>
-                    <div>
-                        <LanguageSelector />
+                    <div className="flex">
+                        <ThemeToggle colorToggle />
+                        <LanguageSelector colorToggle />
                     </div>
                 </header>
                 <Card className="mx-auto w-full max-w-md mt-40">
                     <CardHeader>
                         <CardTitle className="text-2xl">
-                            Alteração da Senha
+                            {t("auth.reset-password.title")}
                         </CardTitle>
                         <CardDescription>
-                            Informe a nova senha abaixo.
+                            {t("auth.reset-password.description")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form className="grid gap-4" onSubmit={submit}>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">
-                                    Endereço de e-mail
-                                </Label>
+                                <Label htmlFor="email">E-mail</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -100,7 +98,9 @@ export default function ResetPassword({
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Senha</Label>
+                                <Label htmlFor="password">
+                                    {t("auth.password")}
+                                </Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -117,7 +117,7 @@ export default function ResetPassword({
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirmação da senha
+                                    {t("auth.password-confirmation")}
                                 </Label>
                                 <Input
                                     id="password_confirmation"
@@ -141,7 +141,9 @@ export default function ResetPassword({
                                 className="w-full"
                                 disabled={processing}
                             >
-                                {processing ? "Carregando..." : "Alterar Senha"}
+                                {processing
+                                    ? t("general.loading")
+                                    : t("auth.reset-password.submit-button")}
                             </Button>
                         </form>
                     </CardContent>

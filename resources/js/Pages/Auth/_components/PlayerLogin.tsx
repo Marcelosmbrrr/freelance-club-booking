@@ -4,6 +4,7 @@ import { Link, useForm } from "@inertiajs/react";
 
 import InputError from "@/components/InputError";
 
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,6 +21,7 @@ import { Label } from "@/components/ui/label";
 
 export default function PlayerLogin() {
     const { toast } = useToast();
+    const { t } = useTranslation();
 
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
@@ -39,7 +41,7 @@ export default function PlayerLogin() {
                         "Confira os dados informados e tente novamente.",
                     action: (
                         <ToastAction altText="Undo the action">
-                            Fechar
+                            {t("general.close")}
                         </ToastAction>
                     ),
                 });
@@ -50,9 +52,11 @@ export default function PlayerLogin() {
     return (
         <Card className="mx-auto w-full max-w-md shadow-none border-none">
             <CardHeader>
-                <CardTitle className="text-2xl">Acesso de Jogador</CardTitle>
+                <CardTitle className="text-2xl">
+                    {t("auth.player.login.title")}
+                </CardTitle>
                 <CardDescription>
-                    Informe suas credenciais abaixo para realizar o acesso.
+                    {t("auth.login.inform-credentials")}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -70,12 +74,14 @@ export default function PlayerLogin() {
                     </div>
                     <div className="grid gap-2">
                         <div className="flex items-center">
-                            <Label htmlFor="password">Senha</Label>
+                            <Label htmlFor="password">
+                                {t("auth.password")}
+                            </Label>
                             <Link
                                 href={route("password.request")}
                                 className="ml-auto inline-block text-sm underline"
                             >
-                                Esqueceu a senha?
+                                {t("general.forgot-password")}
                             </Link>
                         </div>
                         <Input
@@ -106,7 +112,7 @@ export default function PlayerLogin() {
                                 htmlFor="terms"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
-                                Lembrar
+                                {t("auth.login.remember")}
                             </label>
                         </div>
                     </div>
@@ -115,13 +121,15 @@ export default function PlayerLogin() {
                         className="w-full"
                         disabled={processing}
                     >
-                        {processing ? "Carregando ..." : "Acessar"}
+                        {processing
+                            ? t("general.loading")
+                            : t("general.access")}
                     </Button>
                 </form>
                 <div className="mt-4 text-center text-sm">
-                    Não tem uma conta de jogador?{" "}
+                    {t("auth.player.login.dont-have-account")}{" "}
                     <Link href="/player/register" className="underline">
-                        Cadastrar
+                        {t("auth.login.register-link")}
                     </Link>
                 </div>
             </CardContent>
