@@ -91,6 +91,7 @@ export default function ResetPassword({
                                     type="email"
                                     value={data.email}
                                     readOnly
+                                    placeholder="E-mail"
                                 />
                                 <InputError
                                     message={errors.email}

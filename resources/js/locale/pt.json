@@ -40,7 +40,8 @@
             "city": "Cidade",
             "select-option": "Selecionar opção",
             "name": "Nome",
-            "club-name": "Nome do clube"
+            "club-name": "Nome do clube",
+            "send": "Enviar"
         },
 
         "welcome": {

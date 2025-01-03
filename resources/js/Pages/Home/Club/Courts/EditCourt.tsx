@@ -5,6 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import InputError from "@/components/InputError";
 import { CourtImages } from "./_components/image-selector/CourtImages";
 import { TimeSlotSelector } from "./_components/time-slot-selector/TimeSlotSelector";
+import { HelpSidebar } from "@/components/help-sidebar/HelpSidebar";
 // Types
 import { TimeSlot } from "./types/types";
 import { CreateEditCourtSchema } from "./types/types";
@@ -71,7 +72,7 @@ export default function EditCourt() {
                 {/* Forms Container */}
                 <form className="space-y-4 w-full max-w-4xl" onSubmit={submit}>
                     <div className="flex justify-between items-center rounded-lg border p-4">
-                        <h1 className="text-xl font-semibold">Create Court</h1>
+                        <h1 className="text-xl font-semibold">Edit Court</h1>
                     </div>
                     {/* Form 1 - Basic */}
                     <div className="grid gap-4 rounded-lg border p-8">
@@ -82,22 +83,24 @@ export default function EditCourt() {
                                 below.
                             </p>
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="name">Court name</Label>
-                            <Input
-                                id="name"
-                                type="text"
-                                name="name"
-                                placeholder="Court name"
-                                value={data.name}
-                                onChange={(e) =>
-                                    setData("name", e.target.value)
-                                }
-                            />
-                            <InputError
-                                message={errors.name}
-                                className="mt-2"
-                            />
+                        <div className="flex gap-x-4">
+                            <div className="w-full">
+                                <Label htmlFor="name">Court name</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    name="name"
+                                    placeholder="Court name"
+                                    value={data.name}
+                                    onChange={(e) =>
+                                        setData("name", e.target.value)
+                                    }
+                                />
+                                <InputError
+                                    message={errors.name}
+                                    className="mt-2"
+                                />
+                            </div>
                         </div>
                         {/* Linha com selects */}
                         <div className="flex gap-x-4">
@@ -152,6 +155,27 @@ export default function EditCourt() {
                                 </Select>
                                 <InputError
                                     message={errors.type}
+                                    className="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex gap-x-4">
+                            <div className="w-1/2">
+                                <Label htmlFor="name">Base price</Label>
+                                <Input
+                                    id="price"
+                                    type="number"
+                                    min={0}
+                                    step=".01"
+                                    name="price"
+                                    placeholder="Base price"
+                                    value={data.price}
+                                    onChange={(e) =>
+                                        setData("price", e.target.value)
+                                    }
+                                />
+                                <InputError
+                                    message={errors.price}
                                     className="mt-2"
                                 />
                             </div>
@@ -335,9 +359,21 @@ export default function EditCourt() {
                     {/* Form 2 - Time Slots */}
                     <div className="rounded-lg space-y-4 border p-8">
                         <div className="space-y-2">
-                            <h1 className="text-xl font-semibold">
-                                Opening Hours
-                            </h1>
+                            <div className="flex justify-between">
+                                <h1 className="text-xl font-semibold">
+                                    Opening Hours and Promotions
+                                </h1>
+                                <HelpSidebar
+                                    title="Opening Hours and Promotions"
+                                    description="That's the formulary for court time selection and its promotions."
+                                    text={[
+                                        "A court is available on weekdays by periods.",
+                                        "For example, a court can open at 6:30 am and close at 12:00 pm, that's a period. Then you can reopen 14:00 and close 19:00. In this case, the court would have 2 time periods, 06:30-12:00 and 14:00-19:00.",
+                                        "To set up court times, first select the day that will have available times. Then, on the selected day, set up the time periods, a block can have 1 or several periods in the same day.",
+                                        "Promotions refer to the promotional schedules existing in each period. If the block has 1 period, opening at 6:30 am and closing at 11:00 am, it can have, for example, 1 price promotion from 7:00 am to 8:30 am.",
+                                    ]}
+                                />
+                            </div>
                             <p className="text-gray-600">
                                 Select the days of the week and time blocks
                                 available from the court.

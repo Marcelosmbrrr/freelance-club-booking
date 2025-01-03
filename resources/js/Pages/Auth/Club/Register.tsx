@@ -265,7 +265,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="phonenumber">
-                                        Telefone
+                                        {t("general.telephone")}
                                     </Label>
                                     <Input
                                         id="phonenumber"
@@ -291,7 +291,7 @@ export default function RegisterClub({ status }: { status?: string }) {
                                     className="w-full"
                                     disabled={processing}
                                 >
-                                    {processing ? "Carregando..." : "Enviar"}
+                                    {processing ? t("general.loading") : t("general.send")}
                                 </Button>
                             </form>
                             <div className="mt-4 text-center text-sm">

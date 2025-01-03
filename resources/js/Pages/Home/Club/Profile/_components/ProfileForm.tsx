@@ -9,6 +9,7 @@ import { applyCEPMask } from "@/utils/functions/applyCEPMask";
 
 import InputError from "@/components/InputError";
 import { ClubImages } from "./ClubImages";
+import { GoogleMaps } from "@/components/google-maps/GoogleMaps";
 
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -16,21 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 
 export function ProfileForm() {
     const { user }: any = usePage().props;
     const { toast } = useToast();
-
-    const [services, setServices] = React.useState<string[]>([]);
 
     const { data, setData, patch, processing, errors, reset } = useForm({
         name: user.data.name,
@@ -275,6 +265,20 @@ export function ProfileForm() {
                         {processing ? "Carregando ..." : "Salvar Dados"}
                     </Button>
                 </form>
+            </div>
+
+            <div className="rounded-lg border p-8">
+                <div className="mb-2 space-y-2">
+                    <h1 className="text-xl font-semibold">Geolocalização</h1>
+                    <p className="text-gray-600">
+                        Utilize o marcador para informar a localização do seu
+                        clube.
+                    </p>
+                </div>
+                <GoogleMaps />
+                <Button className="w-full mt-2" type="submit" disabled={processing}>
+                    {processing ? "Carregando ..." : "Salvar Localização"}
+                </Button>
             </div>
 
             <div className="rounded-lg border p-8">

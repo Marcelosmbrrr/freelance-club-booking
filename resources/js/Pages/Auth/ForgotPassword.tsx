@@ -84,6 +84,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     onChange={(e) =>
                                         setData("email", e.target.value)
                                     }
+                                    placeholder="E-mail"
                                 />
                                 <InputError
                                     message={errors.email}

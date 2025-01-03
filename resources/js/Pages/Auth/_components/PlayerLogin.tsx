@@ -75,7 +75,7 @@ export default function PlayerLogin() {
                     <div className="grid gap-2">
                         <div className="flex items-center">
                             <Label htmlFor="password">
-                                {t("auth.password")}
+                                {t("general.password")}
                             </Label>
                             <Link
                                 href={route("password.request")}
@@ -112,7 +112,7 @@ export default function PlayerLogin() {
                                 htmlFor="terms"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
-                                {t("auth.login.remember")}
+                                {t("general.remember")}
                             </label>
                         </div>
                     </div>
