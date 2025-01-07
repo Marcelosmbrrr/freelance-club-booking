@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Client;
 
@@ -26,6 +27,8 @@ class Club extends Model
         'geolocalization',
     ];   
 
+    protected $appends = ['name', 'average_price'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -44,5 +47,36 @@ class Club extends Model
     public function reservations()
     {
         return $this->hasManyThrough(Reservation::class, Court::class, 'club_id', 'court_id', 'id', 'id');
+    }
+
+    // Getters
+
+    public function getNameAttribute()
+    {
+        return $this->user->name;
+    }
+
+    public function getAveragePriceAttribute() 
+    {
+        $prices = $this->courts->pluck('price'); 
+
+        if ($prices->count() > 0) {
+            return $prices->avg();
+        }
+
+        return 0;
+    }
+
+    public function getImagesAttribute($value)
+    {
+        $urls = [];
+        
+        $images = Storage::disk('public')->allFiles($value);
+
+        if (count($images) > 0) {
+            $urls = array_map(fn($image) => Storage::url($image), $images);
+        }
+
+        return $urls;
     }
 }

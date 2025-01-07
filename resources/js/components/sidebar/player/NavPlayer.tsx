@@ -2,7 +2,14 @@ import { Link, usePage } from "@inertiajs/react";
 
 import { SidebarContent } from "@/components/ui/sidebar";
 
-import { PieChart, ChevronRight, CalendarDays, Wallet, Trophy, CircleUser } from "lucide-react";
+import {
+    PieChart,
+    ChevronRight,
+    CalendarDays,
+    Wallet,
+    Trophy,
+    CircleUser,
+} from "lucide-react";
 
 import {
     Collapsible,
@@ -30,16 +37,16 @@ const navMain = [
     },
     {
         title: "Reservas",
-        url: "",
+        url: "#",
         icon: CalendarDays,
         requiresVerification: true,
         items: [
             {
                 title: "Nova Reserva",
-                url: "/player/reservations/create",
+                url: "/player/new-reservation",
             },
             {
-                title: "Reservas",
+                title: "Minhas Reservas",
                 url: "/player/reservations",
             },
         ],

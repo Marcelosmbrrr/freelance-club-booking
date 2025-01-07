@@ -18,7 +18,8 @@ use App\Http\Controllers\Home\Club\Clients\ClientsController;
 use App\Http\Controllers\Home\Club\Profile\ClubProfileController;
 
 // Player
-use App\Http\Controllers\Home\Player\Reservations\PlayerReservationController;
+use App\Http\Controllers\Home\Player\Reservations\MyReservationController;
+use App\Http\Controllers\Home\Player\Reservations\NewReservationController;
 use App\Http\Controllers\Home\Player\Tournaments\PlayerTournamentController;
 use App\Http\Controllers\Home\Player\Profile\PlayerProfileController;
 
@@ -46,8 +47,8 @@ Route::middleware(['auth'])->group(function () {
     });
     // Player
     Route::prefix("player")->middleware(["user-access:player", "verified"])->group(function () {
-        Route::resource("reservations", PlayerReservationController::class)->names("player.reservations");
-        Route::get("reservations/create/{club_id?}", [PlayerReservationController::class, "create"])->name("player.reservations.create.club");
+        Route::resource("reservations", MyReservationController::class)->names("player.my-reservations")->except(['create', 'store'])->names("player.reservations");
+        Route::resource("new-reservation", NewReservationController::class)->names("player.new-reservation")->only(['index', 'create', 'store'])->names("player.new-reservation");
         Route::resource("tournaments", PlayerTournamentController::class)->names("player.tournaments");
         Route::get("profile", [PlayerProfileController::class, "index"])->name("player.profile");
     });

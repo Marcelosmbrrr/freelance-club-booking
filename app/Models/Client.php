@@ -24,4 +24,12 @@ class Client extends Model
     {
         return $this->belongsTo(Club::class);
     }
+
+    // Getters
+
+    public function getNameAttribute($value)
+    {
+        return $value->user->name;
+    }
+
 }

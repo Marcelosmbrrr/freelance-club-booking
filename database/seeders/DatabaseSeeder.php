@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             ClubSeeder::class,
             CourtSeeder::class,
             PlayerSeeder::class,
-            ClientSeeder::class
+            ClientSeeder::class,
+            ReservationSeeder::class
         ]);
     }
 }

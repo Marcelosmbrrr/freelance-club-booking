@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Club;
 
 class Court extends Model
@@ -39,5 +40,33 @@ class Court extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class, "court_id");
+    }
+
+    // Getters
+
+    public function getImagesAttribute($value)
+    {
+        $urls = [];
+        
+        $images = Storage::disk('public')->allFiles($value);
+
+        if (count($images) > 0) {
+            $urls = array_map(fn($image) => Storage::url($image), $images);
+        }
+
+        return $urls;
+    }
+
+    public function getSponsorImageAttribute($value)
+    {
+        $urls = [];
+        
+        $images = Storage::disk('public')->allFiles($value);
+
+        if (count($images) > 0) {
+            $urls = array_map(fn($image) => Storage::url($image), $images);
+        }
+
+        return $urls;
     }
 }

@@ -73,7 +73,7 @@ class ClubSeeder extends Seeder
             ]);
 
             // Armazenamento das imagens
-            Storage::disk("public")->put($clubImagesPath . "main.jpg", file_get_contents('https://www.industriadeltenis.com/wp-content/uploads/2022/02/WhatsApp-Image-2022-02-09-at-17.12.50-1.jpeg'));
+            Storage::disk("public")->put($clubImagesPath . "img1.jpg", file_get_contents('https://www.industriadeltenis.com/wp-content/uploads/2022/02/WhatsApp-Image-2022-02-09-at-17.12.50-1.jpeg'));
         }
     }
 }

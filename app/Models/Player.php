@@ -28,4 +28,11 @@ class Player extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    // Getters
+
+    public function getNameAttribute($value)
+    {
+        return $value->user->name;
+    }
 }
