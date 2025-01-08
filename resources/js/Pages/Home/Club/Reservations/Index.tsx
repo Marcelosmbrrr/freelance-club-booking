@@ -100,22 +100,6 @@ export const columns: ColumnDef<Reservation>[] = [
         cell: ({ row }) => <div>{row.getValue("date")}</div>,
     },
     {
-        accessorKey: "time_slots",
-        header: "Hora",
-        cell: ({ row }) => {
-            const time_slots: { id: string; time: string }[] =
-                row.getValue("time_slots");
-
-            return (
-                <>
-                    {time_slots.map((timeslot, index) => (
-                        <Badge key={index}>{timeslot.time}</Badge>
-                    ))}
-                </>
-            );
-        },
-    },
-    {
         id: "actions",
         header: "Ações",
         enableHiding: false,

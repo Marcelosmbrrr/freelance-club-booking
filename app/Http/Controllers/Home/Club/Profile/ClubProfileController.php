@@ -20,7 +20,7 @@ class ClubProfileController extends Controller
 
     function index() {
 
-        $user = $this->userModel->with("club")->find(Auth::user()->id);
+        $user = $this->userModel->find(Auth::user()->id);
 
         return Inertia::render("Home/Club/Profile/Index", [
             "user" => new ClubProfileResource($user)

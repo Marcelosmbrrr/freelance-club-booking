@@ -17,8 +17,6 @@ class EditCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['images'] = $this->courtImages();
-        $data['sponsor_image'] = [Storage::url($this->sponsor_image)];
         $data['time_slots'] = $this->courtTimeSlots();
 
         return $data;
@@ -121,17 +119,4 @@ class EditCourtResource extends JsonResource
     
         return $time_slots_array;
     }       
-
-    function courtImages() {
-
-        $urls = [];
-
-        $images = Storage::disk('public')->allFiles($this->images);
-
-        if (count($images) > 0) {
-            $urls = array_map(fn($image) => Storage::url($image), $images);
-        }
-
-        return $urls;
-    }
 }

@@ -33,7 +33,7 @@ export function ProfileForm() {
         state: user.data.club.state,
         phonenumber: user.data.club.phonenumber,
         description: user.data.club.description,
-        images: user.data.images,
+        images: user.data.club.images,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -276,7 +276,11 @@ export function ProfileForm() {
                     </p>
                 </div>
                 <GoogleMaps />
-                <Button className="w-full mt-2" type="submit" disabled={processing}>
+                <Button
+                    className="w-full mt-2"
+                    type="submit"
+                    disabled={processing}
+                >
                     {processing ? "Carregando ..." : "Salvar Localização"}
                 </Button>
             </div>
@@ -289,15 +293,11 @@ export function ProfileForm() {
                         imagens do clube.
                     </p>
                 </div>
-                <div>
-                    <InputError message={errors.images} />
-                </div>
-                <div>
-                    <ClubImages
-                        setImages={(urls: string[]) => setData("images", urls)}
-                        images={data.images}
-                    />
-                </div>
+                <InputError message={errors.images} />
+                <ClubImages
+                    setImages={(urls: string[]) => setData("images", urls)}
+                    images={data.images}
+                />
             </div>
         </section>
     );

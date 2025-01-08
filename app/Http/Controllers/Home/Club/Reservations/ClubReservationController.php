@@ -97,7 +97,9 @@ class ClubReservationController extends Controller
     {
         $query = $this->reservationModel->query();
 
-        $query->select('id', 'status', 'date', 'court_id', 'player_id');
+        $query->with(['player.user', 'court']);
+
+        $query->select('id', 'status', 'date', 'total_players', 'court_id', 'player_id');
 
         $reservation = $query->firstOrFail();
 

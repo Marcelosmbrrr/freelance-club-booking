@@ -17,7 +17,6 @@ class ReservationsResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data["date"] = Carbon::parse($this->date)->format("d/m/Y");
         $data["time_slots"] = $this->timeSlots();
 
         return $data;
@@ -27,10 +26,11 @@ class ReservationsResource extends JsonResource
 
         $time_slots = [];
 
-        foreach($this->courtTimeSlot as $index => $courtTimeSlot){
+        foreach($this->timeSlots as $index => $timeSlot){
             $time_slots[$index] = [
-                "id" => $courtTimeSlot->timeSlot->id,
-                "time" => $courtTimeSlot->timeSlot->time
+                "id" => $timeSlot->timeSlot->id,
+                "start_time" => $timeSlot->timeSlot->start_time,
+                "end_time" => $timeSlot->timeSlot->end_time,
             ];
         }  
 

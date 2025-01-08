@@ -14,28 +14,68 @@ class CourtTimeSlotsAvailabilityResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $data = parent::toArray($request);
+        // Recupera todos os time slots da quadra e as reservas para a data específica
+        $courtTimeSlots = $this->timeSlots;
+        $reservations = $this->reservations;
 
-        $data["time_slots"] = $this->timeSlotsAvailability();
+        // Inicializa um array para armazenar os time slots com disponibilidade
+        $timeSlotsWithAvailability = [];
 
-        dd($data);
+        // Verifica a disponibilidade de cada time slot
+        foreach ($courtTimeSlots as $timeSlot) {
+            // Inicializa a disponibilidade como "não disponível"
+            $availabilityStatus = 'unavailable';
+            $availableVacancies = [];
 
-        return $data;
-    }
+            // 1. Verifica se o time slot não tem nenhuma reserva associada (disponível)
+            $isAvailable = $reservations->every(function ($reservation) use ($timeSlot) {
+                return !$reservation->timeSlots->contains('id', $timeSlot->id);
+            });
 
-    public function timeSlotsAvailability() {
+            if ($isAvailable) {
+                // Se não houver reserva, o time slot está disponível
+                $availabilityStatus = 'available';
+            } else {
 
-        // TIME SLOTS FECHADOS:
-            // time slots das reservas com status confirmed
-            // time slots das reservas pending e com campo is_public false
+                // 2. Verifica time slots públicos com vagas (status pending e is_public true)
+                $hasVacancy = $reservations->filter(function ($reservation) use ($timeSlot, &$availableVacancies) {
 
-        // TIME SLOTS DE JOGOS COM VAGA
-            // time slots das reservas com status pending, campo is_public e true e campo total_players maior que a quantidade de vagas preenchidas (relacionamentos "slots" com "player_id" preenchidos)
+                    // Verifica se a reserva está associada ao time slot
+                    if ($reservation->timeSlots->contains('id', $timeSlot->id) && $reservation->status === 'pending' && $reservation->is_public) {
+                        
+                        // Coleta as vagas disponíveis (slots com player_id null)
+                        $vacancies = $reservation->playerSlots->whereNull('player_id');
+                        
+                        if ($vacancies->isNotEmpty()) {
+                            // Adiciona as posições das vagas disponíveis na reserva
+                            $vacancyPositions = $vacancies->pluck('position')->toArray();
+                            $availableVacancies = array_merge($availableVacancies, $vacancyPositions);
+                        }
 
-        // TIME SLOTS DISPONÍVEIS
-            // time slots que não tem reserva nenhuma
+                        return true;
+                    }
 
-        return [];
+                    return false;
+                })->isNotEmpty();
 
+                // Se o time slot tem vagas abertas, ele está disponível com vagas
+                if ($hasVacancy) {
+                    $availabilityStatus = 'available vacancy';
+                }
+            }
+
+            // Formata as vagas disponíveis como uma string separada por vírgulas
+            $availableVacanciesString = !empty($availableVacancies) ? implode(',', $availableVacancies) : '';
+
+            // Adiciona o time slot com o campo de disponibilidade
+            $timeSlotsWithAvailability[] = [
+                'id' => $timeSlot->id,
+                'label' => $timeSlot->start_time . "-" . $timeSlot->end_time, 
+                'status' => $availabilityStatus, 
+                'vacancies' => $availableVacanciesString, 
+            ];
+        }
+
+        return $timeSlotsWithAvailability;
     }
 }

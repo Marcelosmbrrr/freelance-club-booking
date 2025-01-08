@@ -59,14 +59,6 @@ class Court extends Model
 
     public function getSponsorImageAttribute($value)
     {
-        $urls = [];
-        
-        $images = Storage::disk('public')->allFiles($value);
-
-        if (count($images) > 0) {
-            $urls = array_map(fn($image) => Storage::url($image), $images);
-        }
-
-        return $urls;
+        return Storage::url($value);
     }
 }

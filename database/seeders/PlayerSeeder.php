@@ -29,7 +29,7 @@ class PlayerSeeder extends Seeder
             'cpf' => '040.410.456-22'
         ]);
 
-        $playerAvatarPath = "images/players/$player->id/avatar/avatar.jpg";
+        $playerAvatarPath = "images/players/$player->id/avatar.jpg";
 
         $player->update([
             'avatar_image' => $playerAvatarPath

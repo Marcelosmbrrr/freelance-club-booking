@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Reservation extends Model
 {
@@ -48,9 +49,11 @@ class Reservation extends Model
         return $this->belongsToMany(CourtTimeSlot::class, 'reservation_court_time_slot', 'reservation_id', 'court_time_slot_id');
     }
 
-    public function slots()
+    public function playerSlots()
     {
         return $this->hasMany(ReservationSlot::class);
     }
+
+    // Getters
 
 }

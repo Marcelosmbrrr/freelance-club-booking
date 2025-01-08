@@ -387,40 +387,10 @@ export default function EditCourt() {
                         />
                     </div>
                     {/* Form 3 - Image */}
-                    <div className="grid gap-4 rounded-lg border p-8">
-                        <div className="space-y-2">
-                            <h1 className="text-xl font-semibold">Pricing</h1>
-                            <p className="text-gray-600">
-                                Fill in the pricing information for court and
-                                promotions available.
-                            </p>
-                        </div>
-                        <div>
-                            <div className="w-64">
-                                <Label htmlFor="name">Court price</Label>
-                                <Input
-                                    id="price"
-                                    type="number"
-                                    min={0}
-                                    step=".01"
-                                    name="price"
-                                    placeholder="Court price"
-                                    value={data.price}
-                                    onChange={(e) =>
-                                        setData("price", e.target.value)
-                                    }
-                                />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    {/* Form 3 - Image */}
-                    <div className="rounded-lg border p-8">
-                        <div>
-                            <div className="mb-2 space-y-2">
+                    <div className="rounded-lg border space-y-4 p-8">
+                        {/* Seção de Fotos do Court */}
+                        <div className="space-y-4">
+                            <div className="space-y-2">
                                 <h1 className="text-xl font-semibold">
                                     Photos of the Court (optional)
                                 </h1>
@@ -429,24 +399,19 @@ export default function EditCourt() {
                                     Organize the photos of the court.
                                 </p>
                             </div>
-                            <div>
-                                <InputError message={errors.images} />
-                            </div>
-                            <div>
-                                <CourtImages
-                                    setImages={(urls: string[]) =>
-                                        setData("images", urls)
-                                    }
-                                    images={data.images}
-                                    multiple
-                                />
-                            </div>
+                            <InputError message={errors.images} />
+                            <CourtImages
+                                setImages={(urls) => setData("images", urls)}
+                                images={data.images}
+                                multiple
+                            />
                         </div>
-                        <div className="py-6">
-                            <Separator />
-                        </div>
-                        <div>
-                            <div className="mb-2 space-y-2">
+
+                        <Separator />
+
+                        {/* Seção de Sponsor do Court */}
+                        <div className="space-y-4">
+                            <div className="space-y-2">
                                 <h1 className="text-xl font-semibold">
                                     Court Sponsor (optional)
                                 </h1>
@@ -455,18 +420,12 @@ export default function EditCourt() {
                                     of the sponsor of the court.
                                 </p>
                             </div>
-                            <div>
-                                <InputError message={errors.images} />
-                            </div>
-                            <div>
-                                <CourtImages
-                                    setImages={(urls: string[]) =>
-                                        setData("images", urls)
-                                    }
-                                    images={data.images}
-                                    saveAs="sponsor"
-                                />
-                            </div>
+                            <InputError message={errors.images} />
+                            <CourtImages
+                                setImages={(urls) => setData("images", urls)}
+                                images={[data.sponsor_image]}
+                                saveAs="sponsor"
+                            />
                         </div>
                     </div>
                     <div className="flex justify-end gap-x-2">

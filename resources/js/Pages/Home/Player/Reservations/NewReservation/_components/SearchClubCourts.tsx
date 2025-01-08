@@ -21,33 +21,31 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-export function SearchClubCourts(props: {
-    club?: { zip_code: string; address: string };
-}) {
+export function SearchClubCourts(props: { club?: { zip_code: string; address: string } }) {
     const [search, setSearch] = React.useState<string>("");
     const [sport, setSport] = React.useState<string>("padel");
-    const [date, setDate] = React.useState<string>(
-        format(new Date(), "yyyy-MM-dd")
-    );
+    const [date, setDate] = React.useState<string>(format(new Date(), "yyyy-MM-dd"));
     const [time, setTime] = React.useState<string>(format(new Date(), "HH:mm"));
     const [isCovered, setIsCovered] = React.useState<boolean>(false);
     const [canPlayOutside, setCanPlayOutside] = React.useState<boolean>(false);
     const [floorType, setFloorType] = React.useState<string>("");
     const [price, setPrice] = React.useState<{ min: number; max: number }>({
-        min: 0,
-        max: 0,
+        min: 10,
+        max: 100,
     });
     const [openMap, setOpenMap] = React.useState<boolean>(false);
 
     return (
-        <div className="w-full rounded-t-lg mb-4">
+        <div className="w-full mb-4">
             <div className="relative">
                 <div className="flex flex-col items-center justify-between py-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
                     <div className="flex w-full max-w-xl items-center space-x-2">
                         <Input
-                            type="email"
+                            type="text"
                             className="min-w-96"
                             placeholder="Procurar quadra por nome"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                         />
                         <Popover>
                             <PopoverTrigger asChild>
@@ -65,14 +63,10 @@ export function SearchClubCourts(props: {
                                     <Separator />
                                     <div className="grid gap-2">
                                         <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="maxWidth">
-                                                Esporte
-                                            </Label>
+                                            <Label htmlFor="sport">Esporte</Label>
                                             <Select
                                                 value={sport}
-                                                onValueChange={(v) =>
-                                                    setSport(v)
-                                                }
+                                                onValueChange={(v) => setSport(v)}
                                             >
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Esporte" />
@@ -96,19 +90,31 @@ export function SearchClubCourts(props: {
                                             </Select>
                                         </div>
                                         <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="time">
-                                                Preço Médio
-                                            </Label>
+                                            <Label htmlFor="price">Preço Médio</Label>
                                             <div className="grid grid-cols-2 gap-2 w-full">
                                                 <Input
                                                     type="number"
                                                     className="w-full"
                                                     placeholder="Mínimo"
+                                                    value={price.min}
+                                                    onChange={(e) =>
+                                                        setPrice((prev) => ({
+                                                            ...prev,
+                                                            min: Number(e.target.value),
+                                                        }))
+                                                    }
                                                 />
                                                 <Input
                                                     type="number"
                                                     className="w-full"
                                                     placeholder="Máximo"
+                                                    value={price.max}
+                                                    onChange={(e) =>
+                                                        setPrice((prev) => ({
+                                                            ...prev,
+                                                            max: Number(e.target.value),
+                                                        }))
+                                                    }
                                                 />
                                             </div>
                                         </div>
@@ -130,8 +136,8 @@ export function SearchClubCourts(props: {
                     </div>
                 </div>
                 <div className="flex gap-x-2">
-                    <Badge>Procura: courts</Badge>
                     <Badge>Esporte: {sport}</Badge>
+                    <Badge>R$: {price.min} - {price.max}</Badge>
                 </div>
                 {openMap && (
                     <div className="my-4 sticky">
@@ -151,3 +157,4 @@ export function SearchClubCourts(props: {
         </div>
     );
 }
+

@@ -33,9 +33,6 @@ export default function ShowCourt() {
                 <div className="grid gap-4 rounded-lg border p-8">
                     <div className="space-y-2">
                         <h1 className="text-xl font-semibold">Basic</h1>
-                        <p className="text-gray-600">
-                            Enter the basic data of the court.
-                        </p>
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="name">Court Name</Label>

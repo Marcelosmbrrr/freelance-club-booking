@@ -1,4 +1,7 @@
 import * as React from "react";
+
+import { timeSlotsData } from "@/utils/data/timeSlots";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,12 +33,12 @@ export function SearchClubOrCourt(props: {
     const [date, setDate] = React.useState<string>(
         format(new Date(), "yyyy-MM-dd")
     );
-    const [time, setTime] = React.useState<string>(format(new Date(), "HH:mm"));
+    const [time, setTime] = React.useState<string>();
+    const [price, setPrice] = React.useState({ min: 10, max: 100 });
     const [court, setCourt] = React.useState({
         is_covered: false,
         floor_type: "",
         can_play_outside: false,
-        price: 0,
     });
     const [openMap, setOpenMap] = React.useState<boolean>(false);
 
@@ -153,7 +156,10 @@ export function SearchClubOrCourt(props: {
                                                                         fora da
                                                                         quadra
                                                                     </Label>
-                                                                    <Input id="can_play_outside" defaultValue="25px" />
+                                                                    <Input
+                                                                        id="can_play_outside"
+                                                                        defaultValue="25px"
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -187,7 +193,22 @@ export function SearchClubOrCourt(props: {
                                             <Label htmlFor="time">
                                                 Horário
                                             </Label>
-                                            <Input type="time" value={time} />
+                                            <Select>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecionar" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {timeSlotsData.map(
+                                                            (time_slot) => (
+                                                                <SelectItem value={time_slot.id}>
+                                                                    {time_slot.time}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                         <div className="grid grid-cols-2 items-center gap-4">
                                             <Label htmlFor="date">Data</Label>
@@ -230,8 +251,10 @@ export function SearchClubOrCourt(props: {
                 <div className="flex gap-x-2">
                     <Badge>Procura: {entity}</Badge>
                     <Badge>Esporte: {sport}</Badge>
-                    <Badge>Horário: {time}</Badge>
-                    <Badge>Dia: {date}</Badge>
+                    <Badge>Data/Hora: {date}</Badge>
+                    <Badge>
+                        R$: {price.min} - {price.max}
+                    </Badge>
                 </div>
                 {openMap && (
                     <div className="my-4 sticky">

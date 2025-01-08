@@ -58,11 +58,16 @@ class NewReservationController extends Controller
         $clubId = $request->input('clubId');
         $courtId = $request->input('courtId');
         $date = $request->input('date');
+        $weekday = $request->input('weekday');
 
         return Inertia::render('Home/Player/Reservations/NewReservation/CreateReservation', [
             'club' =>  new CreateReservationResource($this->clubModel->with(['courts'])->find($clubId)),
-            'court_available_time_slots' => Inertia::lazy(fn () => new CourtTimeSlotsAvailabilityResource($this->courtModel->with(['reservations' => function ($query) use ($date) {
-                $query->whereDate('date', $date);
+            'court_available_time_slots' => Inertia::lazy(fn () => new CourtTimeSlotsAvailabilityResource($this->courtModel->with([
+                'timeSlots' => function ($query) use ($weekday) {
+                    $query->where('weekday', $weekday);
+                }, 
+                'reservations' => function ($query) use ($date) {
+                    $query->whereDate('date', $date);
             }])->find($courtId)))
         ]);
         

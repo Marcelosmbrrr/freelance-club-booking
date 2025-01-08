@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 
 class Player extends Model
@@ -34,5 +35,9 @@ class Player extends Model
     public function getNameAttribute($value)
     {
         return $value->user->name;
+    }
+
+    public function getAvatarImageAttribute($value) {
+        return Storage::url($value);
     }
 }

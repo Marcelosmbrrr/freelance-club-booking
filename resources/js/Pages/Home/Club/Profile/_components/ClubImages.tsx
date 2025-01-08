@@ -31,7 +31,7 @@ export function ClubImages(props: { setImages: (urls: string[]) => void, images:
     };
 
     return (
-        <>
+        <div>
             <div className="max-w-sm mb-4">
                 <Input
                     id="picture"
@@ -94,6 +94,6 @@ export function ClubImages(props: { setImages: (urls: string[]) => void, images:
                     </Droppable>
                 </div>
             </DragDropContext>
-        </>
+        </div>
     );
 }

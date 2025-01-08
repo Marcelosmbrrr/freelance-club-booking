@@ -39,7 +39,7 @@ class CourtSeeder extends Seeder
         ]);
 
         // Configura imagens da quadra
-        $courtImagesPath = "images/courts/$court->id/";
+        $courtImagesPath = "images/courts/$court->id/common/";
         $sponsorImagePath = "images/courts/$court->id/sponsor/img.jpg";
 
         $court->update([
