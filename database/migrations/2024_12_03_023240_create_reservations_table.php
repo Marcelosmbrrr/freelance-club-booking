@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('player_id')->constrained('players'); 
             $table->foreignId('court_id')->constrained('courts');  
             $table->integer('total_players'); 
+            $table->decimal("price");
             $table->boolean('is_public');
             $table->date("date");
             $table->boolean("is_filled");

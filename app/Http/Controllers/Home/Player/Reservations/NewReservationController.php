@@ -26,6 +26,7 @@ class NewReservationController extends Controller
      */
     public function index(Request $request)
     {
+        $entity = $request->input('entity', 'clubs');
         $search = $request->input('search');
         $searchBy = $request->input('search_by', 'id');
         $orderBy = $request->input('order_by', 'id');
@@ -33,18 +34,26 @@ class NewReservationController extends Controller
         $limit = $request->input('limit', 10);
         $page = $request->input('page', 1);
 
-        $query = $this->clubModel->query();
+        $query = $entity === "clubs" ? $this->clubModel->query() : $this->courtModel->query();
+
+        if($entity === "clubs") {
+            $query->with(['user', 'courts']);
+        } else {
+            $query->with('club');
+        }
 
         if ($search && $searchBy) {
             $query->where($searchBy, 'like', '%' . $search . '%');
         }
 
-        $query->orderBy('clubs.' . $orderBy, $order);
+        $query->orderBy("$entity." . $orderBy, $order);
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
         return Inertia::render('Home/Player/Reservations/NewReservation/Index', [
-            'pagination' =>  NewReservationResource::collection($data),
+            'pagination' =>  NewReservationResource::collection($data)->additional([
+                'entity' => $entity,
+            ]),
             'queryParams' => request()->query() ?: null,
             'success' => session('success')
         ]);

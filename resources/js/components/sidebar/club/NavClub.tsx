@@ -6,8 +6,8 @@ import {
     PieChart,
     ChevronRight,
     Store,
-    Trophy,
-    Wallet,
+    //Trophy,
+    //Wallet,
     CircleUser
 } from "lucide-react";
 
@@ -48,33 +48,6 @@ const navMain = [
             {
                 title: "Reservas",
                 url: "/club/reservations",
-            },
-            {
-                title: "Clientes",
-                url: "/club/clients",
-            },
-        ],
-    },
-    {
-        title: "Torneios",
-        url: "/club/tournaments",
-        icon: Trophy,
-        requiresVerification: false,
-        items: null,
-    },
-    {
-        title: "Financeiro",
-        url: "#",
-        icon: Wallet,
-        requiresVerification: true,
-        items: [
-            {
-                title: "Pagamentos",
-                url: "#",
-            },
-            {
-                title: "Contas Bancárias",
-                url: "#",
             },
         ],
     },

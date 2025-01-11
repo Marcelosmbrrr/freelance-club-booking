@@ -27,7 +27,7 @@ return new class extends Migration
             $table->boolean("status")->default(true);
             $table->string("images")->nullable();
             $table->string("sponsor_image")->nullable();
-            $table->decimal("price")->nullable();
+            $table->json("pricing")->nullable();
             $table->timestamps();
         });
     }

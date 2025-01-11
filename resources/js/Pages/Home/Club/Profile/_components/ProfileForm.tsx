@@ -92,9 +92,6 @@ export function ProfileForm() {
 
     return (
         <section className="space-y-4">
-            <div className="flex justify-between items-center rounded-lg border p-4">
-                <h1 className="text-xl font-semibold">Dados do Clube</h1>
-            </div>
             <div className="space-y-4 rounded-lg border p-8">
                 <form className="space-y-6" onSubmit={submit}>
                     <div className="grid w-full items-center gap-1.5">

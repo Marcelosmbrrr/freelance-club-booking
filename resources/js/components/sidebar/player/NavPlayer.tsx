@@ -6,8 +6,8 @@ import {
     PieChart,
     ChevronRight,
     CalendarDays,
-    Wallet,
-    Trophy,
+    //Wallet,
+    //Trophy,
     CircleUser,
 } from "lucide-react";
 
@@ -48,42 +48,6 @@ const navMain = [
             {
                 title: "Minhas Reservas",
                 url: "/player/reservations",
-            },
-        ],
-    },
-    {
-        title: "Torneios",
-        url: "#",
-        icon: Trophy,
-        requiresVerification: true,
-        items: [
-            {
-                title: "Realizar inscrição",
-                url: "/player/tournaments/create",
-            },
-            {
-                title: "Inscrições",
-                url: "/player/tournaments",
-            },
-        ],
-    },
-    {
-        title: "Pagamentos",
-        url: "#",
-        icon: Wallet,
-        requiresVerification: true,
-        items: [
-            {
-                title: "Métodos de Pagamento",
-                url: "/player/payments/methods",
-            },
-            {
-                title: "Pagamentos Pendentes",
-                url: "/player/payments/pending",
-            },
-            {
-                title: "Histórico",
-                url: "/player/payments/history",
             },
         ],
     },

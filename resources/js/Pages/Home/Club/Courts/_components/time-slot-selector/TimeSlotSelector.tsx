@@ -13,6 +13,15 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Combobox } from "@/components/combobox/Combobox";
 import { Button } from "@/components/ui/button";
 import {
@@ -117,7 +126,7 @@ export function TimeSlotSelector(props: {
                             {data[weekday].map((time_slot, index) => (
                                 <div key={index}>
                                     <div className="flex space-x-2">
-                                        <div className="grid gap-2">
+                                        <div>
                                             <Combobox
                                                 options={timeSlotsList.map(
                                                     (item) => ({
@@ -139,7 +148,7 @@ export function TimeSlotSelector(props: {
                                                 }
                                             />
                                         </div>
-                                        <div className="grid gap-2">
+                                        <div>
                                             <Combobox
                                                 options={timeSlotsList.map(
                                                     (item) => ({
@@ -161,7 +170,7 @@ export function TimeSlotSelector(props: {
                                                 }
                                             />
                                         </div>
-                                        <div className="grid gap-2">
+                                        <div>
                                             <Popover>
                                                 <TooltipProvider>
                                                     <Tooltip>
@@ -175,9 +184,7 @@ export function TimeSlotSelector(props: {
                                                             </PopoverTrigger>
                                                         </TooltipTrigger>
                                                         <TooltipContent>
-                                                            <p>
-                                                                Promotions
-                                                            </p>
+                                                            <p>Promoções</p>
                                                         </TooltipContent>
                                                     </Tooltip>
                                                 </TooltipProvider>
@@ -185,32 +192,49 @@ export function TimeSlotSelector(props: {
                                                     <div className="grid gap-4">
                                                         <div className="space-y-2">
                                                             <h4 className="font-medium leading-none">
-                                                                Promotions
+                                                                Promoções
                                                             </h4>
                                                             <p className="text-sm text-muted-foreground">
-                                                                Set price
-                                                                discounts for
-                                                                this period.
+                                                                Define o
+                                                                desconto de
+                                                                preço para esse
+                                                                período.
                                                             </p>
                                                         </div>
                                                         <div className="flex items-center gap-x-2">
                                                             <div className="w-full">
                                                                 <Input
-                                                                    placeholder="Discount"
+                                                                    placeholder="Desconto"
                                                                     className="col-span-2 h-8"
                                                                 />
                                                             </div>
                                                             <div className="w-full">
-                                                                <Input
-                                                                    placeholder="From"
-                                                                    className="col-span-2 h-8"
-                                                                />
+                                                                <Select>
+                                                                    <SelectTrigger className="w-full">
+                                                                        <SelectValue placeholder="De" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        <SelectGroup>
+                                                                            <SelectLabel>
+                                                                                Fruits
+                                                                            </SelectLabel>
+                                                                        </SelectGroup>
+                                                                    </SelectContent>
+                                                                </Select>
                                                             </div>
                                                             <div className="w-full">
-                                                                <Input
-                                                                    placeholder="To"
-                                                                    className="col-span-2 h-8"
-                                                                />
+                                                                <Select>
+                                                                    <SelectTrigger className="w-full">
+                                                                        <SelectValue placeholder="Até" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        <SelectGroup>
+                                                                            <SelectLabel>
+                                                                                Fruits
+                                                                            </SelectLabel>
+                                                                        </SelectGroup>
+                                                                    </SelectContent>
+                                                                </Select>
                                                             </div>
                                                             <TooltipProvider>
                                                                 <Tooltip>
@@ -226,8 +250,8 @@ export function TimeSlotSelector(props: {
                                                                     </TooltipTrigger>
                                                                     <TooltipContent>
                                                                         <p>
-                                                                            Delete
-                                                                            Promotion
+                                                                            Deletar
+                                                                            Promoção
                                                                         </p>
                                                                     </TooltipContent>
                                                                 </Tooltip>
@@ -246,8 +270,8 @@ export function TimeSlotSelector(props: {
                                                                     </TooltipTrigger>
                                                                     <TooltipContent>
                                                                         <p>
-                                                                            Add
-                                                                            Promotion
+                                                                            Adicionar
+                                                                            Promoção
                                                                         </p>
                                                                     </TooltipContent>
                                                                 </Tooltip>
@@ -276,7 +300,10 @@ export function TimeSlotSelector(props: {
                                                             </Button>
                                                         </TooltipTrigger>
                                                         <TooltipContent>
-                                                            <p>Add Time Slot</p>
+                                                            <p>
+                                                                Adicionar
+                                                                Horário
+                                                            </p>
                                                         </TooltipContent>
                                                     </Tooltip>
                                                 </TooltipProvider>
@@ -300,7 +327,7 @@ export function TimeSlotSelector(props: {
                                                         </TooltipTrigger>
                                                         <TooltipContent>
                                                             <p>
-                                                                Delete Time Slot
+                                                                Deletar Horário
                                                             </p>
                                                         </TooltipContent>
                                                     </Tooltip>

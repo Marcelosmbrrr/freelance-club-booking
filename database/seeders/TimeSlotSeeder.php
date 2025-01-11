@@ -13,7 +13,7 @@ class TimeSlotSeeder extends Seeder
      */
     public function run(): void
     {
-        $startTime = strtotime('06:30'); 
+        $startTime = strtotime('06:00'); 
         $endTime = strtotime('00:00') + 86400;  
 
         $timeSlots = [];

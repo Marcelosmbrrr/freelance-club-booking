@@ -17,8 +17,6 @@ class PlayerProfileResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data["avatar_image"] = Storage::url($this->player->avatar_image);
-
         return $data;
     }
 }

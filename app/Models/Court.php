@@ -24,8 +24,12 @@ class Court extends Model
         'status',
         'images',
         'sponsor_image',
-        'price',
+        'pricing',
     ]; 
+
+    protected $casts = [
+        'pricing' => 'array', 
+    ];
     
     public function club()
     {
@@ -55,6 +59,10 @@ class Court extends Model
         }
 
         return $urls;
+    }
+
+    public function getGeolocalizationAttribute() {
+        return $this->club->geolocalization;
     }
 
     public function getSponsorImageAttribute($value)

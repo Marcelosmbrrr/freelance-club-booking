@@ -78,7 +78,7 @@ export const columns: ColumnDef<Reservation>[] = [
     },
     {
         accessorKey: "status",
-        header: "Status",
+        header: "Situação",
         cell: ({ row }) => (
             <Badge>
                 {row.getValue("status") === "confirmed"
@@ -199,7 +199,7 @@ export default function Reservations() {
                             </Tooltip>
                         </TooltipProvider>
                         <Button variant="outline" className="ml-auto" disabled>
-                            Criar Reserva <CirclePlus />
+                            Nova Reserva <CirclePlus />
                         </Button>
                     </div>
                 </div>

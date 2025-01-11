@@ -2,20 +2,20 @@ import * as React from "react";
 import { Head, router, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { SearchCourts } from "./_components/SearchCourts";
 
 import { Badge } from "@/components/ui/badge";
 import {
     ColumnDef,
     ColumnFiltersState,
     SortingState,
-    flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { Trash2, MoreHorizontal, CirclePlus } from "lucide-react";
+import { Trash2, CirclePlus, Eye, SquarePen } from "lucide-react";
 import {
     Tooltip,
     TooltipContent,
@@ -31,14 +31,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 export type Court = {
     id: string;
@@ -47,6 +40,9 @@ export type Court = {
     type: "indoor" | "outdoor";
     reservations: [];
     status: string;
+    images: string[];
+    description: string;
+    sponsor_image: string[];
 };
 
 export const columns: ColumnDef<Court>[] = [
@@ -76,77 +72,22 @@ export const columns: ColumnDef<Court>[] = [
     },
     {
         accessorKey: "name",
-        header: "Name",
+        header: "Nome",
         cell: ({ row }) => <div>{row.getValue("name")}</div>,
     },
     {
         accessorKey: "price",
-        header: "Price",
+        header: "Preço",
         cell: ({ row }) => <div>{row.getValue("price")}</div>,
     },
     {
         accessorKey: "sport",
-        header: "Sport",
+        header: "Esporte",
         cell: ({ row }) => <div>{row.getValue("sport")}</div>,
-    },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-            <div className="flex gap-x-2">
-                <Badge
-                    className={
-                        row.getValue("status")
-                            ? "bg-green-500 hover:bg-green-400"
-                            : "bg-red-500"
-                    }
-                >
-                    {row.getValue("status") ? "Active" : "Inactive"}
-                </Badge>
-                {Boolean(row.original.reservations.length) && (
-                    <Badge>Reserved</Badge>
-                )}
-            </div>
-        ),
-    },
-    {
-        id: "actions",
-        header: "Actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open Menu</span>
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                            onClick={() =>
-                                router.get("/club/courts/" + row.original.id)
-                            }
-                        >
-                            View Court
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                router.get(
-                                    "/club/courts/" + row.original.id + "/edit"
-                                )
-                            }
-                        >
-                            Edit Court
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
-        },
     },
 ];
 
-const breadCrumb = [{ name: "Courts" }];
+const breadCrumb = [{ name: "Quadras" }];
 
 export default function Courts() {
     const { pagination, queryParams = null, success }: any = usePage().props;
@@ -181,109 +122,165 @@ export default function Courts() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Clubs" />
-            <div className="w-full">
-                <div className="flex justify-between items-center py-4">
-                    <Input placeholder="Search" className="max-w-sm" />
-                    <div className="flex items-center space-x-2">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        disabled={
-                                            !table.getIsSomeRowsSelected()
+            <div className="flex justify-between items-center py-4">
+                <SearchCourts />
+                <div className="flex items-center space-x-2">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    disabled={!table.getIsSomeRowsSelected()}
+                                >
+                                    <Trash2 />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Deletar</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <Button
+                        variant="outline"
+                        className="ml-auto"
+                        onClick={() => router.get("/club/courts/create")}
+                    >
+                        Nova Quadra <CirclePlus />
+                    </Button>
+                </div>
+            </div>
+            <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12 2xl:grid-cols-6">
+                {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((item) => (
+                        <div
+                            key={item.id}
+                            className={`group flex flex-col border rounded-lg shadow-sm w-full sm:w-auto md:w-[300px] lg:w-[350px] xl:w-[400px] hover:scale-105 transition-all cursor-pointer ${
+                                item.getIsSelected() && "scale-105"
+                            }`}
+                            onClick={() => item.toggleSelected()}
+                        >
+                            <div className="flex text-clip relative">
+                                <div
+                                    className="aspect-[3/2] size-full rounded-t-lg bg-cover bg-center"
+                                    style={{
+                                        backgroundImage: `url(${item.original.images[0]})`,
+                                    }}
+                                ></div>
+                                <img
+                                    src={item.original.sponsor_image}
+                                    alt="Miniatura"
+                                    className="absolute bottom-2 right-2 w-8 h-8 rounded border-2 border-white"
+                                />
+                            </div>
+                            <div className="p-4">
+                                <div className="mb-2">
+                                    <Badge
+                                        className={
+                                            item.original.status
+                                                ? "bg-green-500 hover:bg-green-400"
+                                                : "bg-red-500"
                                         }
                                     >
-                                        <Trash2 />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>Delete</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                        <Button
-                            variant="outline"
-                            className="ml-auto"
-                            onClick={() => router.get("/club/courts/create")}
+                                        {item.original.status
+                                            ? "Ativo"
+                                            : "Inativo"}
+                                    </Badge>
+                                </div>
+                                <div className="line-clamp-3 break-words text-lg font-medium lg:text-2xl">
+                                    {item.original.name}
+                                </div>
+                                <div className="line-clamp-3 break-words text-sm font-medium">
+                                    {item.original.description}
+                                </div>
+                                <div className="flex justify-end items-center gap-2 py-2">
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={() => {
+                                                        router.get(
+                                                            route(
+                                                                "club.courts.show",
+                                                                {
+                                                                    court: item
+                                                                        .original
+                                                                        .id,
+                                                                }
+                                                            )
+                                                        );
+                                                    }}
+                                                >
+                                                    <Eye />
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Visualizar Quadra</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={() => {
+                                                        router.get(
+                                                            route(
+                                                                "club.courts.edit",
+                                                                {
+                                                                    court: item
+                                                                        .original
+                                                                        .id,
+                                                                }
+                                                            )
+                                                        );
+                                                    }}
+                                                >
+                                                    <SquarePen />
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Editar Quadra</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <TableRow>
+                        <TableCell
+                            colSpan={columns.length}
+                            className="h-24 text-center"
                         >
-                            Create Court <CirclePlus />
-                        </Button>
-                    </div>
+                            Nenhuma quadra encontrada.
+                        </TableCell>
+                    </TableRow>
+                )}
+            </div>
+            <div className="flex items-center justify-end space-x-2 py-4">
+                <div className="flex-1 text-sm text-muted-foreground">
+                    {table.getFilteredSelectedRowModel().rows.length} de{" "}
+                    {table.getFilteredRowModel().rows.length} quadra(s)
+                    selecionada(s).
                 </div>
-                <div className="rounded-md border">
-                    <Table>
-                        <TableHeader>
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
-                                    {headerGroup.headers.map((header) => (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext()
-                                                  )}
-                                        </TableHead>
-                                    ))}
-                                </TableRow>
-                            ))}
-                        </TableHeader>
-                        <TableBody>
-                            {table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={
-                                            row.getIsSelected() && "selected"
-                                        }
-                                    >
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center"
-                                    >
-                                        No courts found.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-                <div className="flex items-center justify-end space-x-2 py-4">
-                    <div className="flex-1 text-sm text-muted-foreground">
-                        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                        {table.getFilteredRowModel().rows.length} row(s)
-                        selected.
-                    </div>
-                    <div className="space-x-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            Previous
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            Next
-                        </Button>
-                    </div>
+                <div className="space-x-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Anterior
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Próximo
+                    </Button>
                 </div>
             </div>
         </AuthenticatedLayout>

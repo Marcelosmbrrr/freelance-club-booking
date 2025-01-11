@@ -27,12 +27,19 @@ class ReservationSeeder extends Seeder
             "total_players" => 4, // Pode alterar para qualquer valor desejado
             "is_public" => true,
             "date" => Carbon::create(2025, 1, 7),
+            "price" => $court->pricing[0]["price"],
             "is_filled" => false
         ]);
 
-        ReservationCourtTimeSlot::create([
-            "reservation_id" => $reservation->id,
-            "court_time_slot_id" => 1
+        ReservationCourtTimeSlot::insert([
+            [
+                "reservation_id" => $reservation->id,
+                "court_time_slot_id" => 1
+            ],
+            [
+                "reservation_id" => $reservation->id,
+                "court_time_slot_id" => 2
+            ]
         ]);
 
         $playerSlots = [];

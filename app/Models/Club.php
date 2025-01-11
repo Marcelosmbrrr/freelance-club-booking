@@ -27,7 +27,7 @@ class Club extends Model
         'geolocalization',
     ];   
 
-    protected $appends = ['name', 'average_price'];
+    protected $appends = ['name', 'average_price', 'sports'];
 
     public function user()
     {
@@ -56,6 +56,11 @@ class Club extends Model
         return $this->user->name;
     }
 
+    public function getSportsAttribute()
+    {
+        return $this->courts->pluck('sport')->unique()->values()->all();
+    }
+
     public function getAveragePriceAttribute() 
     {
         $prices = $this->courts->pluck('price'); 
@@ -79,4 +84,5 @@ class Club extends Model
 
         return $urls;
     }
+
 }

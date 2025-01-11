@@ -23,7 +23,7 @@ class MyReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $search = $request->input('search');
         $searchBy = $request->input('search_by', 'id');
@@ -32,15 +32,17 @@ class MyReservationController extends Controller
         $limit = $request->input('limit', 10);
         $page = $request->input('page', 1);
 
-        $query = $this->clubModel->query();
+        $query = $this->reservationModel->query();
 
-        // Auth::user()->player->id
+        $query->where("player_id", Auth::user()->player->id);
+
+        $query->with(['player', 'club', 'court']);
 
         if ($search && $searchBy) {
             $query->where($searchBy, 'like', '%' . $search . '%');
         }
 
-        $query->orderBy('clubs.' . $orderBy, $order);
+        $query->orderBy('reservations.' . $orderBy, $order);
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 

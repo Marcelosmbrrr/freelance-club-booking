@@ -6,6 +6,7 @@ import InputError from "@/components/InputError";
 import { CourtImages } from "./_components/image-selector/CourtImages";
 import { TimeSlotSelector } from "./_components/time-slot-selector/TimeSlotSelector";
 import { HelpSidebar } from "@/components/help-sidebar/HelpSidebar";
+import { PricingSelector } from "./_components/pricing-selector/PricingSelector";
 // Types
 import { TimeSlot } from "./types/types";
 import { CreateEditCourtSchema } from "./types/types";
@@ -70,27 +71,24 @@ export default function EditCourt() {
             {/* Container */}
             <div className="flex justify-center items-center">
                 {/* Forms Container */}
-                <form className="space-y-4 w-full max-w-4xl" onSubmit={submit}>
-                    <div className="flex justify-between items-center rounded-lg border p-4">
-                        <h1 className="text-xl font-semibold">Edit Court</h1>
-                    </div>
+                <form className="space-y-4 w-full max-w-7xl" onSubmit={submit}>
                     {/* Form 1 - Basic */}
                     <div className="grid gap-4 rounded-lg border p-8">
                         <div className="space-y-2">
-                            <h1 className="text-xl font-semibold">Basic</h1>
+                            <h1 className="text-xl font-semibold">Básico</h1>
                             <p className="text-gray-600">
-                                Enter essential court information in the form
-                                below.
+                                Insira as informações essenciais da quadra no
+                                formulário abaixo.
                             </p>
                         </div>
                         <div className="flex gap-x-4">
                             <div className="w-full">
-                                <Label htmlFor="name">Court name</Label>
+                                <Label htmlFor="name">Nome da Quadra</Label>
                                 <Input
                                     id="name"
                                     type="text"
                                     name="name"
-                                    placeholder="Court name"
+                                    placeholder="Nome da Quadra"
                                     value={data.name}
                                     onChange={(e) =>
                                         setData("name", e.target.value)
@@ -105,7 +103,7 @@ export default function EditCourt() {
                         {/* Linha com selects */}
                         <div className="flex gap-x-4">
                             <div className="w-full">
-                                <Label htmlFor="sport">Sport</Label>
+                                <Label htmlFor="sport">Esporte</Label>
                                 <Select
                                     value={data.sport}
                                     onValueChange={(value) =>
@@ -113,7 +111,7 @@ export default function EditCourt() {
                                     }
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select an option" />
+                                        <SelectValue placeholder="Selecione uma opção" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -129,7 +127,7 @@ export default function EditCourt() {
                                 />
                             </div>
                             <div className="w-full">
-                                <Label htmlFor="type">Court type</Label>
+                                <Label htmlFor="type">Tipo de Quadra</Label>
                                 <Select
                                     value={data.type}
                                     onValueChange={(value) =>
@@ -137,18 +135,18 @@ export default function EditCourt() {
                                     }
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select an option" />
+                                        <SelectValue placeholder="Selecione uma opção" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectItem value="masonry">
-                                                Masonry
+                                                Alvenaria
                                             </SelectItem>
                                             <SelectItem value="panoramic">
-                                                Panoramic
+                                                Panorâmica
                                             </SelectItem>
                                             <SelectItem value="mixed">
-                                                Mixed
+                                                Mista
                                             </SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
@@ -161,14 +159,14 @@ export default function EditCourt() {
                         </div>
                         <div className="flex gap-x-4">
                             <div className="w-1/2">
-                                <Label htmlFor="name">Base price</Label>
+                                <Label htmlFor="name">Preço</Label>
                                 <Input
                                     id="price"
                                     type="number"
                                     min={0}
                                     step=".01"
                                     name="price"
-                                    placeholder="Base price"
+                                    placeholder="Preço"
                                     value={data.price}
                                     onChange={(e) =>
                                         setData("price", e.target.value)
@@ -182,9 +180,7 @@ export default function EditCourt() {
                         </div>
                         <div className="flex flex-col space-y-4">
                             <div>
-                                <Label htmlFor="is_covered">
-                                    Court coverage
-                                </Label>
+                                <Label htmlFor="is_covered">Cobertura</Label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Switch
@@ -196,15 +192,15 @@ export default function EditCourt() {
                                 />
                                 <Label htmlFor="is_covered">
                                     {data.is_covered
-                                        ? "With cover"
-                                        : "Without cover"}
+                                        ? "Com Cobertura"
+                                        : "Sem Cobertura"}
                                 </Label>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <Label htmlFor="description">
-                                    Off-court plays
+                                    Jogos Fora da Quadra
                                 </Label>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -217,15 +213,15 @@ export default function EditCourt() {
                                 />
                                 <Label htmlFor="can_play_outside">
                                     {data.can_play_outside
-                                        ? "Allowed"
-                                        : "Not allowed"}
+                                        ? "Permitido"
+                                        : "Não Permitido"}
                                 </Label>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-4">
                             <div>
                                 <Label htmlFor="description">
-                                    Availability
+                                    Disponibilidade
                                 </Label>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -237,25 +233,27 @@ export default function EditCourt() {
                                     }
                                 />
                                 <Label htmlFor="status">
-                                    {data.status ? "Available" : "Unavailable"}
+                                    {data.status
+                                        ? "Disponível"
+                                        : "Indisponível"}
                                 </Label>
                             </div>
                         </div>
                         <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
                                 <AccordionTrigger>
-                                    Optional Information
+                                    Informações Opcionais
                                 </AccordionTrigger>
                                 <AccordionContent className="grid gap-4 rounded-lg py-4">
                                     <div className="grid gap-2">
                                         <Label htmlFor="floor_type">
-                                            Surface Type (optional)
+                                            Tipo de Piso (opcional)
                                         </Label>
                                         <Input
                                             id="floor_type"
                                             type="text"
                                             name="floor_type"
-                                            placeholder="Surface type"
+                                            placeholder="Tipo de Piso"
                                             value={data.floor_type}
                                             onChange={(e) =>
                                                 setData(
@@ -271,7 +269,7 @@ export default function EditCourt() {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="grass_type">
-                                            Grass type (optional)
+                                            Tipo de Grama (opcional)
                                         </Label>
                                         <Input
                                             id="grass_type"
@@ -293,7 +291,7 @@ export default function EditCourt() {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="manufacturer">
-                                            Manufacturer (optional)
+                                            Fabricante (opcional)
                                         </Label>
                                         <Input
                                             id="manufacturer"
@@ -315,7 +313,7 @@ export default function EditCourt() {
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="installation_year">
-                                            Installation year (optional)
+                                            Ano de Instalação (opcional)
                                         </Label>
                                         <Input
                                             id="installation_year"
@@ -338,7 +336,7 @@ export default function EditCourt() {
                                     <div className="flex gap-4">
                                         <div className="grid w-full items-center gap-2">
                                             <Label htmlFor="description">
-                                                Description (optional)
+                                                Descrição (opcional)
                                             </Label>
                                             <Textarea
                                                 value={data.description}
@@ -361,22 +359,22 @@ export default function EditCourt() {
                         <div className="space-y-2">
                             <div className="flex justify-between">
                                 <h1 className="text-xl font-semibold">
-                                    Opening Hours and Promotions
+                                    Horário de Funcionamento e Promoções
                                 </h1>
                                 <HelpSidebar
-                                    title="Opening Hours and Promotions"
-                                    description="That's the formulary for court time selection and its promotions."
+                                    title="Horário de Funcionamento e Promoções"
+                                    description="Esse é o formulário para a seleção dos horários da quadra e suas promoções."
                                     text={[
-                                        "A court is available on weekdays by periods.",
-                                        "For example, a court can open at 6:30 am and close at 12:00 pm, that's a period. Then you can reopen 14:00 and close 19:00. In this case, the court would have 2 time periods, 06:30-12:00 and 14:00-19:00.",
-                                        "To set up court times, first select the day that will have available times. Then, on the selected day, set up the time periods, a block can have 1 or several periods in the same day.",
-                                        "Promotions refer to the promotional schedules existing in each period. If the block has 1 period, opening at 6:30 am and closing at 11:00 am, it can have, for example, 1 price promotion from 7:00 am to 8:30 am.",
+                                        "Uma quadra está disponível nos dias da semana por períodos.",
+                                        "Por exemplo, uma quadra pode abrir às 6h30 e fechar às 12h, esse é um período. Depois, pode reabrir às 14h e fechar às 19h. Nesse caso, a quadra teria 2 períodos, 06:30-12:00 e 14:00-19:00.",
+                                        "Para configurar os horários da quadra, primeiro selecione o dia que terá horários disponíveis. Em seguida, no dia selecionado, configure os períodos de tempo. Um bloco pode ter 1 ou vários períodos no mesmo dia.",
+                                        "As promoções referem-se aos horários promocionais existentes em cada período. Se a quadra tiver 1 período de horário apenas, abrindo às 6h30 e fechando às 11h, ele pode ter, por exemplo, 2 promoções de preço das 7h às 8h e das 9h às 10h.",
                                     ]}
                                 />
                             </div>
                             <p className="text-gray-600">
-                                Select the days of the week and time blocks
-                                available from the court.
+                                Selecione os dias da semana e os períodos de
+                                tempo disponíveis na quadra.
                             </p>
                         </div>
                         <TimeSlotSelector
@@ -387,54 +385,64 @@ export default function EditCourt() {
                         />
                     </div>
                     {/* Form 3 - Image */}
-                    <div className="rounded-lg border space-y-4 p-8">
-                        {/* Seção de Fotos do Court */}
-                        <div className="space-y-4">
-                            <div className="space-y-2">
+                    <div className="rounded-lg border p-8">
+                        <div>
+                            <div className="mb-2 space-y-2">
                                 <h1 className="text-xl font-semibold">
-                                    Photos of the Court (optional)
+                                    Fotos da Quadra (opcional)
                                 </h1>
                                 <p className="text-gray-600">
-                                    Click the button below to upload and
-                                    Organize the photos of the court.
+                                    Clique no botão abaixo para carregar as
+                                    fotos da quadra.
                                 </p>
                             </div>
-                            <InputError message={errors.images} />
-                            <CourtImages
-                                setImages={(urls) => setData("images", urls)}
-                                images={data.images}
-                                multiple
-                            />
+                            <div>
+                                <InputError message={errors.images} />
+                            </div>
+                            <div>
+                                <CourtImages
+                                    setImages={(urls: string[]) =>
+                                        setData("images", urls)
+                                    }
+                                    images={data.images}
+                                    multiple
+                                />
+                            </div>
                         </div>
-
-                        <Separator />
-
-                        {/* Seção de Sponsor do Court */}
-                        <div className="space-y-4">
-                            <div className="space-y-2">
+                        <div className="py-6">
+                            <Separator />
+                        </div>
+                        <div>
+                            <div className="mb-2 space-y-2">
                                 <h1 className="text-xl font-semibold">
-                                    Court Sponsor (optional)
+                                    Fotos do Patrocinador (opcional)
                                 </h1>
                                 <p className="text-gray-600">
-                                    Click the button below to upload the photo
-                                    of the sponsor of the court.
+                                    Clique no botão abaixo para carregar as
+                                    fotos de patrocinador da quadra.
                                 </p>
                             </div>
-                            <InputError message={errors.images} />
-                            <CourtImages
-                                setImages={(urls) => setData("images", urls)}
-                                images={[data.sponsor_image]}
-                                saveAs="sponsor"
-                            />
+                            <div>
+                                <InputError message={errors.images} />
+                            </div>
+                            <div>
+                                <CourtImages
+                                    setImages={(urls: string[]) =>
+                                        setData("images", urls)
+                                    }
+                                    images={data.images}
+                                    saveAs="sponsor"
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-end gap-x-2">
                         <Button>
                             <Link href={route("club.courts.index")}>
-                                Cancel
+                                Cancelar
                             </Link>
                         </Button>
-                        <Button disabled={processing}>Create</Button>
+                        <Button disabled={processing}>Confirmar</Button>
                     </div>
                 </form>
             </div>

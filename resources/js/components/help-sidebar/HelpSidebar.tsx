@@ -18,7 +18,7 @@ export function HelpSidebar(props: {
         <Sheet>
             <SheetTrigger asChild>
                 <Button variant="ghost">
-                    <CircleHelp /> Help
+                    <CircleHelp /> Ajuda
                 </Button>
             </SheetTrigger>
             <SheetContent>

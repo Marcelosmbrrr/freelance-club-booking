@@ -25,7 +25,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 export function SearchClubOrCourt(props: {
-    club?: { zip_code: string; address: string };
+    localization?: { lat: number; lng: number };
+    fetchData: Function
 }) {
     const [search, setSearch] = React.useState<string>("");
     const [entity, setEntity] = React.useState<string>("clubs");
@@ -33,7 +34,7 @@ export function SearchClubOrCourt(props: {
     const [date, setDate] = React.useState<string>(
         format(new Date(), "yyyy-MM-dd")
     );
-    const [time, setTime] = React.useState<string>();
+    const [time, setTime] = React.useState<string>("time");
     const [price, setPrice] = React.useState({ min: 10, max: 100 });
     const [court, setCourt] = React.useState({
         is_covered: false,
@@ -41,6 +42,11 @@ export function SearchClubOrCourt(props: {
         can_play_outside: false,
     });
     const [openMap, setOpenMap] = React.useState<boolean>(false);
+
+    function handleChangeEntity(new_value: string) {
+        setEntity(new_value);
+        props.fetchData({ entity: new_value});
+    }
 
     return (
         <div className="w-full rounded-t-lg mb-4">
@@ -73,9 +79,7 @@ export function SearchClubOrCourt(props: {
                                             </Label>
                                             <Select
                                                 value={entity}
-                                                onValueChange={(v) =>
-                                                    setEntity(v)
-                                                }
+                                                onValueChange={handleChangeEntity}
                                             >
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Selecionar" />
@@ -201,8 +205,14 @@ export function SearchClubOrCourt(props: {
                                                     <SelectGroup>
                                                         {timeSlotsData.map(
                                                             (time_slot) => (
-                                                                <SelectItem value={time_slot.id}>
-                                                                    {time_slot.time}
+                                                                <SelectItem
+                                                                    value={
+                                                                        time_slot.id
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        time_slot.time
+                                                                    }
                                                                 </SelectItem>
                                                             )
                                                         )}
@@ -251,7 +261,7 @@ export function SearchClubOrCourt(props: {
                 <div className="flex gap-x-2">
                     <Badge>Procura: {entity}</Badge>
                     <Badge>Esporte: {sport}</Badge>
-                    <Badge>Data/Hora: {date}</Badge>
+                    <Badge>Data/Hora: {date} {time}</Badge>
                     <Badge>
                         R$: {price.min} - {price.max}
                     </Badge>
@@ -260,8 +270,8 @@ export function SearchClubOrCourt(props: {
                     <div className="my-4 sticky">
                         <iframe
                             src={
-                                props.club
-                                    ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGkVceXOyvDwgH5mYQRyXYD7bzi6W7ygg&q=${props.club.zip_code}`
+                                props.localization
+                                    ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGkVceXOyvDwgH5mYQRyXYD7bzi6W7ygg&q=${props.localization}`
                                     : `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGkVceXOyvDwgH5mYQRyXYD7bzi6W7ygg&q=São+Paulo`
                             }
                             className="w-full h-[250px]"

@@ -35,7 +35,20 @@ class CourtSeeder extends Seeder
             'installation_year' => 2022,
             'manufacturer' => 'XYZ Sports',
             'status' => true,
-            'price' => 100.00,
+            'pricing' => [
+                [
+                    'time' => '01:00',
+                    'price' => 50.00
+                ],
+                [
+                    'time' => '03:00',
+                    'price' => 70.00
+                ],
+                [
+                    'time' => '05:00',
+                    'price' => 99.00
+                ]
+            ],
         ]);
 
         // Configura imagens da quadra

@@ -29,62 +29,87 @@ export function RadioGroupDemo() {
     );
 }
 
-export type Club = {
-    id: string;
+export type ClubOrCourt = {
+    clubId: string;
     name: string;
-    image: string;
+    images: string[];
     description: string;
-    zip_code: string;
+    geolocalization: { lat: number; lng: number };
     sports: string[];
-    address: string;
 };
 
-const breadCrumb = [{ name: "Minhas Reservas" }];
+interface QueryParams {
+    entity: "clubs" | "courts";
+    search?: string;
+    searchBy: string;
+    orderBy: string;
+    order: "asc" | "desc";
+    limit: number;
+    page: number;
+}
 
-export default function Reservations() {
+const breadCrumb = [{ name: "Nova Reserva" }];
+
+export default function MyReservations() {
     const { pagination, queryParams = null, success }: any = usePage().props;
 
-    const { data, meta, links }: { data: Club[]; meta: any; links: any } =
-        pagination;
+    const {
+        data,
+        meta,
+        links,
+    }: { data: ClubOrCourt[]; meta: any; links: any } = pagination;
+
+    const fetchData = React.useCallback(
+        (param: Partial<QueryParams>) => {
+            router.get(
+                route("player.new-reservation.index"),
+                { ...param },
+                {
+                    preserveState: true,
+                }
+            );
+        },
+        [queryParams]
+    );
 
     const [localization, setLocalization] = React.useState<{
-        zip_code: string;
-        address: string;
+        lat: number;
+        lng: number;
     }>();
 
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Criar Reserva" />
-            <SearchClubOrCourt club={localization} />
+            <SearchClubOrCourt
+                localization={localization}
+                fetchData={fetchData}
+            />
             <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12 2xl:grid-cols-6">
-                {data.map((club) => (
+                {data.map((item) => (
                     <div
-                        key={club.id}
-                        className="group flex flex-col border rounded-lg shadow"
+                        key={item.clubId}
+                        className="group flex flex-col border rounded-lg shadow w-full sm:w-auto md:w-[300px] lg:w-[350px] xl:w-[400px]"
                     >
                         <div className="flex text-clip">
                             <div className="size-full">
                                 <img
-                                    src={club.image}
+                                    src={item.images[0]}
                                     className="aspect-[3/2] size-full object-cover object-centered rounded-t-lg"
                                 />
                             </div>
                         </div>
                         <div className="px-4">
-                            <div className="py-4 line-clamp-3 break-words text-lg font-medium lg:text-2xl">
-                                {club.name}
+                            <div className="py-2 line-clamp-3 break-words text-lg font-medium lg:text-2xl">
+                                {item.name}
                             </div>
-                            <div className="flex justify-between items-center gap-2 py-4">
-                                <div>
-                                    <Badge>Disponível</Badge>
-                                </div>
+                            <div className="flex justify-end items-center gap-2 py-2">
                                 <div className="flex items-center gap-x-2">
                                     <Button
                                         variant="outline"
                                         onClick={() =>
                                             setLocalization({
-                                                zip_code: club.zip_code,
-                                                address: club.address,
+                                                lat: item.geolocalization.lat,
+                                                lng: item.geolocalization.lng,
                                             })
                                         }
                                     >
@@ -94,8 +119,8 @@ export default function Reservations() {
                                         onClick={() => {
                                             router.get(
                                                 route(
-                                                    "player.reservations.create",
-                                                    { clubId: club.id }
+                                                    "player.new-reservation.create",
+                                                    { clubId: item.clubId }
                                                 )
                                             );
                                         }}
