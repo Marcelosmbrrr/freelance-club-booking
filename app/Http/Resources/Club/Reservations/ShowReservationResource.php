@@ -4,7 +4,6 @@ namespace App\Http\Resources\Club\Reservations;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
 
 class ShowReservationResource extends JsonResource
 {
@@ -16,6 +15,14 @@ class ShowReservationResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
+
+        $time_slots = [];
+
+        foreach($data["time_slots"] as $timeSlot) {
+            $time_slots[] = $timeSlot["time_slot"];
+        }
+
+        $data["time_slots"] = $time_slots;
 
         return $data;
     }

@@ -1,13 +1,23 @@
 import { Head, Link, usePage } from "@inertiajs/react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const breadCrumb = [
     { name: "Reservas", href: "/club/reservations" },
@@ -16,14 +26,15 @@ const breadCrumb = [
 
 export default function ShowReservation() {
     const { reservation }: any = usePage().props;
+    console.log(reservation);
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Reserva" />
 
-            <Tabs defaultValue="calendar" className="mx-auto w-full max-w-7xl">
+            <Tabs defaultValue="players" className="mx-auto w-full max-w-7xl">
                 <div className="flex justify-between items-end py-4">
                     <h2 className="font-medium text-xl">
-                        Reserva #{reservation.data.id} - {reservation.data.court.name}
+                        Visualização da Reserva
                     </h2>
                     <div className="py-2 flex justify-end">
                         <Button>
@@ -33,41 +44,34 @@ export default function ShowReservation() {
                         </Button>
                     </div>
                 </div>
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="calendar">Calendário</TabsTrigger>
-                    <TabsTrigger value="client">Jogadores</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="players">Jogadores</TabsTrigger>
                     <TabsTrigger value="payment">Pagamento</TabsTrigger>
                 </TabsList>
-                <TabsContent value="calendar">
-                    <div className="rounded-lg space-y-4 border p-8">
-                        <div className="grid gap-2 w-64">
-                            <Input
-                                id="name"
-                                type="text"
-                                name="name"
-                                placeholder="Tipo de área"
-                                value={reservation.data.date}
-                                readOnly
-                            />
-                        </div>
-                    </div>
-                </TabsContent>
-                <TabsContent value="client">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 rounded-lg border p-8">
-                        {reservation.data.players.map((player) => (
-                            <div className="p-4 flex flex-col items-center text-center shadow rounded-lg">
-                                <Avatar className="mb-2 size-12 md:size-24">
-                                    <AvatarImage
-                                        src={
-                                            player.user
-                                                ? player.user.avatar
-                                                : ""
-                                        }
+                <TabsContent value="players">
+                    <div className="grid md:grid-cols-2 gap-8 p-8 rounded border">
+                        {reservation.data.players.map((player, index) => (
+                            <div className="relative py-4 items-center bg-white rounded-lg shadow sm:flex dark:bg-neutral-800 dark:border-gray-700">
+                                <Badge
+                                    variant="secondary"
+                                    className="absolute top-0 right-0 mt-2 mr-2"
+                                >
+                                    Jogador {index + 1}
+                                </Badge>
+
+                                {player.user && (
+                                    <img
+                                        className="ml-4 aspect-square size-28 rounded-full"
+                                        src={player.user.avatar}
+                                        alt="player-image"
                                     />
-                                    <AvatarFallback>
+                                )}
+
+                                {!player.user && (
+                                    <div className="flex justify-center items-center ml-4 aspect-square size-28">
                                         <svg
                                             aria-hidden="true"
-                                            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                                            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-300"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -81,22 +85,82 @@ export default function ShowReservation() {
                                                 fill="currentFill"
                                             />
                                         </svg>
-                                    </AvatarFallback>
-                                </Avatar>
-                                <p className="mb-1 text-sm font-medium">
-                                    {player.user
-                                        ? player.user.name
-                                        : "Não Preenchido"}
-                                </p>
+                                    </div>
+                                )}
+
+                                <div className="px-5">
+                                    <h2 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+                                        {player.user
+                                            ? player.user.name
+                                            : "Esperando jogador..."}
+                                    </h2>
+                                    {player.user && (
+                                        <p className="text-gray-500 dark:text-gray-400">
+                                            {player.user.email}
+                                        </p>
+                                    )}
+
+                                    {player.user && (
+                                        <div className="flex space-x-4 mt-4">
+                                            <Button disabled>
+                                                Ver Jogador
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>
                 </TabsContent>
                 <TabsContent value="payment">
-                    <div className="rounded-lg border p-8">
-                        <div>
+                    <div className="space-y-4 rounded-lg border p-8">
+                        <div className="space-y-8">
                             <Badge>Situação: {reservation.data.status}</Badge>
+                            <div className="grid gap-2">
+                                <Label>Data da Reserva</Label>
+                                <Input
+                                    type="text"
+                                    className="w-72"
+                                    value={format(
+                                        reservation.data.date,
+                                        "EEEE, dd 'de' MMMM 'de' yyyy",
+                                        {
+                                            locale: ptBR,
+                                        }
+                                    )}
+                                />
+                            </div>
                         </div>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[100px]">
+                                        Horário
+                                    </TableHead>
+                                    <TableHead className="w-[100px]">
+                                        Promoção
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        Preço Total
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {[].map((invoice) => (
+                                    <TableRow key={invoice.invoice}>
+                                        <TableCell>
+                                            {invoice.paymentStatus}
+                                        </TableCell>
+                                        <TableCell>
+                                            {invoice.paymentMethod}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {invoice.totalAmount}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </div>
                 </TabsContent>
             </Tabs>

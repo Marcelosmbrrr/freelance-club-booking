@@ -13,14 +13,11 @@ use App\Http\Controllers\Home\Admin\Profile\AdminProfileController;
 // Club
 use App\Http\Controllers\Home\Club\Reservations\ClubReservationController;
 use App\Http\Controllers\Home\Club\Courts\ClubCourtController;
-use App\Http\Controllers\Home\Club\Tournaments\ClubTournamentController;
-use App\Http\Controllers\Home\Club\Clients\ClientsController;
 use App\Http\Controllers\Home\Club\Profile\ClubProfileController;
 
 // Player
 use App\Http\Controllers\Home\Player\Reservations\MyReservationController;
 use App\Http\Controllers\Home\Player\Reservations\NewReservationController;
-use App\Http\Controllers\Home\Player\Tournaments\PlayerTournamentController;
 use App\Http\Controllers\Home\Player\Profile\PlayerProfileController;
 
 // Public
@@ -41,15 +38,12 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix("club")->middleware(["user-access:club", "verified"])->group(function () {
         Route::resource("courts", ClubCourtController::class)->names("club.courts");
         Route::resource("reservations", ClubReservationController::class)->names("club.reservations");
-        Route::resource("tournaments", ClubTournamentController::class)->names("club.tournaments");
-        Route::resource("clients", ClientsController::class)->names("club.clients");
         Route::get("profile", [ClubProfileController::class, "index"])->name("club.profile");
     });
     // Player
     Route::prefix("player")->middleware(["user-access:player", "verified"])->group(function () {
         Route::resource("reservations", MyReservationController::class)->names("player.my-reservations")->except(['create', 'store'])->names("player.reservations");
         Route::resource("new-reservation", NewReservationController::class)->names("player.new-reservation")->only(['index', 'create', 'store'])->names("player.new-reservation");
-        Route::resource("tournaments", PlayerTournamentController::class)->names("player.tournaments");
         Route::get("profile", [PlayerProfileController::class, "index"])->name("player.profile");
     });
 });

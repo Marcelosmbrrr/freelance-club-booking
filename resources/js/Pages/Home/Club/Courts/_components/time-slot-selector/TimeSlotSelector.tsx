@@ -7,22 +7,6 @@ import { TimeSlot } from "../../types/types";
 // Shadcn
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Trash2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Combobox } from "@/components/combobox/Combobox";
 import { Button } from "@/components/ui/button";
 import {
     Tooltip,
@@ -30,7 +14,14 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { BadgePercent } from "lucide-react";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 type Data = {
     [key in Weekday]: { start_time: string; end_time: string }[];
@@ -50,7 +41,7 @@ export function TimeSlotSelector(props: {
     setData: Function;
     data?: TimeSlot;
 }) {
-    const [data, setData] = React.useState<Data>({
+    const [timeSlotsByWeekday, setTimeSlotsByWeekday] = React.useState<Data>({
         monday: [],
         tuesday: [],
         wednesday: [],
@@ -62,31 +53,32 @@ export function TimeSlotSelector(props: {
 
     React.useEffect(() => {
         if (props.data) {
-            setData(props.data);
+            console.log(props.data)
+            setTimeSlotsByWeekday(props.data);
         }
     }, []);
 
     function handleCheck(toggle: boolean, weekday: Weekday) {
-        const clone = Object.assign({}, data);
+        const clone = Object.assign({}, timeSlotsByWeekday);
         clone[weekday] = toggle ? [{ start_time: "", end_time: "" }] : [];
-        setData(clone);
+        setTimeSlotsByWeekday(clone);
         props.setData(clone);
     }
 
     function addTimeSlot(weekday: Weekday) {
-        const clone = Object.assign({}, data);
+        const clone = Object.assign({}, timeSlotsByWeekday);
         clone[weekday].push({
             start_time: "",
             end_time: "",
         });
-        setData(clone);
+        setTimeSlotsByWeekday(clone);
         props.setData(clone);
     }
 
     function removeTimeSlot(weekday: Weekday, index: number) {
-        const clone = Object.assign({}, data);
+        const clone = Object.assign({}, timeSlotsByWeekday);
         clone[weekday].splice(index, 1);
-        setData(clone);
+        setTimeSlotsByWeekday(clone);
         props.setData(clone);
     }
 
@@ -96,20 +88,21 @@ export function TimeSlotSelector(props: {
         weekday: Weekday,
         index: number
     ) {
-        const clone = Object.assign({}, data);
+        const clone = Object.assign({}, timeSlotsByWeekday);
         clone[weekday][index][field] = value;
-        setData(clone);
+        setTimeSlotsByWeekday(clone);
         props.setData(clone);
     }
 
     return (
         <div className="w-1/3 space-y-4">
             {weekdays.map((weekday: Weekday) => (
-                <div className="space-y-4">
+                <div className="space-y-4" key={weekday}>
                     <div className="flex items-center space-x-2">
                         <Checkbox
                             id={weekday}
                             value={weekday}
+                            checked={timeSlotsByWeekday[weekday as Weekday].length > 0}
                             onCheckedChange={(v: boolean) =>
                                 handleCheck(v, weekday)
                             }
@@ -121,222 +114,129 @@ export function TimeSlotSelector(props: {
                             {weekday}
                         </label>
                     </div>
-                    {data[weekday].length > 0 && (
+                    {timeSlotsByWeekday[weekday].length > 0 && (
                         <div className="space-y-2 py-2">
-                            {data[weekday].map((time_slot, index) => (
-                                <div key={index}>
-                                    <div className="flex space-x-2">
-                                        <div>
-                                            <Combobox
-                                                options={timeSlotsList.map(
-                                                    (item) => ({
-                                                        value: item,
-                                                        label: item,
-                                                    })
-                                                )}
-                                                placeholder="Open at"
-                                                name="start_time"
-                                                id="start_time"
-                                                value={time_slot.start_time}
-                                                setValue={(value) =>
+                            {timeSlotsByWeekday[weekday].map(
+                                (time_slot, index) => (
+                                    <div key={index}>
+                                        <div className="flex space-x-2">
+                                            <Select
+                                                onValueChange={(v) =>
                                                     handleSelect(
-                                                        value,
+                                                        v,
                                                         "start_time",
                                                         weekday,
                                                         index
                                                     )
                                                 }
-                                            />
-                                        </div>
-                                        <div>
-                                            <Combobox
-                                                options={timeSlotsList.map(
-                                                    (item) => ({
-                                                        value: item,
-                                                        label: item,
-                                                    })
-                                                )}
-                                                name="end_time"
-                                                id="end_time"
-                                                placeholder="Close at"
-                                                value={time_slot.end_time}
-                                                setValue={(value) =>
+                                                value={time_slot.start_time}
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="De" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {timeSlotsList.map(
+                                                            (item) => (
+                                                                <SelectItem
+                                                                    value={item}
+                                                                >
+                                                                    {item}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                            <Select
+                                                onValueChange={(v) =>
                                                     handleSelect(
-                                                        value,
+                                                        v,
                                                         "end_time",
                                                         weekday,
                                                         index
                                                     )
                                                 }
-                                            />
-                                        </div>
-                                        <div>
-                                            <Popover>
-                                                <TooltipProvider>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <PopoverTrigger
+                                                value={time_slot.end_time}
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Até" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {timeSlotsList.map(
+                                                            (item) => (
+                                                                <SelectItem
+                                                                    value={item}
+                                                                >
+                                                                    {item}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                            <div className="flex items-end">
+                                                {index === 0 && (
+                                                    <TooltipProvider>
+                                                        <Tooltip>
+                                                            <TooltipTrigger
                                                                 asChild
                                                             >
-                                                                <Button variant="ghost">
-                                                                    <BadgePercent />
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        addTimeSlot(
+                                                                            weekday
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Plus />
                                                                 </Button>
-                                                            </PopoverTrigger>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>Promoções</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </TooltipProvider>
-                                                <PopoverContent className="w-[420px]">
-                                                    <div className="grid gap-4">
-                                                        <div className="space-y-2">
-                                                            <h4 className="font-medium leading-none">
-                                                                Promoções
-                                                            </h4>
-                                                            <p className="text-sm text-muted-foreground">
-                                                                Define o
-                                                                desconto de
-                                                                preço para esse
-                                                                período.
-                                                            </p>
-                                                        </div>
-                                                        <div className="flex items-center gap-x-2">
-                                                            <div className="w-full">
-                                                                <Input
-                                                                    placeholder="Desconto"
-                                                                    className="col-span-2 h-8"
-                                                                />
-                                                            </div>
-                                                            <div className="w-full">
-                                                                <Select>
-                                                                    <SelectTrigger className="w-full">
-                                                                        <SelectValue placeholder="De" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectGroup>
-                                                                            <SelectLabel>
-                                                                                Fruits
-                                                                            </SelectLabel>
-                                                                        </SelectGroup>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div className="w-full">
-                                                                <Select>
-                                                                    <SelectTrigger className="w-full">
-                                                                        <SelectValue placeholder="Até" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectGroup>
-                                                                            <SelectLabel>
-                                                                                Fruits
-                                                                            </SelectLabel>
-                                                                        </SelectGroup>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <TooltipProvider>
-                                                                <Tooltip>
-                                                                    <TooltipTrigger
-                                                                        asChild
-                                                                    >
-                                                                        <Button
-                                                                            variant="ghost"
-                                                                            type="button"
-                                                                        >
-                                                                            <Trash2 />
-                                                                        </Button>
-                                                                    </TooltipTrigger>
-                                                                    <TooltipContent>
-                                                                        <p>
-                                                                            Deletar
-                                                                            Promoção
-                                                                        </p>
-                                                                    </TooltipContent>
-                                                                </Tooltip>
-                                                            </TooltipProvider>
-                                                            <TooltipProvider>
-                                                                <Tooltip>
-                                                                    <TooltipTrigger
-                                                                        asChild
-                                                                    >
-                                                                        <Button
-                                                                            variant="ghost"
-                                                                            type="button"
-                                                                        >
-                                                                            <Plus />
-                                                                        </Button>
-                                                                    </TooltipTrigger>
-                                                                    <TooltipContent>
-                                                                        <p>
-                                                                            Adicionar
-                                                                            Promoção
-                                                                        </p>
-                                                                    </TooltipContent>
-                                                                </Tooltip>
-                                                            </TooltipProvider>
-                                                        </div>
-                                                    </div>
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-
-                                        <div className="flex items-end">
-                                            {index === 0 && (
-                                                <TooltipProvider>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    addTimeSlot(
-                                                                        weekday
-                                                                    )
-                                                                }
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                <p>
+                                                                    Adicionar
+                                                                    Horário
+                                                                </p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
+                                                )}
+                                                {index > 0 && (
+                                                    <TooltipProvider>
+                                                        <Tooltip>
+                                                            <TooltipTrigger
+                                                                asChild
                                                             >
-                                                                <Plus />
-                                                            </Button>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>
-                                                                Adicionar
-                                                                Horário
-                                                            </p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </TooltipProvider>
-                                            )}
-                                            {index > 0 && (
-                                                <TooltipProvider>
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    removeTimeSlot(
-                                                                        weekday,
-                                                                        index
-                                                                    )
-                                                                }
-                                                            >
-                                                                <Trash2 />
-                                                            </Button>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>
-                                                                Deletar Horário
-                                                            </p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </TooltipProvider>
-                                            )}
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        removeTimeSlot(
+                                                                            weekday,
+                                                                            index
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Trash2 />
+                                                                </Button>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                <p>
+                                                                    Deletar
+                                                                    Horário
+                                                                </p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            )}
                         </div>
                     )}
                 </div>

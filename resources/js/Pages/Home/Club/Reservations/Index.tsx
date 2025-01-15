@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Head, router, usePage } from "@inertiajs/react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { ReservationsFilter } from "./_components/ReservationsFilter";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -30,7 +33,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
     Table,
     TableBody,
@@ -49,6 +51,7 @@ export type Reservation = {
     player: any;
     court: any;
     time_slots: [];
+    price: number;
 };
 
 export const columns: ColumnDef<Reservation>[] = [
@@ -95,9 +98,20 @@ export const columns: ColumnDef<Reservation>[] = [
         cell: ({ row }) => <div>{row.original.court.name}</div>,
     },
     {
+        accessorKey: "price",
+        header: "Preço",
+        cell: ({ row }) => <div>R${row.original.price}</div>,
+    },
+    {
         accessorKey: "date",
         header: "Data",
-        cell: ({ row }) => <div>{row.getValue("date")}</div>,
+        cell: ({ row }) => (
+            <div>
+                {format(row.getValue("date"), "EEEE, dd 'de' MMMM 'de' yyyy", {
+                    locale: ptBR,
+                })}
+            </div>
+        ),
     },
     {
         id: "actions",
@@ -124,18 +138,6 @@ export const columns: ColumnDef<Reservation>[] = [
                             }
                         >
                             Ver Reserva
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                router.get(
-                                    route(
-                                        "club.reservations.edit",
-                                        row.original.id
-                                    )
-                                )
-                            }
-                        >
-                            Editar Reserva
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -179,76 +181,79 @@ export default function Reservations() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Reservas" />
-            <div className="w-full">
-                <div className="flex justify-between items-center py-4">
-                    <Input placeholder="Pesquisar" className="max-w-sm" />
-                    <div className="flex items-center space-x-2">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        disabled={
-                                            !table.getIsSomeRowsSelected()
-                                        }
-                                    >
-                                        <Trash2 />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>Deletar</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                        <Button variant="outline" className="ml-auto" disabled>
-                            Nova Reserva <CirclePlus />
-                        </Button>
-                    </div>
+            <div className="flex justify-between items-center py-4">
+                <ReservationsFilter />
+                <div className="flex items-center space-x-2">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    disabled={!table.getIsSomeRowsSelected()}
+                                >
+                                    <Trash2 />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Deletar</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                    <Button
+                        variant="outline"
+                        className="ml-auto"
+                        onClick={() =>
+                            router.get(route("club.reservations.create"))
+                        }
+                        disabled
+                    >
+                        Nova Reserva <CirclePlus />
+                    </Button>
                 </div>
-                <div className="rounded-md border">
-                    <Table>
-                        <TableHeader>
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
-                                    {headerGroup.headers.map((header) => (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext()
-                                                  )}
-                                        </TableHead>
+            </div>
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                  header.column.columnDef
+                                                      .header,
+                                                  header.getContext()
+                                              )}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </TableCell>
                                     ))}
                                 </TableRow>
-                            ))}
-                        </TableHeader>
-                        <TableBody>
-                            {table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow key={row.id}>
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="text-center"
-                                    >
-                                        Nenhuma reserva encontrada.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="text-center"
+                                >
+                                    Nenhuma reserva encontrada.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
             </div>
         </AuthenticatedLayout>
     );

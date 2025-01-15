@@ -41,7 +41,7 @@ class ClubReservationController extends Controller
 
         $query = $this->reservationModel->query();
 
-        $query->select('id', 'status', 'date', 'court_id', 'player_id');
+        $query->select('id', 'price', 'status', 'date', 'court_id', 'player_id');
 
         $query->whereHas('club', function ($q) use ($clubId) {
             $q->where('clubs.id', $clubId); 
@@ -97,7 +97,9 @@ class ClubReservationController extends Controller
     {
         $query = $this->reservationModel->query();
 
-        $query->with(['player.user', 'court']);
+        $query->with(['player.user', 'court.promotions', 'timeSlots.timeSlot' => function ($query) {
+            $query->select('id', 'start_time', 'end_time'); // Selecionar apenas os campos desejados
+        }]);
 
         $query->select('id', 'status', 'date', 'total_players', 'court_id', 'player_id');
 

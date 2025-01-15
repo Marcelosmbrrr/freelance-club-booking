@@ -30,6 +30,8 @@ class Court extends Model
     protected $casts = [
         'pricing' => 'array', 
     ];
+
+    protected $appends = ['min_price', 'promotions_by_weekday'];
     
     public function club()
     {
@@ -44,6 +46,11 @@ class Court extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class, "court_id");
+    }
+
+    public function promotions()
+    {
+        return $this->hasMany(Promotion::class, "court_id");
     }
 
     // Getters
@@ -68,5 +75,23 @@ class Court extends Model
     public function getSponsorImageAttribute($value)
     {
         return Storage::url($value);
+    }
+
+    public function getMinPriceAttribute()
+    {
+        return collect($this->pricing)->min('price');
+    }
+
+    public function getPromotionsByWeekdayAttribute() {
+        return $this->promotions->groupBy('weekday')->map(function ($promotions) {
+            return $promotions->map(function ($promotion) {
+                return [
+                    'id' => $promotion->id,
+                    'start_time' => $promotion->start_time,
+                    'end_time' => $promotion->end_time,
+                    'discount' => $promotion->discount,
+                ];
+            });
+        });
     }
 }

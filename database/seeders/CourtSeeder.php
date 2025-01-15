@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\TimeSlot;
 use App\Models\Court;
 use App\Models\Club;
+use App\Models\Promotion;
 
 class CourtSeeder extends Seeder
 {
@@ -95,5 +96,12 @@ class CourtSeeder extends Seeder
                 ]);
             }
         }
+
+        $court->promotions()->create([
+            "start_time" => $court->timeSlots[0]->start_time,
+            "end_time" => $court->timeSlots[2]->end_time,
+            "weekday" => "monday",
+            "discount" => 10
+        ]);
     }
 }

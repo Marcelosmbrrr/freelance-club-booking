@@ -38,16 +38,6 @@ export type ClubOrCourt = {
     sports: string[];
 };
 
-interface QueryParams {
-    entity: "clubs" | "courts";
-    search?: string;
-    searchBy: string;
-    orderBy: string;
-    order: "asc" | "desc";
-    limit: number;
-    page: number;
-}
-
 const breadCrumb = [{ name: "Nova Reserva" }];
 
 export default function Reservations() {
@@ -59,15 +49,6 @@ export default function Reservations() {
         links,
     }: { data: ClubOrCourt[]; meta: any; links: any } = pagination;
 
-    const fetchData = React.useCallback(
-        (param: Partial<QueryParams>) => {
-            router.get(route("player.new-reservation.index"), { ...param }, {
-                preserveState: true
-            });
-        },
-        [queryParams]
-    );
-
     const [localization, setLocalization] = React.useState<{
         lat: number;
         lng: number;
@@ -76,7 +57,7 @@ export default function Reservations() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Criar Reserva" />
-            <SearchClubOrCourt localization={localization} fetchData={fetchData} />
+            <SearchClubOrCourt localization={localization} />
             <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12 2xl:grid-cols-6">
                 {data.map((item) => (
                     <div

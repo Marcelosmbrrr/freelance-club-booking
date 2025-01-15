@@ -1,4 +1,5 @@
 import * as React from "react";
+import { router } from "@inertiajs/react";
 
 import { timeSlotsData } from "@/utils/data/timeSlots";
 
@@ -24,9 +25,18 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
+interface QueryParams {
+    entity: "clubs" | "courts";
+    search?: string;
+    searchBy: string;
+    orderBy: string;
+    order: "asc" | "desc";
+    limit: number;
+    page: number;
+}
+
 export function SearchClubOrCourt(props: {
     localization?: { lat: number; lng: number };
-    fetchData: Function
 }) {
     const [search, setSearch] = React.useState<string>("");
     const [entity, setEntity] = React.useState<string>("clubs");
@@ -43,10 +53,14 @@ export function SearchClubOrCourt(props: {
     });
     const [openMap, setOpenMap] = React.useState<boolean>(false);
 
-    function handleChangeEntity(new_value: string) {
-        setEntity(new_value);
-        props.fetchData({ entity: new_value});
-    }
+    const fetchData = React.useCallback(
+        (param: Partial<QueryParams>) => {
+            router.get(route("player.new-reservation.index"), { ...param }, {
+                preserveState: true
+            });
+        },
+        [search, entity, sport, date, time, price, court]
+    );
 
     return (
         <div className="w-full rounded-t-lg mb-4">
@@ -79,7 +93,7 @@ export function SearchClubOrCourt(props: {
                                             </Label>
                                             <Select
                                                 value={entity}
-                                                onValueChange={handleChangeEntity}
+                                                onValueChange={(v) => setEntity(v)}
                                             >
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Selecionar" />

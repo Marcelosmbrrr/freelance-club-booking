@@ -16,26 +16,24 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
+import { Pricing, Promotion } from "./types/types";
 
 const breadCrumb = [{ name: "Quadras", href: "/club/courts" }, { name: "Ver" }];
 
 export default function ShowCourt() {
     const { court }: any = usePage().props;
+    console.log(court);
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Reserva" />
             <Tabs defaultValue="basic" className="mx-auto w-full max-w-7xl">
-                <div className="flex justify-between items-end py-4">
+                <div className="flex justify-between items-center py-4">
                     <h2 className="font-medium text-xl">
                         Visualização da Quadra
                     </h2>
-                    <div className="py-2 flex justify-end">
-                        <Button>
-                            <Link href={route("club.courts.index")}>
-                                Voltar
-                            </Link>
-                        </Button>
-                    </div>
+                    <Button>
+                        <Link href={route("club.courts.index")}>Voltar</Link>
+                    </Button>
                 </div>
                 <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="basic">Básico</TabsTrigger>
@@ -227,7 +225,10 @@ export default function ShowCourt() {
                     </div>
                 </TabsContent>
                 <TabsContent value="pricing">
-                    <div className="rounded-lg border p-8">
+                    <div className="rounded-lg border p-8 mb-2">
+                        <h2 className="mb-2 font-semibold text-lg">
+                            Preço por hora
+                        </h2>
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -240,39 +241,83 @@ export default function ShowCourt() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {[].map((item) => (
+                                {court.data.pricing.map((item: Pricing) => (
                                     <TableRow key={item.time}>
                                         <TableCell className="font-medium">
                                             {item.time}
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            {item.price}
+                                            R${item.price}
                                         </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     </div>
+                    <div className="rounded-lg border p-8">
+                        <h2 className="mb-2 font-semibold text-lg">
+                            Promoções
+                        </h2>
+                        {Object.keys(court.data.promotions_by_weekday).map(
+                            (weekday) => (
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="w-[140px]">
+                                                Período
+                                            </TableHead>
+                                            <TableHead className="text-right">
+                                                Disconto
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {court.data.promotions_by_weekday[
+                                            weekday
+                                        ].map((item: Promotion) => (
+                                            <TableRow key={item.id}>
+                                                <TableCell className="font-medium">
+                                                    {item.start_time} -{" "}
+                                                    {item.end_time}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    R${item.discount}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            )
+                        )}
+                    </div>
                 </TabsContent>
                 <TabsContent value="images" className="space-y-2">
                     <div className="rounded-lg border p-8">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {court.data.images.map((image_src, index) => (
-                                <div>
-                                    <img
-                                        className="h-36 w-full rounded-lg"
-                                        src={image_src}
-                                        alt={"img-" + index}
-                                    />
-                                </div>
-                            ))}
+                        <h2 className="mb-4 font-semibold text-lg">
+                            Imagens da Quadra
+                        </h2>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            {court.data.images.map(
+                                (image_src: string, index: number) => (
+                                    <div>
+                                        <img
+                                            className="rounded-lg"
+                                            src={image_src}
+                                            alt={"img-" + index}
+                                        />
+                                    </div>
+                                )
+                            )}
                         </div>
                     </div>
                     <div className="rounded-lg border p-8">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <h2 className="mb-4 font-semibold text-lg">
+                            Imagem do Patrocinador
+                        </h2>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             <div>
                                 <img
-                                    className="h-36 w-full rounded-lg"
+                                    className="rounded-lg"
                                     src={court.data.sponsor_image}
                                     alt="sponsor-image"
                                 />

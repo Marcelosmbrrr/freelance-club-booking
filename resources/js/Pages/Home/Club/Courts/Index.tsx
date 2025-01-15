@@ -2,7 +2,7 @@ import * as React from "react";
 import { Head, router, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { SearchCourts } from "./_components/SearchCourts";
+import { CourtsFilter } from "./_components/CourtsFilter";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,7 +15,12 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { Trash2, CirclePlus, Eye, SquarePen } from "lucide-react";
+import {
+    Trash2,
+    CirclePlus,
+    Eye,
+    SquarePen
+} from "lucide-react";
 import {
     Tooltip,
     TooltipContent,
@@ -24,14 +29,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { Pricing } from "./types/types";
 
 export type Court = {
     id: string;
@@ -42,7 +41,9 @@ export type Court = {
     status: string;
     images: string[];
     description: string;
-    sponsor_image: string[];
+    sponsor_image: string;
+    pricing: Pricing[];
+    min_price: string;
 };
 
 export const columns: ColumnDef<Court>[] = [
@@ -123,7 +124,7 @@ export default function Courts() {
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Clubs" />
             <div className="flex justify-between items-center py-4">
-                <SearchCourts />
+                <CourtsFilter />
                 <div className="flex items-center space-x-2">
                     <TooltipProvider>
                         <Tooltip>
@@ -167,28 +168,25 @@ export default function Courts() {
                                 <img
                                     src={item.original.sponsor_image}
                                     alt="Miniatura"
-                                    className="absolute bottom-2 right-2 w-8 h-8 rounded border-2 border-white"
+                                    className="absolute bottom-2 left-4 w-12 h-12 rounded border-white"
                                 />
                             </div>
                             <div className="p-4">
                                 <div className="mb-2">
-                                    <Badge
-                                        className={
-                                            item.original.status
-                                                ? "bg-green-500 hover:bg-green-400"
-                                                : "bg-red-500"
-                                        }
-                                    >
-                                        {item.original.status
-                                            ? "Ativo"
-                                            : "Inativo"}
+                                    <Badge className="mr-1">
+                                        {item.original.sport}
+                                    </Badge>
+                                    <Badge>
+                                        a partir de R${item.original.min_price}
                                     </Badge>
                                 </div>
-                                <div className="line-clamp-3 break-words text-lg font-medium lg:text-2xl">
-                                    {item.original.name}
-                                </div>
-                                <div className="line-clamp-3 break-words text-sm font-medium">
-                                    {item.original.description}
+                                <div className="space-y-2">
+                                    <div className="line-clamp-3 break-words text-lg font-medium lg:text-2xl">
+                                        {item.original.name}
+                                    </div>
+                                    <div className="line-clamp-3 break-words text-sm font-medium">
+                                        {item.original.description}
+                                    </div>
                                 </div>
                                 <div className="flex justify-end items-center gap-2 py-2">
                                     <TooltipProvider>

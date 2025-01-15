@@ -11,6 +11,19 @@ export type TimeSlot = {
     [key in Weekday]: { start_time: string; end_time: string }[];
 };
 
+export type Pricing = { time: string; price: string };
+
+export type Promotion = {
+    discount: number;
+    start_time: string;
+    end_time: string;
+    id?: string;
+};
+
+export type PromotionsByWeekday = {
+    [key in Weekday]: Promotion[];
+};
+
 export interface CreateEditCourtSchema {
     name: string;
     sport: string;
@@ -26,5 +39,6 @@ export interface CreateEditCourtSchema {
     status: boolean;
     images: string[];
     sponsor_image: string[];
-    price: string;
+    pricing: Pricing[];
+    promotions_by_weekday: PromotionsByWeekday;
 }
