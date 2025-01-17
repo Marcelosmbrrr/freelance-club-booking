@@ -3,9 +3,7 @@
 namespace App\Http\Resources\Club\Courts;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class CourtsResource extends JsonResource
 {
@@ -16,8 +14,6 @@ class CourtsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $data = parent::toArray($request);
-
-        return $data;
+        return parent::toArray($request);
     }
 }

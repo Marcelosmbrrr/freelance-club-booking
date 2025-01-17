@@ -97,18 +97,20 @@ class ClubReservationController extends Controller
     {
         $query = $this->reservationModel->query();
 
-        $query->with(['player.user', 'court.promotions', 'timeSlots.timeSlot' => function ($query) {
-            $query->select('id', 'start_time', 'end_time'); // Selecionar apenas os campos desejados
-        }]);
+        $query->with([
+            'court.promotions',
+            'courtTimeSlots'
+        ]);
 
-        $query->select('id', 'status', 'date', 'total_players', 'court_id', 'player_id');
+        $query->select('id', 'status', 'date', 'total_players', 'court_id', 'player_id', 'price'); // Incluído 'price'
 
-        $reservation = $query->firstOrFail();
+        $reservation = $query->findOrFail($id); // findOrFail garante a busca pelo ID específico
 
         return Inertia::render('Home/Club/Reservations/ShowReservation', [
             'reservation' => new ShowReservationResource($reservation)
         ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

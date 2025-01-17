@@ -1,7 +1,7 @@
 import * as React from "react";
 import { router } from "@inertiajs/react";
 
-import { timeSlotsList } from "@/utils/data/timeSlotsList";
+import { timeList } from "@/utils/data/timeList";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 interface QueryParams {
     search: string;
@@ -34,6 +35,10 @@ export function ReservationsFilter() {
     const [search, setSearch] = React.useState<string>("");
     const [status, setStatus] = React.useState<string>(""); // Status agora é utilizado como filtro
     const [date, setDate] = React.useState<string>("");
+    const [time, setTime] = React.useState<{
+        start_time: string;
+        end_time: string;
+    }>({ start_time: "06:00", end_time: "00:00" });
     const [price, setPrice] = React.useState({ min: 10, max: 100 });
 
     const fetchData = React.useCallback(
@@ -117,6 +122,63 @@ export function ReservationsFilter() {
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 items-center gap-4">
+                                        <Label htmlFor="price">Horário</Label>
+                                        <div className="grid grid-cols-2 gap-2 w-full">
+                                            <Select
+                                                value={status}
+                                                onValueChange={(value) =>
+                                                    setTime({
+                                                        ...time,
+                                                        start_time: value,
+                                                    })
+                                                }
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="De" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {timeList.map(
+                                                            (time) => (
+                                                                <SelectItem
+                                                                    value={time}
+                                                                >
+                                                                    {time}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                            <Select
+                                                value={status}
+                                                onValueChange={(value) =>
+                                                    setTime({
+                                                        ...time,
+                                                        end_time: value,
+                                                    })
+                                                }
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Até" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {timeList.map(
+                                                            (time) => (
+                                                                <SelectItem
+                                                                    value={time}
+                                                                >
+                                                                    {time}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 items-center gap-4">
                                         <Label htmlFor="price">
                                             Preço Médio
                                         </Label>
@@ -172,6 +234,7 @@ export function ReservationsFilter() {
                 }
             >
                 Procurar
+                <Search />
             </Button>
         </div>
     );

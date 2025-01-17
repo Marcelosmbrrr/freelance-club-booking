@@ -29,7 +29,7 @@ class CourtTimeSlotsAvailabilityResource extends JsonResource
 
             // 1. Verifica se o time slot não tem nenhuma reserva associada (disponível)
             $isAvailable = $reservations->every(function ($reservation) use ($timeSlot) {
-                return !$reservation->timeSlots->contains('id', $timeSlot->id);
+                return !$reservation->courtTimeSlots->contains('id', $timeSlot->id);
             });
 
             if ($isAvailable) {
@@ -41,7 +41,7 @@ class CourtTimeSlotsAvailabilityResource extends JsonResource
                 $hasVacancy = $reservations->filter(function ($reservation) use ($timeSlot, &$availableVacancies) {
 
                     // Verifica se a reserva está associada ao time slot
-                    if ($reservation->timeSlots->contains('id', $timeSlot->id) && $reservation->status === 'pending' && $reservation->is_public) {
+                    if ($reservation->courtTimeSlots->contains('id', $timeSlot->id) && $reservation->status === 'pending' && $reservation->is_public) {
                         
                         // Coleta as vagas disponíveis (slots com player_id null)
                         $vacancies = $reservation->playerSlots->whereNull('player_id');
@@ -71,6 +71,8 @@ class CourtTimeSlotsAvailabilityResource extends JsonResource
             $timeSlotsWithAvailability[] = [
                 'id' => $timeSlot->id,
                 'label' => $timeSlot->start_time . "-" . $timeSlot->end_time, 
+                'start_time' => $timeSlot->start_time,
+                'end_time' => $timeSlot->end_time,
                 'status' => $availabilityStatus, 
                 'vacancies' => $availableVacanciesString, 
             ];

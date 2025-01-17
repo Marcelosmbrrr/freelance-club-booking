@@ -1,4 +1,4 @@
-export const timeSlotsList = [
+export const timeList = [
     "06:00",
     "06:30",
     "07:00",

@@ -1,7 +1,8 @@
 import * as React from "react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 
-import { timeSlotsData } from "@/utils/data/timeSlots";
+import { CourtsFilter } from "./CourtsFilter";
+import { ClubsFilter } from "./ClubsFilter";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,8 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { format } from "date-fns";
-import { Filter } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import {
     Popover,
     PopoverContent,
@@ -27,6 +27,14 @@ import { Separator } from "@/components/ui/separator";
 
 interface QueryParams {
     entity: "clubs" | "courts";
+    sport: string;
+    weekday: string;
+    time: { start_time: string; end_time: string };
+    price: { min: number; max: number };
+    type?: string;
+    isCovered?: boolean;
+    manufacturer?: string;
+    installationYear?: string;
     search?: string;
     searchBy: string;
     orderBy: string;
@@ -35,31 +43,44 @@ interface QueryParams {
     page: number;
 }
 
+const defaultParams: QueryParams = {
+    entity: "clubs",
+    sport: "padel",
+    weekday: "monday",
+    time: { start_time: "06:00", end_time: "00:00" },
+    price: { min: 10, max: 100 },
+    searchBy: "name",
+    orderBy: "id",
+    order: "asc",
+    limit: 10,
+    page: 1,
+    type: undefined,
+    isCovered: true,
+    manufacturer: undefined,
+    installationYear: undefined,
+    search: undefined,
+};
+
 export function SearchClubOrCourt(props: {
     localization?: { lat: number; lng: number };
 }) {
-    const [search, setSearch] = React.useState<string>("");
-    const [entity, setEntity] = React.useState<string>("clubs");
-    const [sport, setSport] = React.useState<string>("padel");
-    const [date, setDate] = React.useState<string>(
-        format(new Date(), "yyyy-MM-dd")
-    );
-    const [time, setTime] = React.useState<string>("time");
-    const [price, setPrice] = React.useState({ min: 10, max: 100 });
-    const [court, setCourt] = React.useState({
-        is_covered: false,
-        floor_type: "",
-        can_play_outside: false,
-    });
+    const { queryParams = null } = usePage().props;
+
+    const parameters: QueryParams = { ...defaultParams, ...queryParams };
+
     const [openMap, setOpenMap] = React.useState<boolean>(false);
 
     const fetchData = React.useCallback(
         (param: Partial<QueryParams>) => {
-            router.get(route("player.new-reservation.index"), { ...param }, {
-                preserveState: true
-            });
+            router.get(
+                route("player.new-reservation.index"),
+                { ...param },
+                {
+                    preserveState: true,
+                }
+            );
         },
-        [search, entity, sport, date, time, price, court]
+        [parameters]
     );
 
     return (
@@ -92,8 +113,10 @@ export function SearchClubOrCourt(props: {
                                                 Procurar por
                                             </Label>
                                             <Select
-                                                value={entity}
-                                                onValueChange={(v) => setEntity(v)}
+                                                value={parameters.entity}
+                                                onValueChange={(
+                                                    v: "clubs" | "courts"
+                                                ) => fetchData({ entity: v })}
                                             >
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Selecionar" />
@@ -111,155 +134,31 @@ export function SearchClubOrCourt(props: {
                                             </Select>
                                         </div>
 
-                                        {entity === "courts" && (
+                                        {parameters.entity === "courts" && (
                                             <div className="grid grid-cols-2 items-center gap-4">
-                                                <Label htmlFor="width">
-                                                    Detalhes
+                                                <Label htmlFor="maxWidth">
+                                                    Filtrar Quadra
                                                 </Label>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
-                                                        <Button variant="outline">
-                                                            Filtrar Quadra
-                                                        </Button>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent className="md:w-[400px] lg:w-[500px]">
-                                                        <div className="grid gap-4">
-                                                            <div className="grid gap-2">
-                                                                <div className="grid grid-cols-2 items-center gap-4">
-                                                                    <Label htmlFor="type">
-                                                                        Tipo
-                                                                    </Label>
-                                                                    <Select>
-                                                                        <SelectTrigger className="w-full">
-                                                                            <SelectValue placeholder="Selecionar" />
-                                                                        </SelectTrigger>
-                                                                        <SelectContent>
-                                                                            <SelectGroup>
-                                                                                <SelectItem value="masonry">
-                                                                                    Masonry
-                                                                                </SelectItem>
-                                                                                <SelectItem value="panoramic">
-                                                                                    Panoramic
-                                                                                </SelectItem>
-                                                                                <SelectItem value="mixed">
-                                                                                    Mixed
-                                                                                </SelectItem>
-                                                                            </SelectGroup>
-                                                                        </SelectContent>
-                                                                    </Select>
-                                                                </div>
-                                                                <div className="grid grid-cols-2 items-center py-2 gap-4">
-                                                                    <Label htmlFor="width">
-                                                                        Cobertura
-                                                                    </Label>
-                                                                    <div className="flex items-center space-x-2">
-                                                                        <Switch id="is_covered" />
-                                                                        <Label htmlFor="is_covered">
-                                                                            {court.is_covered
-                                                                                ? "With cover"
-                                                                                : "Without cover"}
-                                                                        </Label>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="grid grid-cols-2 items-center gap-4">
-                                                                    <Label htmlFor="surface_type">
-                                                                        Tipo de
-                                                                        Superfície
-                                                                    </Label>
-                                                                    <Input id="surface_type" />
-                                                                </div>
-                                                                <div className="grid grid-cols-2 items-center gap-4">
-                                                                    <Label htmlFor="can_play_outside">
-                                                                        Jogar
-                                                                        fora da
-                                                                        quadra
-                                                                    </Label>
-                                                                    <Input
-                                                                        id="can_play_outside"
-                                                                        defaultValue="25px"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </PopoverContent>
-                                                </Popover>
+                                                <CourtsFilter />
                                             </div>
                                         )}
-                                        <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="maxWidth">
-                                                Esporte
-                                            </Label>
-                                            <Select
-                                                value={sport}
-                                                onValueChange={(v) =>
-                                                    setSport(v)
-                                                }
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Esporte" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectItem value="padel">
-                                                            Padel
-                                                        </SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="time">
-                                                Horário
-                                            </Label>
-                                            <Select>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Selecionar" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        {timeSlotsData.map(
-                                                            (time_slot) => (
-                                                                <SelectItem
-                                                                    value={
-                                                                        time_slot.id
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        time_slot.time
-                                                                    }
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="date">Data</Label>
-                                            <Input type="date" value={date} />
-                                        </div>
-                                        <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="time">
-                                                Preço Médio
-                                            </Label>
-                                            <div className="grid grid-cols-2 gap-2 w-full">
-                                                <Input
-                                                    type="number"
-                                                    className="w-full"
-                                                    placeholder="Mínimo"
-                                                />
-                                                <Input
-                                                    type="number"
-                                                    className="w-full"
-                                                    placeholder="Máximo"
-                                                />
+
+                                        {parameters.entity === "clubs" && (
+                                            <div className="grid grid-cols-2 items-center gap-4">
+                                                <Label htmlFor="maxWidth">
+                                                    Filtrar Clube
+                                                </Label>
+                                                <ClubsFilter />
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </PopoverContent>
                         </Popover>
-                        <Button>Procurar</Button>
+                        <Button>
+                            Procurar
+                            <Search />
+                        </Button>
                     </div>
                     <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
                         <div className="flex items-center space-x-2">
@@ -273,11 +172,21 @@ export function SearchClubOrCourt(props: {
                     </div>
                 </div>
                 <div className="flex gap-x-2">
-                    <Badge>Procura: {entity}</Badge>
-                    <Badge>Esporte: {sport}</Badge>
-                    <Badge>Data/Hora: {date} {time}</Badge>
-                    <Badge>
-                        R$: {price.min} - {price.max}
+                    <Badge variant="secondary">
+                        Procura: {parameters.entity}
+                    </Badge>
+                    <Badge variant="secondary">
+                        Esporte: {parameters.sport}
+                    </Badge>
+                    <Badge variant="secondary">
+                        Dia da Semana: {parameters.weekday}
+                    </Badge>
+                    <Badge variant="secondary">
+                        Horário: {parameters.time.start_time} -{" "}
+                        {parameters.time.end_time}{" "}
+                    </Badge>
+                    <Badge variant="secondary">
+                        R$: {parameters.price.min} - {parameters.price.max}
                     </Badge>
                 </div>
                 {openMap && (

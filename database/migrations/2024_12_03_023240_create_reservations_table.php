@@ -19,7 +19,6 @@ return new class extends Migration
             $table->decimal("price");
             $table->boolean('is_public');
             $table->date("date");
-            $table->boolean("is_filled");
             $table->enum("status", ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });

@@ -11,7 +11,6 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -21,7 +20,7 @@ import { Label } from "@/components/ui/label";
 
 const breadCrumb = [
     { name: "Reservas", href: "/club/reservations" },
-    { name: "Ver" },
+    { name: "Visualizar" },
 ];
 
 export default function ShowReservation() {
@@ -30,7 +29,6 @@ export default function ShowReservation() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Reserva" />
-
             <Tabs defaultValue="players" className="mx-auto w-full max-w-7xl">
                 <div className="flex justify-between items-end py-4">
                     <h2 className="font-medium text-xl">
@@ -134,10 +132,10 @@ export default function ShowReservation() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[100px]">
+                                    <TableHead className="w-[140px]">
                                         Horário
                                     </TableHead>
-                                    <TableHead className="w-[100px]">
+                                    <TableHead className="w-[140px]">
                                         Promoção
                                     </TableHead>
                                     <TableHead className="text-right">
@@ -146,19 +144,19 @@ export default function ShowReservation() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {[].map((invoice) => (
-                                    <TableRow key={invoice.invoice}>
-                                        <TableCell>
-                                            {invoice.paymentStatus}
-                                        </TableCell>
-                                        <TableCell>
-                                            {invoice.paymentMethod}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {invoice.totalAmount}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                <TableRow>
+                                    <TableCell>
+                                        {reservation.data.payment.start_time} -{" "}
+                                        {reservation.data.payment.end_time}
+                                    </TableCell>
+                                    <TableCell>
+                                        {reservation.data.payment.promotion ??
+                                            "Sem promoção"}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        R${reservation.data.price}
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </div>

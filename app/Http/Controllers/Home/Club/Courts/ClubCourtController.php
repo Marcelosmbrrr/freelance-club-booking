@@ -41,7 +41,7 @@ class ClubCourtController extends Controller
         $query->with(["reservations"]);
 
         if ($search) {
-            if (in_array($searchBy, ['name', 'sport', 'structure_type', 'status', 'manufacturer'])) { 
+            if (in_array($searchBy, ['name', 'sport', 'type', 'status', 'manufacturer'])) { 
                 $query->where($searchBy, 'like', '%' . $search . '%');
             }
         }

@@ -5,7 +5,6 @@ namespace App\Http\Resources\Club\Courts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class ShowCourtResource extends JsonResource
 {
@@ -18,15 +17,13 @@ class ShowCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data["reservations"] = $this->reservationCourtTimeSlots();
-        $data['time_slots'] = $this->courtTimeSlots();
+        $data['time_slots'] = $this->courtTimeSlotsByWeekday();
+        $data["reservations"] = $this->courtReservations();
 
         return $data;
     }
 
-    // Custom
-
-    function courtTimeSlots() {
+    function courtTimeSlotsByWeekday() {
 
         $grouped_court_time_slots = $this->timeSlots->groupBy('weekday');
 
@@ -59,7 +56,7 @@ class ShowCourtResource extends JsonResource
 
     }
 
-    function reservationCourtTimeSlots() {
+    function courtReservations() {
 
         $data = [];
 
@@ -74,7 +71,7 @@ class ShowCourtResource extends JsonResource
 
                 $time_slots = [];
 
-                foreach($reservation->timeSlots as $indexx => $courtTimeSlot){
+                foreach($reservation->courtTimeSlots as $indexx => $courtTimeSlot){
                     $time_slots[$indexx] = [
                         "id" => $courtTimeSlot->timeSlot->id,
                         "start_time" => $courtTimeSlot->timeSlot->start_time,

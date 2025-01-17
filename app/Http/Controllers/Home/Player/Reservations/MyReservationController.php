@@ -26,7 +26,6 @@ class MyReservationController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $searchBy = $request->input('search_by', 'id');
         $orderBy = $request->input('order_by', 'id');
         $order = $request->input('order', 'asc');
         $limit = $request->input('limit', 10);
@@ -38,8 +37,11 @@ class MyReservationController extends Controller
 
         $query->with(['player', 'club', 'court']);
 
-        if ($search && $searchBy) {
-            $query->where($searchBy, 'like', '%' . $search . '%');
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
 
         $query->orderBy('reservations.' . $orderBy, $order);

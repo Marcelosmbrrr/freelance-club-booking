@@ -27,7 +27,7 @@ class Club extends Model
         'geolocalization',
     ];   
 
-    protected $appends = ['name', 'average_price', 'sports'];
+    protected $appends = ['name', 'min_price', 'sports'];
 
     public function user()
     {
@@ -61,15 +61,11 @@ class Club extends Model
         return $this->courts->pluck('sport')->unique()->values()->all();
     }
 
-    public function getAveragePriceAttribute() 
+    public function getMinPriceAttribute() 
     {
-        $prices = $this->courts->pluck('price'); 
-
-        if ($prices->count() > 0) {
-            return $prices->avg();
-        }
-
-        return 0;
+        return $this->courts->map(function ($court) {
+            return collect($court->pricing)->min('price');
+        })->min();
     }
 
     public function getImagesAttribute($value)

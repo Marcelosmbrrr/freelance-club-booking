@@ -43,7 +43,8 @@ Route::middleware(['auth'])->group(function () {
     // Player
     Route::prefix("player")->middleware(["user-access:player", "verified"])->group(function () {
         Route::resource("reservations", MyReservationController::class)->names("player.my-reservations")->except(['create', 'store'])->names("player.reservations");
-        Route::resource("new-reservation", NewReservationController::class)->names("player.new-reservation")->only(['index', 'create', 'store'])->names("player.new-reservation");
+        Route::resource("new-reservation", NewReservationController::class)->names("player.new-reservation")->only(['index', 'store'])->names("player.new-reservation");
+        Route::get("new-reservation/create/{clubId}", [NewReservationController::class, "create"])->name("player.new-reservation.create");
         Route::get("profile", [PlayerProfileController::class, "index"])->name("player.profile");
     });
 });

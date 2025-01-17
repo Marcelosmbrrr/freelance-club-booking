@@ -4,7 +4,6 @@ namespace App\Http\Resources\Club\Courts;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class EditCourtResource extends JsonResource
 {
@@ -17,11 +16,10 @@ class EditCourtResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['time_slots'] = $this->courtTimeSlots();
+        $data['time_slots'] = $this->courtTimeSlotsByWeekday();
 
         return $data;
     }
-
     
     /**
      * Agrupa os horários disponíveis de uma quadra por dia da semana e retorna apenas os 
@@ -50,7 +48,7 @@ class EditCourtResource extends JsonResource
      * 
      * @return array Retorna os blocos contínuos de horários organizados por dia da semana.
      */
-    function courtTimeSlots() {
+    function courtTimeSlotsByWeekday() {
         $grouped_court_time_slots = $this->timeSlots->groupBy('weekday');
     
         $time_slots_array = [

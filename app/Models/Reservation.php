@@ -47,7 +47,7 @@ class Reservation extends Model
         return $this->hasOneThrough(Club::class, Court::class, 'id', 'id', 'court_id', 'club_id');
     }
 
-    public function timeSlots()
+    public function courtTimeSlots()
     {
         return $this->belongsToMany(CourtTimeSlot::class, 'reservation_court_time_slot', 'reservation_id', 'court_time_slot_id');
     }

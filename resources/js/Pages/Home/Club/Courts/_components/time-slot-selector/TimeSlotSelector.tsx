@@ -1,7 +1,7 @@
 import * as React from "react";
 // Components
 import { Weekday } from "../../types/types";
-import { timeSlotsList } from "@/utils/data/timeSlotsList";
+import { timeList } from "@/utils/data/timeList";
 // Types
 import { TimeSlot } from "../../types/types";
 // Shadcn
@@ -53,7 +53,7 @@ export function TimeSlotSelector(props: {
 
     React.useEffect(() => {
         if (props.data) {
-            console.log(props.data)
+            console.log(props.data);
             setTimeSlotsByWeekday(props.data);
         }
     }, []);
@@ -102,7 +102,10 @@ export function TimeSlotSelector(props: {
                         <Checkbox
                             id={weekday}
                             value={weekday}
-                            checked={timeSlotsByWeekday[weekday as Weekday].length > 0}
+                            checked={
+                                timeSlotsByWeekday[weekday as Weekday].length >
+                                0
+                            }
                             onCheckedChange={(v: boolean) =>
                                 handleCheck(v, weekday)
                             }
@@ -136,7 +139,7 @@ export function TimeSlotSelector(props: {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        {timeSlotsList.map(
+                                                        {timeList.map(
                                                             (item) => (
                                                                 <SelectItem
                                                                     value={item}
@@ -164,7 +167,7 @@ export function TimeSlotSelector(props: {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        {timeSlotsList.map(
+                                                        {timeList.map(
                                                             (item) => (
                                                                 <SelectItem
                                                                     value={item}

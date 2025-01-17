@@ -27,12 +27,20 @@ class NewReservationController extends Controller
     public function index(Request $request)
     {
         $entity = $request->input('entity', 'clubs');
-        $search = $request->input('search');
-        $searchBy = $request->input('search_by', 'id');
-        $orderBy = $request->input('order_by', 'id');
-        $order = $request->input('order', 'asc');
-        $limit = $request->input('limit', 10);
-        $page = $request->input('page', 1);
+        $sport = $request->input('sport', 'padel');
+        $date = $request->input('date', now()->toDateString());
+        $time = $request->input('time', ['start_time' => '06:00', 'end_time' => '00:00']);
+        $price = $request->input('price', ['min' => 10, 'max' => 100]);
+        $searchBy = $request->input('searchBy', 'name');
+        $orderBy = $request->input('orderBy', 'id');
+        $order = $request->input('order', 'asc'); 
+        $limit = $request->input('limit', 10); 
+        $page = $request->input('page', 1); 
+        $type = $request->input('type'); 
+        $isCovered = $request->input('isCovered', true); 
+        $manufacturer = $request->input('manufacturer'); 
+        $installationYear = $request->input('installationYear'); 
+        $search = $request->input('search'); 
 
         $query = $entity === "clubs" ? $this->clubModel->query() : $this->courtModel->query();
 
@@ -42,8 +50,18 @@ class NewReservationController extends Controller
             $query->with('club');
         }
 
-        if ($search && $searchBy) {
-            $query->where($searchBy, 'like', '%' . $search . '%');
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%');
+            });
+
+            if ($entity === 'courts') {
+                $query->orWhereHas('club', function ($clubQuery) use ($search) {
+                    $clubQuery->where('city', 'like', '%' . $search . '%')
+                              ->orWhere('state', 'like', '%' . $search . '%');
+                });
+            }
         }
 
         $query->orderBy("$entity." . $orderBy, $order);
@@ -62,12 +80,27 @@ class NewReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request, string $clubId)
     {
-        $clubId = $request->input('clubId');
         $courtId = $request->input('courtId');
         $date = $request->input('date');
         $weekday = $request->input('weekday');
+
+        $entity = $request->input('entity', 'clubs');
+        $sport = $request->input('sport', 'padel');
+        $date = $request->input('date', now()->toDateString());
+        $time = $request->input('time', ['start_time' => '06:00', 'end_time' => '00:00']);
+        $price = $request->input('price', ['min' => 10, 'max' => 100]);
+        $searchBy = $request->input('searchBy', 'name');
+        $orderBy = $request->input('orderBy', 'id');
+        $order = $request->input('order', 'asc'); 
+        $limit = $request->input('limit', 10); 
+        $page = $request->input('page', 1); 
+        $type = $request->input('type'); 
+        $isCovered = $request->input('isCovered', true); 
+        $manufacturer = $request->input('manufacturer'); 
+        $installationYear = $request->input('installationYear'); 
+        $search = $request->input('search'); 
 
         return Inertia::render('Home/Player/Reservations/NewReservation/CreateReservation', [
             'club' =>  new CreateReservationResource($this->clubModel->with(['courts'])->find($clubId)),
@@ -77,7 +110,8 @@ class NewReservationController extends Controller
                 }, 
                 'reservations' => function ($query) use ($date) {
                     $query->whereDate('date', $date);
-            }])->find($courtId)))
+            }])->find($courtId))),
+            'queryParams' => request()->query() ?: null,
         ]);
         
     }

@@ -16,16 +16,16 @@ class ReservationsResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data["time_slots"] = $this->timeSlots();
+        $data["time_slots"] = $this->courtTimeSlots();
 
         return $data;
     }
 
-    function timeSlots() {
+    function courtTimeSlots() {
 
         $time_slots = [];
 
-        foreach($this->timeSlots as $index => $timeSlot){
+        foreach($this->courtTimeSlots as $index => $timeSlot){
             $time_slots[$index] = [
                 "id" => $timeSlot->timeSlot->id,
                 "start_time" => $timeSlot->timeSlot->start_time,

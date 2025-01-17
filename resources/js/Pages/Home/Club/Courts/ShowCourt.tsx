@@ -18,11 +18,10 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Pricing, Promotion } from "./types/types";
 
-const breadCrumb = [{ name: "Quadras", href: "/club/courts" }, { name: "Ver" }];
+const breadCrumb = [{ name: "Quadras", href: "/club/courts" }, { name: "Visualizar" }];
 
 export default function ShowCourt() {
     const { court }: any = usePage().props;
-    console.log(court);
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Reserva" />

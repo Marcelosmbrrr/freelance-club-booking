@@ -1,7 +1,7 @@
 import * as React from "react";
 import { router } from "@inertiajs/react";
 
-import { timeSlotsList } from "@/utils/data/timeSlotsList";
+import { timeList } from "@/utils/data/timeList";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 interface QueryParams {
     search: string;
@@ -57,11 +58,24 @@ export function CourtsFilter() {
 
     const fetchData = React.useCallback(
         (param: Partial<QueryParams>) => {
-            router.get(route("club.courts.index"), { ...param }, {
-                preserveState: true
-            });
+            router.get(
+                route("club.courts.index"),
+                { ...param },
+                {
+                    preserveState: true,
+                }
+            );
         },
-        [search, time, type, sport, isCovered, manufacturer, installationYear, price]
+        [
+            search,
+            time,
+            type,
+            sport,
+            isCovered,
+            manufacturer,
+            installationYear,
+            price,
+        ]
     );
 
     return (
@@ -98,6 +112,26 @@ export function CourtsFilter() {
                                                     : "Inativo"}
                                             </Label>
                                         </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 items-center gap-4">
+                                        <Label htmlFor="maxWidth">
+                                            Esporte
+                                        </Label>
+                                        <Select
+                                            value={sport}
+                                            onValueChange={(v) => setSport(v)}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Esporte" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectItem value="padel">
+                                                        Padel
+                                                    </SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     <div className="grid grid-cols-2 items-center gap-4 border p-2 rounded">
                                         <Label htmlFor="time">
@@ -154,7 +188,7 @@ export function CourtsFilter() {
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectGroup>
-                                                            {timeSlotsList.map(
+                                                            {timeList.map(
                                                                 (item) => (
                                                                     <SelectItem
                                                                         value={
@@ -179,7 +213,7 @@ export function CourtsFilter() {
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectGroup>
-                                                            {timeSlotsList.map(
+                                                            {timeList.map(
                                                                 (item) => (
                                                                     <SelectItem
                                                                         value={
@@ -196,26 +230,7 @@ export function CourtsFilter() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 items-center gap-4">
-                                        <Label htmlFor="maxWidth">
-                                            Esporte
-                                        </Label>
-                                        <Select
-                                            value={sport}
-                                            onValueChange={(v) => setSport(v)}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Esporte" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectItem value="padel">
-                                                        Padel
-                                                    </SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+
                                     <div className="grid grid-cols-2 items-center gap-4">
                                         <Label htmlFor="type">Tipo</Label>
                                         <Select
@@ -315,7 +330,10 @@ export function CourtsFilter() {
                     </div>
                 </PopoverContent>
             </Popover>
-            <Button type="button" onClick={fetchData}>Procurar</Button>
+            <Button type="button" onClick={fetchData}>
+                Procurar
+                <Search />
+            </Button>
         </div>
     );
 }

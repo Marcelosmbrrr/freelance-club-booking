@@ -1,6 +1,6 @@
 import * as React from "react";
 // Components
-import { timeSlotsList } from "@/utils/data/timeSlotsList";
+import { timeList } from "@/utils/data/timeList";
 // Types
 import { TimeSlot, Weekday } from "../types/types";
 // Shadcn
@@ -103,10 +103,8 @@ export function PromotionsSelector(props: {
     function getTimeSlotsInRange(
         weekday_time_slots: { start_time: string; end_time: string }[]
     ) {
-        const startIndex = timeSlotsList.indexOf(
-            weekday_time_slots[0].start_time
-        );
-        const endIndex = timeSlotsList.indexOf(
+        const startIndex = timeList.indexOf(weekday_time_slots[0].start_time);
+        const endIndex = timeList.indexOf(
             weekday_time_slots.slice(-1)[0].end_time
         );
 
@@ -114,7 +112,7 @@ export function PromotionsSelector(props: {
             throw new Error("Os valores fornecidos não existem na lista.");
         }
 
-        return timeSlotsList.slice(startIndex, endIndex + 1);
+        return timeList.slice(startIndex, endIndex + 1);
     }
 
     return (
