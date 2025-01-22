@@ -1,10 +1,13 @@
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
+import { Search } from "lucide-react";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,11 +28,10 @@ const breadCrumb = [
 
 export default function ShowReservation() {
     const { reservation }: any = usePage().props;
-    console.log(reservation);
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Reserva" />
-            <Tabs defaultValue="players" className="mx-auto w-full max-w-7xl">
+            <div className="mx-auto w-full max-w-7xl">
                 <div className="flex justify-between items-end py-4">
                     <h2 className="font-medium text-xl">
                         Visualização da Reserva
@@ -42,80 +44,12 @@ export default function ShowReservation() {
                         </Button>
                     </div>
                 </div>
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="players">Jogadores</TabsTrigger>
-                    <TabsTrigger value="payment">Pagamento</TabsTrigger>
-                </TabsList>
-                <TabsContent value="players">
-                    <div className="grid md:grid-cols-2 gap-8 p-8 rounded border">
-                        {reservation.data.players.map((player, index) => (
-                            <div className="relative py-4 items-center bg-white rounded-lg shadow sm:flex dark:bg-neutral-800 dark:border-gray-700">
-                                <Badge
-                                    variant="secondary"
-                                    className="absolute top-0 right-0 mt-2 mr-2"
-                                >
-                                    Jogador {index + 1}
-                                </Badge>
-
-                                {player.user && (
-                                    <img
-                                        className="ml-4 aspect-square size-28 rounded-full"
-                                        src={player.user.avatar}
-                                        alt="player-image"
-                                    />
-                                )}
-
-                                {!player.user && (
-                                    <div className="flex justify-center items-center ml-4 aspect-square size-28">
-                                        <svg
-                                            aria-hidden="true"
-                                            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-300"
-                                            viewBox="0 0 100 101"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                                fill="currentColor"
-                                            />
-                                            <path
-                                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                                fill="currentFill"
-                                            />
-                                        </svg>
-                                    </div>
-                                )}
-
-                                <div className="px-5">
-                                    <h2 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {player.user
-                                            ? player.user.name
-                                            : "Esperando jogador..."}
-                                    </h2>
-                                    {player.user && (
-                                        <p className="text-gray-500 dark:text-gray-400">
-                                            {player.user.email}
-                                        </p>
-                                    )}
-
-                                    {player.user && (
-                                        <div className="flex space-x-4 mt-4">
-                                            <Button disabled>
-                                                Ver Jogador
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </TabsContent>
-                <TabsContent value="payment">
-                    <div className="space-y-4 rounded-lg border p-8">
-                        <div className="space-y-8">
-                            <Badge>Situação: {reservation.data.status}</Badge>
+                <div className="space-y-4 py-4">
+                    <div className="space-y-8">
+                        <Badge>Situação: {reservation.data.status}</Badge>
+                        <div className="flex gap-4">
                             <div className="grid gap-2">
-                                <Label>Data da Reserva</Label>
+                                <Label>Criado em</Label>
                                 <Input
                                     type="text"
                                     className="w-72"
@@ -128,40 +62,170 @@ export default function ShowReservation() {
                                     )}
                                 />
                             </div>
+                            <div className="grid gap-2">
+                                <Label>Data Agendada</Label>
+                                <Input
+                                    type="text"
+                                    className="w-72"
+                                    value={format(
+                                        reservation.data.date,
+                                        "EEEE, dd 'de' MMMM 'de' yyyy",
+                                        {
+                                            locale: ptBR,
+                                        }
+                                    )}
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Quadra</Label>
+                                <Input
+                                    type="text"
+                                    className="w-72"
+                                    value={reservation.data.court.name}
+                                />
+                            </div>
+                            <div className="flex items-end">
+                                <Button
+                                    onClick={() =>
+                                        router.get(
+                                            route("club.courts.show", {
+                                                court:
+                                                    reservation.data.court.id,
+                                            })
+                                        )
+                                    }
+                                >
+                                    Ver Quadra <Search />
+                                </Button>
+                            </div>
                         </div>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[140px]">
-                                        Horário
-                                    </TableHead>
-                                    <TableHead className="w-[140px]">
-                                        Promoção
-                                    </TableHead>
-                                    <TableHead className="text-right">
-                                        Preço Total
-                                    </TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell>
-                                        {reservation.data.payment.start_time} -{" "}
-                                        {reservation.data.payment.end_time}
-                                    </TableCell>
-                                    <TableCell>
-                                        {reservation.data.payment.promotion ??
-                                            "Sem promoção"}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        R${reservation.data.price}
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
                     </div>
-                </TabsContent>
-            </Tabs>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[140px]">
+                                    Horário
+                                </TableHead>
+                                <TableHead className="w-[140px]">
+                                    Promoção
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    Preço Total
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>
+                                    {reservation.data.payment.start_time} -{" "}
+                                    {reservation.data.payment.end_time}
+                                </TableCell>
+                                <TableCell>
+                                    {reservation.data.payment.promotion ??
+                                        "Sem promoção"}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    R${reservation.data.price}
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                    <div className="container w-full">
+                        <Tabs defaultValue="1">
+                            <TabsList className="flex h-auto w-full flex-col gap-2 bg-background md:flex-row">
+                                {reservation.data.players.map((player) => (
+                                    <TabsTrigger
+                                        value={player.position}
+                                        className="flex w-full flex-col items-start justify-start gap-1 whitespace-normal rounded-md border p-4 text-left text-primary hover:border-primary/40 data-[state=active]:border-primary"
+                                    >
+                                        <div className="flex items-center gap-2 md:flex-col md:items-start lg:gap-4">
+                                            <Avatar className="size-12">
+                                                <AvatarImage
+                                                    src={
+                                                        player.user
+                                                            ? player.user.avatar
+                                                            : ""
+                                                    }
+                                                    alt="@shadcn"
+                                                />
+                                                <AvatarFallback>
+                                                    P{player.position}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <p className="text-lg font-semibold md:text-2xl lg:text-xl">
+                                                {player.user
+                                                    ? player.user.name
+                                                    : "Jogador " +
+                                                      player.position}
+                                            </p>
+                                        </div>
+                                        <p className="font-normal text-muted-foreground md:block">
+                                            <Badge>
+                                                {player.user
+                                                    ? "Vaga Preenchida"
+                                                    : "Aguardando Jogador"}
+                                            </Badge>
+                                        </p>
+                                    </TabsTrigger>
+                                ))}
+                            </TabsList>
+                            {reservation.data.players.map((player) => (
+                                <TabsContent
+                                    value={player.position}
+                                    className="rounded-lg border p-8 space-y-4"
+                                >
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="font-medium text-xl">
+                                            {player.user
+                                                ? "Informações da Reserva"
+                                                : "Aguardando jogador..."}
+                                        </h3>
+                                        <Button disabled={!player.user}>
+                                            Ver Cliente <Search />
+                                        </Button>
+                                    </div>
+                                    {player.user && (
+                                        <div className="space-y-4">
+                                            <div className="flex gap-4">
+                                                <div className="grid w-full items-center gap-1.5">
+                                                    <Label htmlFor="phonenumber">
+                                                        Entrou em
+                                                    </Label>
+                                                    <Input
+                                                        type="text"
+                                                        id="phonenumber"
+                                                        value="21/01/2025"
+                                                    />
+                                                </div>
+                                                <div className="grid w-full items-center gap-1.5">
+                                                    <Label htmlFor="name">
+                                                        Situação
+                                                    </Label>
+                                                    <Input
+                                                        type="text"
+                                                        id="name"
+                                                        value="Aguardando pagamento"
+                                                    />
+                                                </div>
+                                                <div className="grid w-full items-center gap-1.5">
+                                                    <Label htmlFor="email">
+                                                        Valor a pagar
+                                                    </Label>
+                                                    <Input
+                                                        type="text"
+                                                        id="email"
+                                                        value="R$12.5"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </TabsContent>
+                            ))}
+                        </Tabs>
+                    </div>
+                </div>
+            </div>
         </AuthenticatedLayout>
     );
 }

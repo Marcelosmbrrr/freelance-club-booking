@@ -39,7 +39,7 @@ const times = [
 
 export function PricingSelector(props: {
     setData: Function;
-    data?: Pricing[]
+    data?: Pricing[];
 }) {
     const [items, setItems] = React.useState<Pricing[]>(initialValue);
 

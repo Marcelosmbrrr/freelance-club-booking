@@ -8,7 +8,9 @@ export function ImagesForm(props: {
     setData: Function;
 }) {
     const [images, setImages] = React.useState<string[]>(props.data.images);
-    const [sponsorImages, setSponsorImages] = React.useState<string[]>([props.data.sponsor_image]);
+    const [sponsorImages, setSponsorImages] = React.useState<string[]>([
+        props.data.sponsor_image,
+    ]);
 
     function handleUploadImages(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
@@ -40,7 +42,7 @@ export function ImagesForm(props: {
 
     return (
         <>
-            <div className="rounded-lg border p-8 mb-2">
+            <div className="py-8 mb-2">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">
                         Fotos da Quadra (opcional)
@@ -72,10 +74,10 @@ export function ImagesForm(props: {
                     </div>
                 </div>
             </div>
-            <div className="rounded-lg border p-8">
+            <div className="p-8">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">
-                        Fotos do Patrocinador (opcional)
+                        Logo da Quadra / Patrocinador (opcional)
                     </h1>
                     <p className="text-gray-600">
                         Clique no botão abaixo para carregar as fotos de

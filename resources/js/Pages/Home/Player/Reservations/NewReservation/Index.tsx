@@ -198,7 +198,7 @@ export default function Reservations() {
                                                 </Button>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>Procurar no mapa</p>
+                                                <p>Pesquisar no mapa</p>
                                             </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>

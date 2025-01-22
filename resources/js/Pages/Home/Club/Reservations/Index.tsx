@@ -5,6 +5,7 @@ import { ptBR } from "date-fns/locale";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ReservationsFilter } from "./_components/ReservationsFilter";
+import { DeletionModal } from "@/components/modal/DeletionModal";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,13 +19,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { Trash2, MoreHorizontal, CirclePlus } from "lucide-react";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { MoreHorizontal, CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -93,16 +88,6 @@ export const columns: ColumnDef<Reservation>[] = [
         ),
     },
     {
-        accessorKey: "court_name",
-        header: "Quadra",
-        cell: ({ row }) => <div>{row.original.court.name}</div>,
-    },
-    {
-        accessorKey: "price",
-        header: "Preço",
-        cell: ({ row }) => <div>R${row.original.price}</div>,
-    },
-    {
         accessorKey: "date",
         header: "Data",
         cell: ({ row }) => (
@@ -113,6 +98,17 @@ export const columns: ColumnDef<Reservation>[] = [
             </div>
         ),
     },
+    {
+        accessorKey: "start_end_time",
+        header: "Horário",
+        cell: ({ row }) => row.getValue("start_end_time"),
+    },
+    {
+        accessorKey: "is_public",
+        header: "Público",
+        cell: ({ row }) => (row.getValue("is_public") ? "Sim" : "Não"),
+    },
+
     {
         id: "actions",
         header: "Ações",
@@ -155,7 +151,11 @@ export default function Reservations() {
         data,
         meta,
         links,
-    }: { data: Reservation[]; meta: any; links: any } = pagination;
+    }: {
+        data: Reservation[];
+        meta: any;
+        links: any;
+    } = pagination;
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -184,26 +184,13 @@ export default function Reservations() {
             <div className="flex justify-between items-center py-4">
                 <ReservationsFilter />
                 <div className="flex items-center space-x-2">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    disabled={!table.getIsSomeRowsSelected()}
-                                >
-                                    <Trash2 />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Deletar</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <DeletionModal disabled={table.getFilteredSelectedRowModel().rows.length === 0} />
                     <Button
                         variant="outline"
                         className="ml-auto"
                         onClick={() =>
                             router.get(route("club.reservations.create"))
                         }
-                        disabled
                     >
                         Nova Reserva <CirclePlus />
                     </Button>

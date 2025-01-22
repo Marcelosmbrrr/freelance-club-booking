@@ -13,21 +13,20 @@ export default function Profile() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Minha Conta" />
-            <Tabs
-                defaultValue="account"
-                className="space-y-4 max-w-screen-md mx-auto"
-            >
-                <TabsList>
-                    <TabsTrigger value="account">Dados do Clube</TabsTrigger>
-                    <TabsTrigger value="config">Configurações</TabsTrigger>
-                </TabsList>
-                <TabsContent value="account">
-                    <ProfileForm />
-                </TabsContent>
-                <TabsContent value="config">
-                    <ProfileConfigurationsForm />
-                </TabsContent>
-            </Tabs>
+            <div className="max-w-screen-md mx-auto">
+                <Tabs defaultValue="account">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="account">Clube</TabsTrigger>
+                        <TabsTrigger value="config">Configurações</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="account">
+                        <ProfileForm />
+                    </TabsContent>
+                    <TabsContent value="config">
+                        <ProfileConfigurationsForm />
+                    </TabsContent>
+                </Tabs>
+            </div>
         </AuthenticatedLayout>
     );
 }

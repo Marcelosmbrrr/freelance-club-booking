@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 
 type Data = {
     [key in Weekday]: {
-        discount: number;
+        discount: string;
         start_time: string;
         end_time: string;
     }[];
@@ -100,6 +100,15 @@ export function PromotionsSelector(props: {
         props.setData(clone);
     }
 
+    function onChangeDiscount(value: string, weekday: string, index: number) {
+        const clone = {
+            ...promotions,
+        };
+        clone[weekday as Weekday][index].discount = Number(value);
+        setPromotions(clone);
+        props.setData(clone);
+    }
+
     function getTimeSlotsInRange(
         weekday_time_slots: { start_time: string; end_time: string }[]
     ) {
@@ -143,25 +152,16 @@ export function PromotionsSelector(props: {
                                         <div key={index}>
                                             <div className="flex space-x-2">
                                                 <Input
-                                                    type="number"
-                                                    min="0"
-                                                    max="100"
-                                                    step="1"
+                                                    type="text"
                                                     placeholder="Desconto (%)"
                                                     value={promotion.discount}
-                                                    onChange={(e) => {
-                                                        const clone = {
-                                                            ...promotions,
-                                                        };
-                                                        clone[
-                                                            weekday as Weekday
-                                                        ][index].discount =
-                                                            Number(
-                                                                e.target.value
-                                                            );
-                                                        setPromotions(clone);
-                                                        props.setData(clone);
-                                                    }}
+                                                    onChange={(e) =>
+                                                        onChangeDiscount(
+                                                            e.target.value,
+                                                            weekday,
+                                                            index
+                                                        )
+                                                    }
                                                 />
                                                 <Select
                                                     onValueChange={(v) =>

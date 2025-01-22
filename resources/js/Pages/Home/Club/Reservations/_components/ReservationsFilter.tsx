@@ -1,7 +1,5 @@
 import * as React from "react";
-import { router } from "@inertiajs/react";
-
-import { timeList } from "@/utils/data/timeList";
+import { router, usePage } from "@inertiajs/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,42 +23,62 @@ import { Search } from "lucide-react";
 
 interface QueryParams {
     search: string;
+    court: string;
     status: string;
     date: string;
     min_price: number;
     max_price: number;
 }
 
-export function ReservationsFilter() {
-    const [search, setSearch] = React.useState<string>("");
-    const [status, setStatus] = React.useState<string>(""); // Status agora é utilizado como filtro
-    const [date, setDate] = React.useState<string>("");
-    const [time, setTime] = React.useState<{
-        start_time: string;
-        end_time: string;
-    }>({ start_time: "06:00", end_time: "00:00" });
-    const [price, setPrice] = React.useState({ min: 10, max: 100 });
+const defaultParams: QueryParams = {
+    search: "",
+    court: "",
+    status: "all",
+    date: "",
+    min_price: 0,
+    max_price: 100,
+};
 
-    const fetchData = React.useCallback(
-        (param: Partial<QueryParams>) => {
-            router.get(
-                route("club.courts.index"),
-                { ...param },
-                {
-                    preserveState: true,
-                }
-            );
-        },
-        [search, status, date, price]
-    );
+export function ReservationsFilter() {
+    const { courts, queryParams = null }: any = usePage().props;
+    const parameters: QueryParams = { ...defaultParams, ...queryParams };
+
+    const [filter, setFilter] = React.useState<QueryParams>(parameters);
+
+    function fetchData() {
+        router.get(
+            route("club.reservations.index"),
+            { ...filter },
+            {
+                preserveState: true,
+            }
+        );
+    }
 
     return (
         <div className="flex gap-x-1">
             <Input
-                placeholder="Procurar"
+                placeholder="Pesquisar"
                 className="w-72"
-                onChange={(e) => setSearch(e.target.value)}
+                value={filter.search}
+                onChange={(e) =>
+                    setFilter({ ...filter, search: e.target.value })
+                }
             />
+            <Select>
+                <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Quadra" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        {courts.map((court: { id: string; name: string }) => (
+                            <SelectItem value={court.id}>
+                                {court.name}
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
             <Popover>
                 <PopoverTrigger asChild>
                     <Button variant="outline">
@@ -69,10 +87,11 @@ export function ReservationsFilter() {
                 </PopoverTrigger>
                 <PopoverContent className="md:w-[460px] lg:w-[560px]">
                     <div className="grid gap-4">
-                        <div className="space-y-2">
+                        <div className="flex justify-between items-center">
                             <h4 className="font-semibold leading-none">
                                 Filtros
                             </h4>
+                            <Button onClick={fetchData}>Aplicar Filtros</Button>
                         </div>
                         <Separator />
                         <div className="grid gap-2">
@@ -81,9 +100,12 @@ export function ReservationsFilter() {
                                     <div className="grid grid-cols-2 items-center py-2 gap-4">
                                         <Label htmlFor="status">Status</Label>
                                         <Select
-                                            value={status}
-                                            onValueChange={(value) =>
-                                                setStatus(value)
+                                            value={filter.status}
+                                            onValueChange={(v) =>
+                                                setFilter({
+                                                    ...filter,
+                                                    status: v,
+                                                })
                                             }
                                         >
                                             <SelectTrigger>
@@ -111,72 +133,17 @@ export function ReservationsFilter() {
                                         </Select>
                                     </div>
                                     <div className="grid grid-cols-2 items-center gap-4">
-                                        <Label htmlFor="date">Data</Label>
+                                        <Label htmlFor="maxWidth">Data</Label>
                                         <Input
                                             type="date"
-                                            id="date"
-                                            value={date}
+                                            value={filter.date}
                                             onChange={(e) =>
-                                                setDate(e.target.value)
+                                                setFilter({
+                                                    ...filter,
+                                                    date: e.target.value,
+                                                })
                                             }
                                         />
-                                    </div>
-                                    <div className="grid grid-cols-2 items-center gap-4">
-                                        <Label htmlFor="price">Horário</Label>
-                                        <div className="grid grid-cols-2 gap-2 w-full">
-                                            <Select
-                                                value={status}
-                                                onValueChange={(value) =>
-                                                    setTime({
-                                                        ...time,
-                                                        start_time: value,
-                                                    })
-                                                }
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="De" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        {timeList.map(
-                                                            (time) => (
-                                                                <SelectItem
-                                                                    value={time}
-                                                                >
-                                                                    {time}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                            <Select
-                                                value={status}
-                                                onValueChange={(value) =>
-                                                    setTime({
-                                                        ...time,
-                                                        end_time: value,
-                                                    })
-                                                }
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Até" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        {timeList.map(
-                                                            (time) => (
-                                                                <SelectItem
-                                                                    value={time}
-                                                                >
-                                                                    {time}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
                                     </div>
                                     <div className="grid grid-cols-2 items-center gap-4">
                                         <Label htmlFor="price">
@@ -188,11 +155,11 @@ export function ReservationsFilter() {
                                                 className="w-full"
                                                 placeholder="Mínimo"
                                                 min="0"
-                                                value={price.min}
+                                                value={filter.min_price}
                                                 onChange={(e) =>
-                                                    setPrice({
-                                                        ...price,
-                                                        min: Number(
+                                                    setFilter({
+                                                        ...filter,
+                                                        min_price: Number(
                                                             e.target.value
                                                         ),
                                                     })
@@ -203,11 +170,11 @@ export function ReservationsFilter() {
                                                 className="w-full"
                                                 placeholder="Máximo"
                                                 min="0"
-                                                value={price.max}
+                                                value={filter.max_price}
                                                 onChange={(e) =>
-                                                    setPrice({
-                                                        ...price,
-                                                        max: Number(
+                                                    setFilter({
+                                                        ...filter,
+                                                        max_price: Number(
                                                             e.target.value
                                                         ),
                                                     })
@@ -221,19 +188,8 @@ export function ReservationsFilter() {
                     </div>
                 </PopoverContent>
             </Popover>
-            <Button
-                type="button"
-                onClick={() =>
-                    fetchData({
-                        search,
-                        status,
-                        date,
-                        min_price: price.min,
-                        max_price: price.max,
-                    })
-                }
-            >
-                Procurar
+            <Button type="button" onClick={fetchData}>
+                Pesquisar
                 <Search />
             </Button>
         </div>

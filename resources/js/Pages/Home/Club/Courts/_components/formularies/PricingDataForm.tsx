@@ -12,7 +12,7 @@ export function PricingDataForm(props: {
 }) {
     return (
         <>
-            <div className="rounded-lg space-y-4 border p-8 mb-2">
+            <div className="space-y-4 py-8 mb-2">
                 <div className="space-y-2">
                     <div className="flex justify-between">
                         <h1 className="text-xl font-semibold">Precificação</h1>
@@ -35,7 +35,7 @@ export function PricingDataForm(props: {
                     }
                 />
             </div>
-            <div className="rounded-lg space-y-4 border p-8">
+            <div className="space-y-4 py-8">
                 <div className="space-y-2">
                     <div className="flex justify-between">
                         <h1 className="text-xl font-semibold">Promoções (opcional)</h1>

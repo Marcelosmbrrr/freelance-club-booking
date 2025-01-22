@@ -34,6 +34,14 @@ class ClubCourtController extends Controller
         $limit = $request->input('limit', 10);  
         $page = $request->input('page', 1); 
 
+        $status = (bool) $request->input("status", 1);
+        $type = $request->input("type", "all");
+        $sport = $request->input("sport", "padel");
+        $cover = $request->input("cover", "all");
+        $manufacturer = $request->input("manufacturer");
+        $installation_year = $request->input("installation_year");
+        $weekday = $request->input("weekday", "all");
+
         $query = $this->courtModel->query();
 
         $query->where("club_id", Auth::user()->club->id);
@@ -46,6 +54,34 @@ class ClubCourtController extends Controller
             }
         }
 
+        $query->where('status', $status);
+
+        if ($weekday && $weekday != "all") {
+            $query->whereHas('timeSlots', function ($query) use ($weekday) {
+                $query->where('weekday', $weekday);
+            });
+        }        
+
+        if ($cover && $cover != "all") {
+            $query->where('is_covered', $cover === "covered" ? true : false);
+        }
+
+        if ($type && $type != "all") {
+            $query->where('type', $type);
+        }
+
+        if ($sport) {
+            $query->where('sport', $sport);
+        }
+
+        if ($manufacturer) {
+            $query->where('manufacturer', $manufacturer);
+        }
+
+        if ($installation_year) {
+            $query->where('installation_year', (int) $installation_year);
+        }
+
         $query->orderBy($orderBy, $order);
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
@@ -56,6 +92,7 @@ class ClubCourtController extends Controller
             'success' => session('success'),
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

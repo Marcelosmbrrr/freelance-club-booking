@@ -35,7 +35,9 @@ export function CourtsFilter() {
     const fetchData = React.useCallback(
         (param: Partial<QueryParams>) => {
             router.get(
-                route("player.new-reservation.create", { clubId: club.data.id }),
+                route("player.new-reservation.create", {
+                    clubId: club.data.id,
+                }),
                 { ...param },
                 {
                     preserveState: true,
@@ -47,8 +49,8 @@ export function CourtsFilter() {
 
     return (
         <div className="w-full mb-4">
-            <div className="flex w-full max-w-xl items-center space-x-2">
-                <Input placeholder="Procurar por nome" className="w-72" />
+            <div className="flex max-w-xl items-center gap-x-1">
+                <Input placeholder="Pesquisar por nome" className="w-72" />
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button variant="outline">
@@ -310,7 +312,7 @@ export function CourtsFilter() {
                     </PopoverContent>
                 </Popover>
                 <Button type="button" onClick={fetchData}>
-                    Procurar
+                    Pesquisar
                     <Search />
                 </Button>
             </div>

@@ -16,7 +16,10 @@ class ReservationsResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data["time_slots"] = $this->courtTimeSlots();
+        $court_time_slots_collection = $this->courtTimeSlots();
+      
+        $data["time_slots"] = $court_time_slots_collection->toArray();
+        $data["start_end_time"] = $court_time_slots_collection->first()["start_time"] . " - " . $court_time_slots_collection->last()["end_time"];
 
         return $data;
     }
@@ -33,7 +36,7 @@ class ReservationsResource extends JsonResource
             ];
         }  
 
-        return $time_slots;
+        return collect($time_slots);
 
     }
 }

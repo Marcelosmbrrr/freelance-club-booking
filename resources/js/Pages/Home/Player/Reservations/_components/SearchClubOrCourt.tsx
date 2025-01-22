@@ -91,7 +91,7 @@ export function SearchClubOrCourt(props: {
                         <Input
                             type="email"
                             className="min-w-96"
-                            placeholder="Procurar por nome, estado ou cidade"
+                            placeholder="Pesquisar por nome, estado ou cidade"
                         />
                         <Popover>
                             <PopoverTrigger asChild>
@@ -110,7 +110,7 @@ export function SearchClubOrCourt(props: {
                                     <div className="grid gap-2">
                                         <div className="grid grid-cols-2 items-center gap-4">
                                             <Label htmlFor="width">
-                                                Procurar por
+                                                Pesquisar por
                                             </Label>
                                             <Select
                                                 value={parameters.entity}
@@ -156,7 +156,7 @@ export function SearchClubOrCourt(props: {
                             </PopoverContent>
                         </Popover>
                         <Button>
-                            Procurar
+                            Pesquisar
                             <Search />
                         </Button>
                     </div>

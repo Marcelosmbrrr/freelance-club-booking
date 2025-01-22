@@ -11,10 +11,13 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Toggle } from "@/components/ui/toggle";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Check, CirclePercent, Clock, DollarSign, Lock, UserPlus } from "lucide-react";
+import { Check, Lock, UserPlus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const weekdays = [
@@ -33,7 +36,7 @@ type TimeSlot = {
     start_time: string;
     end_time: string;
     status: string;
-    vacancies: string;
+    vacancies: { position: string; filled: boolean }[];
 };
 
 type TimeSlots = TimeSlot[];
@@ -103,7 +106,7 @@ export function CreateReservationForSelectedCourt(props: {
             // Verifique se o `start_time` do novo bloco é igual ao `end_time` do último bloco selecionado
             if (timeSlot.start_time === lastSelected.end_time) {
                 // Verifique se o bloco é válido: status "true" e vacancies "false"
-                if (timeSlot.status && !timeSlot.vacancies) {
+                if (timeSlot.status && timeSlot.vacancies.length === 0) {
                     setSelectedTimeSlots([...selectedTimeSlots, timeSlot]);
                 } else {
                     alert("O bloco selecionado não é válido.");
@@ -178,26 +181,6 @@ export function CreateReservationForSelectedCourt(props: {
                     <Button onClick={handleSubmit}>Criar Reserva</Button>
                 </div>
             </div>
-            {/*<div className="grid gap-4 grid-cols-3 max-w-2xl">
-                <div className="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-gray-700">
-                    <Clock className="me-2 h-4 w-4 shrink-0 text-gray-900 dark:text-white" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        Horas Totais: {selectedTimeSlots.length * 30 / 60}
-                    </span>
-                </div>
-                <div className="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-gray-700">
-                    <CirclePercent className="me-2 h-4 w-4 shrink-0 text-gray-900 dark:text-white" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        Promoção: 0%
-                    </span>
-                </div>
-                <div className="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-gray-700">
-                    <DollarSign className="me-2 h-4 w-4 shrink-0 text-gray-900 dark:text-white" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        Valor Final: 0
-                    </span>
-                </div>
-            </div>*/}
             <div>
                 {weekday && (
                     <div>
@@ -234,7 +217,7 @@ export function CreateReservationForSelectedCourt(props: {
                                                     </Badge>
                                                 </TableCell>
                                                 <TableCell className="flex justify-end">
-                                                    {!time_slot.vacancies &&
+                                                    {time_slot.vacancies.length === 0 &&
                                                     time_slot.status ? (
                                                         <Button
                                                             variant={
@@ -250,10 +233,35 @@ export function CreateReservationForSelectedCourt(props: {
                                                         >
                                                             <Check />
                                                         </Button>
-                                                    ) : time_slot.vacancies ? (
-                                                        <Button variant="ghost">
-                                                            <UserPlus />
-                                                        </Button>
+                                                    ) : time_slot.vacancies.length > 0 ? (
+                                                        <Popover>
+                                                            <PopoverTrigger
+                                                                asChild
+                                                            >
+                                                                <Button variant="ghost">
+                                                                    <UserPlus />
+                                                                </Button>
+                                                            </PopoverTrigger>
+                                                            <PopoverContent className="w-fit">
+                                                                <div className="flex gap-x-2">
+                                                                    {time_slot.vacancies.map(
+                                                                        (vacancy: {
+                                                                            position: string;
+                                                                            filled: boolean;
+                                                                        }) => (
+                                                                            <Button disabled={vacancy.filled} variant="ghost">
+                                                                                {vacancy.position}
+                                                                                {vacancy.filled ? (
+                                                                                    <Lock />
+                                                                                ) : (
+                                                                                    <UserPlus />
+                                                                                )}
+                                                                            </Button>
+                                                                        )
+                                                                    )}
+                                                                </div>
+                                                            </PopoverContent>
+                                                        </Popover>
                                                     ) : (
                                                         <Button
                                                             variant="ghost"

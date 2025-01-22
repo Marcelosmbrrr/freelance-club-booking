@@ -3,8 +3,8 @@ import { Head, router, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { CourtsFilter } from "./_components/CourtsFilter";
+import { DeletionModal } from "@/components/modal/DeletionModal";
 
-import { Badge } from "@/components/ui/badge";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -15,12 +15,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {
-    Trash2,
-    CirclePlus,
-    Eye,
-    SquarePen
-} from "lucide-react";
+import { Trash2, CirclePlus, Eye, SquarePen, Volleyball } from "lucide-react";
 import {
     Tooltip,
     TooltipContent,
@@ -126,19 +121,12 @@ export default function Courts() {
             <div className="flex justify-between items-center py-4">
                 <CourtsFilter />
                 <div className="flex items-center space-x-2">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    disabled={!table.getIsSomeRowsSelected()}
-                                >
-                                    <Trash2 />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Deletar</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <DeletionModal
+                        disabled={
+                            table.getFilteredSelectedRowModel().rows.length ===
+                            0
+                        }
+                    />
                     <Button
                         variant="outline"
                         className="ml-auto"
@@ -171,15 +159,35 @@ export default function Courts() {
                                     className="absolute bottom-2 left-4 w-12 h-12 rounded border-white"
                                 />
                             </div>
-                            <div className="p-4">
-                                <div className="mb-2">
-                                    <Badge className="mr-1">
-                                        {item.original.sport}
-                                    </Badge>
-                                    <Badge>
-                                        a partir de R${item.original.min_price}
-                                    </Badge>
-                                </div>
+                            <div className="p-4 flex flex-col grow">
+                                <ul className="flex gap-x-2 mb-2 text-sm text-neutral-600">
+                                    <li className="flex items-center">
+                                        <Volleyball className="w-4 h-4 mr-1 text-gray-800 dark:text-white" />
+                                        <span>{item.original.sport}</span>
+                                    </li>
+                                    <li className="flex items-center">
+                                        <svg
+                                            className="w-4 h-4 mr-1 text-gray-800 dark:text-white"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke="currentColor"
+                                                stroke-linecap="round"
+                                                stroke-width="2"
+                                                d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                            />
+                                        </svg>
+                                        <span>
+                                            a partir de R$
+                                            {item.original.min_price}
+                                        </span>
+                                    </li>
+                                </ul>
                                 <div className="space-y-2">
                                     <div className="line-clamp-3 break-words text-lg font-medium lg:text-2xl">
                                         {item.original.name}

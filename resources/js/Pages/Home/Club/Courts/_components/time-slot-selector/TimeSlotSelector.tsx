@@ -24,7 +24,11 @@ import {
 } from "@/components/ui/select";
 
 type Data = {
-    [key in Weekday]: { start_time: string; end_time: string }[];
+    [key in Weekday]: {
+        start_time: string;
+        end_time: string;
+        is_interval?: boolean;
+    }[];
 };
 
 const weekdays: Weekday[] = [
@@ -53,7 +57,6 @@ export function TimeSlotSelector(props: {
 
     React.useEffect(() => {
         if (props.data) {
-            console.log(props.data);
             setTimeSlotsByWeekday(props.data);
         }
     }, []);
@@ -92,6 +95,33 @@ export function TimeSlotSelector(props: {
         clone[weekday][index][field] = value;
         setTimeSlotsByWeekday(clone);
         props.setData(clone);
+    }
+
+    // Filtra as opções de horários disponíveis para o item atual, removendo os horários já selecionados nos itens anteriores do mesmo dia da semana
+    // - weekday: O dia da semana ao qual os horários se referem.
+    // - index: O índice do item atual na lista de seleção para o dia da semana.
+    // - time_list_aux: Uma lista de horários disponíveis (timeList) para o item atual, excluindo os intervalos já selecionados nos itens anteriores.
+    function getTimeList(weekday: Weekday, index: number) {
+        if (index === 0) {
+            return timeList;
+        }
+
+        // Obtenha o end_time do item anterior ao atual
+        const previous_end_time =
+            timeSlotsByWeekday[weekday][index - 1].end_time;
+
+        // Crie uma cópia de timeList
+        let time_list_aux = [...timeList];
+
+        // Encontre o índice do end_time do item anterior
+        const start_index = time_list_aux.indexOf(previous_end_time);
+
+        // Se encontrar o end_time, retorne a "sobra", excluindo o previous_end_time
+        if (start_index !== -1) {
+            return time_list_aux.slice(start_index + 1); // Exclui o previous_end_time
+        }
+
+        return time_list_aux; // Caso não encontre o end_time, retorne a lista completa
     }
 
     return (
@@ -139,15 +169,16 @@ export function TimeSlotSelector(props: {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        {timeList.map(
-                                                            (item) => (
-                                                                <SelectItem
-                                                                    value={item}
-                                                                >
-                                                                    {item}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
+                                                        {getTimeList(
+                                                            weekday,
+                                                            index
+                                                        ).map((item) => (
+                                                            <SelectItem
+                                                                value={item}
+                                                            >
+                                                                {item}
+                                                            </SelectItem>
+                                                        ))}
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>
@@ -167,15 +198,16 @@ export function TimeSlotSelector(props: {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        {timeList.map(
-                                                            (item) => (
-                                                                <SelectItem
-                                                                    value={item}
-                                                                >
-                                                                    {item}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
+                                                        {getTimeList(
+                                                            weekday,
+                                                            index
+                                                        ).map((item) => (
+                                                            <SelectItem
+                                                                value={item}
+                                                            >
+                                                                {item}
+                                                            </SelectItem>
+                                                        ))}
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>

@@ -92,7 +92,7 @@ export function ProfileForm() {
 
     return (
         <section className="space-y-4">
-            <div className="space-y-4 rounded-lg border p-8">
+            <div className="space-y-4 py-8">
                 <form className="space-y-6" onSubmit={submit}>
                     <div className="grid w-full items-center gap-1.5">
                         <Label htmlFor="name">Nome Completo</Label>
@@ -264,7 +264,7 @@ export function ProfileForm() {
                 </form>
             </div>
 
-            <div className="rounded-lg border p-8">
+            <div className="py-8">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">Geolocalização</h1>
                     <p className="text-gray-600">
@@ -282,7 +282,7 @@ export function ProfileForm() {
                 </Button>
             </div>
 
-            <div className="rounded-lg border p-8">
+            <div className="py-8">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">Imagens</h1>
                     <p className="text-gray-600">

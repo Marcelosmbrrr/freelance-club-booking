@@ -4,11 +4,10 @@ import { usePage } from "@inertiajs/react";
 import { NavAdmin } from "./admin/NavAdmin";
 import { NavPlayer } from "./player/NavPlayer";
 import { NavClub } from "./club/NavClub";
-import ApplicationLogo from "../ApplicationLogo";
-
 import { NavUser } from "./NavUser";
 
 import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { Volleyball } from "lucide-react";
 
 import {
     Sidebar,
@@ -36,11 +35,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                     <div className="flex items-center gap-2">
-                        <img
-                            src="https://www.shadcnblocks.com/images/block/block-1.svg"
-                            className="w-8"
-                            alt="logo"
-                        />
+                        <Volleyball className="size-8" />
                         <span className="text-xl font-bold">
                             App - {app[user.role]}
                         </span>

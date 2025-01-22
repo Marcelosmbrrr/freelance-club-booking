@@ -12,9 +12,9 @@ import { Features } from "./_components/features/Features";
 import { Features2 } from "./_components/features/Features2";
 import { Pricing } from "./_components/pricing/Pricing";
 import { Footer } from "./_components/footer/Footer";
-import { AppIcon } from "@/components/icons/AppIcon";
 
 import { Separator } from "@/components/ui/separator";
+import { Volleyball } from "lucide-react";
 
 export default function Welcome() {
     const { pending } = useHomePage();
@@ -30,7 +30,7 @@ export default function Welcome() {
                 )}
                 role="status"
             >
-                <AppIcon h="40" w="40" />
+                <Volleyball className="h-40 w-40" />
                 <span className="sr-only">Loading...</span>
             </div>
 

@@ -50,10 +50,10 @@ export function ProfileConfigurationsForm() {
     };
     return (
         <section className="space-y-4">
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-8">
+            <div className="max-w-screen-md space-y-6 py-8">
                 <ChangePasswordForm />
             </div>
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-8">
+            <div className="max-w-screen-md space-y-6 py-8">
                 <DeactivateAccountForm />
             </div>
         </section>

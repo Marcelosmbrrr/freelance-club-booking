@@ -18,7 +18,10 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Pricing, Promotion } from "./types/types";
 
-const breadCrumb = [{ name: "Quadras", href: "/club/courts" }, { name: "Visualizar" }];
+const breadCrumb = [
+    { name: "Quadras", href: "/club/courts" },
+    { name: "Visualizar" },
+];
 
 export default function ShowCourt() {
     const { court }: any = usePage().props;
@@ -30,9 +33,18 @@ export default function ShowCourt() {
                     <h2 className="font-medium text-xl">
                         Visualização da Quadra
                     </h2>
-                    <Button>
-                        <Link href={route("club.courts.index")}>Voltar</Link>
-                    </Button>
+                    <div className="flex gap-x-2">
+                        <Button>
+                            <Link href={route("club.reservations.index")}>
+                                Ver Reservas
+                            </Link>
+                        </Button>
+                        <Button>
+                            <Link href={route("club.courts.index")}>
+                                Voltar
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
                 <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="basic">Básico</TabsTrigger>
@@ -43,7 +55,7 @@ export default function ShowCourt() {
                     <TabsTrigger value="images">Imagens</TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
-                    <div className="grid gap-4 rounded-lg border p-8">
+                    <div className="grid gap-4 py-8">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Nome</Label>
                             <Input
@@ -193,7 +205,7 @@ export default function ShowCourt() {
                     </div>
                 </TabsContent>
                 <TabsContent value="hours">
-                    <div className="rounded-lg border p-8">
+                    <div className="py-8">
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -224,7 +236,7 @@ export default function ShowCourt() {
                     </div>
                 </TabsContent>
                 <TabsContent value="pricing">
-                    <div className="rounded-lg border p-8 mb-2">
+                    <div className="py-8 mb-2">
                         <h2 className="mb-2 font-semibold text-lg">
                             Preço por hora
                         </h2>
@@ -253,7 +265,7 @@ export default function ShowCourt() {
                             </TableBody>
                         </Table>
                     </div>
-                    <div className="rounded-lg border p-8">
+                    <div className="py-8">
                         <h2 className="mb-2 font-semibold text-lg">
                             Promoções
                         </h2>
@@ -291,7 +303,7 @@ export default function ShowCourt() {
                     </div>
                 </TabsContent>
                 <TabsContent value="images" className="space-y-2">
-                    <div className="rounded-lg border p-8">
+                    <div className="py-8">
                         <h2 className="mb-4 font-semibold text-lg">
                             Imagens da Quadra
                         </h2>
@@ -309,9 +321,9 @@ export default function ShowCourt() {
                             )}
                         </div>
                     </div>
-                    <div className="rounded-lg border p-8">
+                    <div className="py-8">
                         <h2 className="mb-4 font-semibold text-lg">
-                            Imagem do Patrocinador
+                            Logo da Quadra / Patrocinador
                         </h2>
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             <div>

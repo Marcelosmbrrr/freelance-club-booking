@@ -27,7 +27,7 @@ export function BasicDataForm(props: {
     setData: Function;
 }) {
     return (
-        <div className="grid gap-4 rounded-lg border p-8">
+        <div className="grid gap-4 py-8">
             <div className="space-y-2">
                 <h1 className="text-xl font-semibold">Básico</h1>
                 <p className="text-gray-600">
