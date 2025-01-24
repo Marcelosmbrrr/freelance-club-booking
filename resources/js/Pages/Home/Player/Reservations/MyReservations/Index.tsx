@@ -1,136 +1,280 @@
 import * as React from "react";
 import { Head, router, usePage } from "@inertiajs/react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { SearchClubOrCourt } from "../_components/SearchClubOrCourt";
+import { MyReservationFilter } from "../_components/MyReservationFilter";
+import { DeletionModal } from "@/components/modal/DeletionModal";
 
-import { MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+    ColumnDef,
+    ColumnFiltersState,
+    SortingState,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import { MoreHorizontal, CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
-export function RadioGroupDemo() {
-    return (
-        <RadioGroup defaultValue="comfortable">
-            <div className="flex items-center space-x-2">
-                <RadioGroupItem value="default" id="r1" />
-                <Label htmlFor="r1">Default</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-                <RadioGroupItem value="comfortable" id="r2" />
-                <Label htmlFor="r2">Comfortable</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-                <RadioGroupItem value="compact" id="r3" />
-                <Label htmlFor="r3">Compact</Label>
-            </div>
-        </RadioGroup>
-    );
+interface Reservation {
+    id: number;
+    court: {
+        name: string;
+        image: string; 
+    };
+    date: string; 
+    start_time: string[]; 
+    end_time: string; 
+    sport: string;
+    status: string;
+    total_players: number;
+    is_public: boolean;
+    price: number;
 }
 
-export type ClubOrCourt = {
-    clubId: string;
-    name: string;
-    images: string[];
-    description: string;
-    geolocalization: { lat: number; lng: number };
-    sports: string[];
-};
+export const columns: ColumnDef<Reservation>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) =>
+                    table.toggleAllPageRowsSelected(!!value)
+                }
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
+        accessorKey: "status",
+        header: "Situação",
+        cell: ({ row }) => (
+            <Badge>
+                {row.getValue("status") === "confirmed"
+                    ? "Confirmado"
+                    : row.getValue("status") === "pending"
+                    ? "Pendente"
+                    : "Cancelado"}
+            </Badge>
+        ),
+    },
+    {
+        accessorKey: "date",
+        header: "Data",
+        cell: ({ row }) => (
+            <div>
+                {format(row.getValue("date"), "EEEE, dd 'de' MMMM 'de' yyyy", {
+                    locale: ptBR,
+                })}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "time",
+        header: "Horário",
+        cell: ({ row }) => row.getValue("time"),
+    },
+    {
+        accessorKey: "is_public",
+        header: "Público",
+        cell: ({ row }) => (row.getValue("is_public") ? "Sim" : "Não"),
+    },
 
-interface QueryParams {
-    entity: "clubs" | "courts";
-    search?: string;
-    searchBy: string;
-    orderBy: string;
-    order: "asc" | "desc";
-    limit: number;
-    page: number;
-}
+    {
+        id: "actions",
+        header: "Ações",
+        enableHiding: false,
+        cell: ({ row }) => {
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Abrir Menu</span>
+                            <MoreHorizontal />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                            onClick={() =>
+                                router.get(
+                                    route(
+                                        "club.reservations.show",
+                                        row.original.id
+                                    )
+                                )
+                            }
+                        >
+                            Ver Reserva
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
+        },
+    },
+];
 
-const breadCrumb = [{ name: "Nova Reserva" }];
+const breadCrumb = [{ name: "Reservas" }];
 
-export default function MyReservations() {
+export default function Reservations() {
     const { pagination, queryParams = null, success }: any = usePage().props;
 
     const {
         data,
         meta,
         links,
-    }: { data: ClubOrCourt[]; meta: any; links: any } = pagination;
+    }: {
+        data: Reservation[];
+        meta: any;
+        links: any;
+    } = pagination;
 
-    const fetchData = React.useCallback(
-        (param: Partial<QueryParams>) => {
-            router.get(
-                route("player.new-reservation.index"),
-                { ...param },
-                {
-                    preserveState: true,
-                }
-            );
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] =
+        React.useState<ColumnFiltersState>([]);
+
+    const table = useReactTable({
+        data,
+        columns,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility: {},
         },
-        [queryParams]
-    );
-
-    const [localization, setLocalization] = React.useState<{
-        lat: number;
-        lng: number;
-    }>();
+        enableRowSelection: true,
+    });
 
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
-            <Head title="Criar Reserva" />
-            <SearchClubOrCourt
-                localization={localization}
-                fetchData={fetchData}
-            />
-            <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12 2xl:grid-cols-6">
-                {data.map((item) => (
-                    <div
-                        key={item.clubId}
-                        className="group flex flex-col border rounded-lg shadow w-full sm:w-auto md:w-[300px] lg:w-[350px] xl:w-[400px]"
+            <Head title="Reservas" />
+            <div className="flex justify-between items-center py-4">
+                <MyReservationFilter />
+                <div className="flex items-center space-x-2">
+                    <DeletionModal
+                        disabled={
+                            table.getFilteredSelectedRowModel().rows.length ===
+                            0
+                        }
+                    />
+                    <Button
+                        variant="outline"
+                        className="ml-auto"
+                        onClick={() =>
+                            router.get(route("player.new-reservation.index"))
+                        }
                     >
-                        <div className="flex text-clip">
-                            <div className="size-full">
-                                <img
-                                    src={item.images[0]}
-                                    className="aspect-[3/2] size-full object-cover object-centered rounded-t-lg"
-                                />
-                            </div>
-                        </div>
-                        <div className="px-4">
-                            <div className="py-2 line-clamp-3 break-words text-lg font-medium lg:text-2xl">
-                                {item.name}
-                            </div>
-                            <div className="flex justify-end items-center gap-2 py-2">
-                                <div className="flex items-center gap-x-2">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() =>
-                                            setLocalization({
-                                                lat: item.geolocalization.lat,
-                                                lng: item.geolocalization.lng,
-                                            })
-                                        }
-                                    >
-                                        <MapPin />
-                                    </Button>
-                                    <Button
-                                        onClick={() => {
-                                            router.get(
-                                                route(
-                                                    "player.new-reservation.create",
-                                                    { clubId: item.clubId }
-                                                )
-                                            );
-                                        }}
-                                    >
-                                        Reservar
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                        Nova Reserva <CirclePlus />
+                    </Button>
+                </div>
+            </div>
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                  header.column.columnDef
+                                                      .header,
+                                                  header.getContext()
+                                              )}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="text-center"
+                                >
+                                    Nenhuma reserva encontrada.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            <div className="flex items-center justify-end space-x-2 py-4">
+                <div className="flex-1 text-sm text-muted-foreground">
+                    {table.getFilteredSelectedRowModel().rows.length} de{" "}
+                    {table.getFilteredRowModel().rows.length} quadra(s)
+                    selecionada(s).
+                </div>
+                <div className="space-x-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Anterior
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Próximo
+                    </Button>
+                </div>
             </div>
         </AuthenticatedLayout>
     );

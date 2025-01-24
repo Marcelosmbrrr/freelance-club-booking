@@ -27,68 +27,73 @@ class ClubCourtController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $searchBy = $request->input('search_by');  
-        $orderBy = $request->input('order_by', 'id');  
-        $order = $request->input('order', 'asc');  
-        $limit = $request->input('limit', 10);  
-        $page = $request->input('page', 1); 
+        $validated = $request->validate([
+            'search' => 'nullable|string',
+            'search_by' => 'nullable|in:name,sport,type,status,manufacturer',
+            'order_by' => 'nullable|string',
+            'order' => 'nullable|in:asc,desc',
+            'limit' => 'nullable|integer|min:1',
+            'page' => 'nullable|integer|min:1',
+            'status' => 'nullable|boolean',
+            'type' => 'nullable|string',
+            'sport' => 'nullable|string',
+            'cover' => 'nullable|in:all,covered,uncovered',
+            'manufacturer' => 'nullable|string',
+            'installation_year' => 'nullable|integer',
+            'weekday' => 'nullable|in:all,monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+        ]);
 
-        $status = (bool) $request->input("status", 1);
-        $type = $request->input("type", "all");
-        $sport = $request->input("sport", "padel");
-        $cover = $request->input("cover", "all");
-        $manufacturer = $request->input("manufacturer");
-        $installation_year = $request->input("installation_year");
-        $weekday = $request->input("weekday", "all");
+        $search = $validated['search'] ?? null;
+        $searchBy = $validated['search_by'] ?? null;
+        $orderBy = $validated['order_by'] ?? 'id';
+        $order = $validated['order'] ?? 'asc';
+        $limit = $validated['limit'] ?? 10;
+        $page = $validated['page'] ?? 1;
+        $status = $validated['status'] ?? true;
+        $type = $validated['type'] ?? 'all';
+        $sport = $validated['sport'] ?? 'all';
+        $cover = $validated['cover'] ?? 'all';
+        $manufacturer = $validated['manufacturer'] ?? null;
+        $installation_year = $validated['installation_year'] ?? null;
+        $weekday = $validated['weekday'] ?? 'all';
 
         $query = $this->courtModel->query();
+        $query->where('club_id', Auth::user()->club->id);
 
-        $query->where("club_id", Auth::user()->club->id);
+        if ($search && $searchBy) {
+            $query->where($searchBy, 'like', '%' . $search . '%');
+        }
 
-        $query->with(["reservations"]);
+        $filters = [
+            'status' => $status,
+            'type' => $type !== 'all' ? $type : null,
+            'sport' => $sport != 'all' ? $sport : null,
+            'is_covered' => $cover === 'covered' ? true : ($cover === 'uncovered' ? false : null),
+            'manufacturer' => $manufacturer,
+            'installation_year' => $installation_year,
+        ];
 
-        if ($search) {
-            if (in_array($searchBy, ['name', 'sport', 'type', 'status', 'manufacturer'])) { 
-                $query->where($searchBy, 'like', '%' . $search . '%');
+        foreach ($filters as $field => $value) {
+            if ($value !== null) {
+                $query->where($field, $value);
             }
         }
 
-        $query->where('status', $status);
-
-        if ($weekday && $weekday != "all") {
+        if ($weekday && $weekday !== 'all') {
             $query->whereHas('timeSlots', function ($query) use ($weekday) {
                 $query->where('weekday', $weekday);
             });
-        }        
-
-        if ($cover && $cover != "all") {
-            $query->where('is_covered', $cover === "covered" ? true : false);
         }
 
-        if ($type && $type != "all") {
-            $query->where('type', $type);
-        }
-
-        if ($sport) {
-            $query->where('sport', $sport);
-        }
-
-        if ($manufacturer) {
-            $query->where('manufacturer', $manufacturer);
-        }
-
-        if ($installation_year) {
-            $query->where('installation_year', (int) $installation_year);
-        }
-
+        $validColumns = ['id', 'name', 'sport', 'type', 'status', 'manufacturer', 'installation_year'];
+        $orderBy = in_array($orderBy, $validColumns) ? $orderBy : 'id';
         $query->orderBy($orderBy, $order);
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
         return Inertia::render('Home/Club/Courts/Index', [
             'pagination' => CourtsResource::collection($data),
-            'queryParams' => request()->query() ?: null,
+            'queryParams' => $validated,
             'success' => session('success'),
         ]);
     }

@@ -1,8 +1,5 @@
 import * as React from "react";
 import { router, usePage } from "@inertiajs/react";
-
-import { timeList } from "@/utils/data/timeList";
-
 import { Button } from "@/components/ui/button";
 import {
     Select,
@@ -14,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Filter } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import {
     Popover,
     PopoverContent,
@@ -22,7 +19,6 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 
 interface QueryParams {
     search: string;
@@ -44,11 +40,11 @@ interface QueryParams {
 const defaultParams: QueryParams = {
     search: "",
     status: 1,
-    weekday: "",
+    weekday: "all",
     from: "",
     to: "",
     type: "all",
-    sport: "padel",
+    sport: "all",
     cover: "all",
     manufacturer: "",
     installation_year: "",
@@ -63,14 +59,18 @@ export function CourtsFilter() {
     const parameters: QueryParams = { ...defaultParams, ...queryParams };
 
     const [filter, setFilter] = React.useState<QueryParams>(parameters);
+    const [error, setError] = React.useState<string | null>(null);
 
     function fetchData() {
-        console.log(filter);
+        setError(null);
+
         router.get(
             route("club.courts.index"),
             { ...filter },
             {
                 preserveState: true,
+                onError: () =>
+                    setError("Failed to fetch data. Please try again."),
             }
         );
     }
@@ -81,13 +81,14 @@ export function CourtsFilter() {
                 <Input
                     placeholder="Pesquisar"
                     className="w-72"
+                    value={filter.search}
                     onChange={(e) =>
                         setFilter({ ...filter, search: e.target.value })
                     }
                 />
                 <Popover>
                     <PopoverTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" aria-label="Open filters">
                             <Filter />
                         </Button>
                     </PopoverTrigger>
@@ -130,7 +131,7 @@ export function CourtsFilter() {
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="maxWidth">
+                                            <Label htmlFor="sport">
                                                 Esporte
                                             </Label>
                                             <Select
@@ -147,6 +148,9 @@ export function CourtsFilter() {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
+                                                        <SelectItem value="all">
+                                                            Todos
+                                                        </SelectItem>
                                                         <SelectItem value="padel">
                                                             Padel
                                                         </SelectItem>
@@ -155,8 +159,8 @@ export function CourtsFilter() {
                                             </Select>
                                         </div>
                                         <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="time">
-                                                Funcionamento
+                                            <Label htmlFor="weekday">
+                                                Dia da Semana
                                             </Label>
                                             <Select
                                                 value={filter.weekday}
@@ -211,8 +215,8 @@ export function CourtsFilter() {
                                                     })
                                                 }
                                             >
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Selecionar" />
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Tipo" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
@@ -233,7 +237,7 @@ export function CourtsFilter() {
                                             </Select>
                                         </div>
                                         <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="width">
+                                            <Label htmlFor="cover">
                                                 Cobertura
                                             </Label>
                                             <Select
@@ -245,8 +249,8 @@ export function CourtsFilter() {
                                                     })
                                                 }
                                             >
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Selecionar" />
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Cobertura" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
@@ -264,7 +268,7 @@ export function CourtsFilter() {
                                             </Select>
                                         </div>
                                         <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="surface_type">
+                                            <Label htmlFor="installation_year">
                                                 Ano de Instalação
                                             </Label>
                                             <Input
@@ -313,6 +317,7 @@ export function CourtsFilter() {
                     <Search />
                 </Button>
             </div>
+            {error && <div className="text-red-500 mt-2">{error}</div>}
         </div>
     );
 }

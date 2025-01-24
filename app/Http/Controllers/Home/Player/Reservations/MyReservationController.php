@@ -31,7 +31,12 @@ class MyReservationController extends Controller
         $limit = $request->input('limit', 10);
         $page = $request->input('page', 1);
 
+        $status = $request->input('status', 'all');
+        $date = $request->input('date'); 
+
         $query = $this->reservationModel->query();
+
+        $query->select('id', 'price', 'is_public', 'status', 'date', 'court_id', 'player_id');
 
         $query->where("player_id", Auth::user()->player->id);
 
@@ -39,9 +44,16 @@ class MyReservationController extends Controller
 
         if ($search) {
             $query->where(function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('description', 'like', '%' . $search . '%');
+                $query->where('name', 'like', '%' . $search . '%');
             });
+        }
+
+        if ($status && $status != "all") {
+            $query->where('status', $status);
+        }
+
+        if ($date) {
+            $query->whereDate('date', '=', $date);
         }
 
         $query->orderBy('reservations.' . $orderBy, $order);
@@ -50,6 +62,7 @@ class MyReservationController extends Controller
 
         return Inertia::render('Home/Player/Reservations/MyReservations/Index', [
             'pagination' =>  MyReservationsResource::collection($data),
+            'clubs' => fn () => Auth::user()->player->saved_clubs,
             'queryParams' => request()->query() ?: null,
             'success' => session('success')
         ]);

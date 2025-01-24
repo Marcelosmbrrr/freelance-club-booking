@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home\Player\Reservations;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use App\Models\Reservation;
 use App\Models\Club;
@@ -26,41 +27,67 @@ class NewReservationController extends Controller
      */
     public function index(Request $request)
     {
-        $entity = $request->input('entity', 'clubs');
-        $sport = $request->input('sport', 'padel');
-        $date = $request->input('date', now()->toDateString());
-        $time = $request->input('time', ['start_time' => '06:00', 'end_time' => '00:00']);
-        $price = $request->input('price', ['min' => 10, 'max' => 100]);
+        $search = $request->input('search');
         $searchBy = $request->input('searchBy', 'name');
         $orderBy = $request->input('orderBy', 'id');
         $order = $request->input('order', 'asc'); 
         $limit = $request->input('limit', 10); 
-        $page = $request->input('page', 1); 
-        $type = $request->input('type'); 
-        $isCovered = $request->input('isCovered', true); 
+        $page = $request->input('page', 1);
+
+        $entity = $request->input('entity', 'clubs');
+
+        // Club and Court
+        $sport = $request->input('sport', 'all');
+        $type = $request->input('type', "all"); 
+        $cover = $request->input('cover', "all"); 
         $manufacturer = $request->input('manufacturer'); 
-        $installationYear = $request->input('installationYear'); 
-        $search = $request->input('search'); 
+        $installation_year = $request->input('installation_year');
 
         $query = $entity === "clubs" ? $this->clubModel->query() : $this->courtModel->query();
 
-        if($entity === "clubs") {
+        if ($entity === "clubs") {
             $query->with(['user', 'courts']);
+            if ($sport && $sport != "all") {
+                $query->whereHas('courts', function ($courtQuery) use ($sport) {
+                    $courtQuery->where('sport', $sport);
+                });
+            }
         } else {
             $query->with('club');
+            if ($sport && $sport != "all") {
+                $query->where('sport', $sport);
+            }
         }
 
         if ($search) {
-            $query->where(function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('description', 'like', '%' . $search . '%');
-            });
+            if(in_array($searchBy, ['city', 'state'])) {
+                $query->where($searchBy, 'like', '%' . $search . '%');
 
-            if ($entity === 'courts') {
-                $query->orWhereHas('club', function ($clubQuery) use ($search) {
-                    $clubQuery->where('city', 'like', '%' . $search . '%')
-                              ->orWhere('state', 'like', '%' . $search . '%');
-                });
+                if ($entity === 'courts') {
+                    $query->orWhereHas('club', function ($clubQuery) use ($search, $searchBy) {
+                        $clubQuery->where($searchBy, 'like', '%' . $search . '%');
+                    });
+                }
+            }
+        }
+
+        if ($entity === 'courts') {
+            $query->where('status', true);
+
+            if ($type && $type != "all") {
+                $query->where('type', $type);
+            }
+
+            if ($cover && $cover !== "all") {
+                $query->where('is_covered', $cover === "covered");
+            }
+
+            if ($manufacturer) {
+                $query->where('manufacturer', $manufacturer);
+            }
+
+            if ($installation_year) {
+                $query->whereYear('installation_year', $installation_year);
             }
         }
 
@@ -77,44 +104,57 @@ class NewReservationController extends Controller
         ]);
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request, string $clubId)
     {
         $courtId = $request->input('courtId');
-        $date = $request->input('date');
-        $weekday = $request->input('weekday');
-
-        $entity = $request->input('entity', 'clubs');
-        $sport = $request->input('sport', 'padel');
-        $date = $request->input('date', now()->toDateString());
-        $time = $request->input('time', ['start_time' => '06:00', 'end_time' => '00:00']);
-        $price = $request->input('price', ['min' => 10, 'max' => 100]);
-        $searchBy = $request->input('searchBy', 'name');
-        $orderBy = $request->input('orderBy', 'id');
-        $order = $request->input('order', 'asc'); 
-        $limit = $request->input('limit', 10); 
-        $page = $request->input('page', 1); 
-        $type = $request->input('type'); 
-        $isCovered = $request->input('isCovered', true); 
-        $manufacturer = $request->input('manufacturer'); 
-        $installationYear = $request->input('installationYear'); 
         $search = $request->input('search'); 
 
+        $date = $request->input('date', Carbon::today());
+        $sport = $request->input('sport', 'padel');
+        $type = $request->input('type'); 
+        $cover = $request->input('cover', "all"); 
+        //$min_price = $request->input("min_price", 0);
+        //$max_price = $request->input("max_price", 100);
+
+        $weekday = strtolower(Carbon::parse($date)->format('l'));
+
         return Inertia::render('Home/Player/Reservations/NewReservation/CreateReservation', [
-            'club' =>  new CreateReservationResource($this->clubModel->with(['courts'])->find($clubId)),
-            'court_available_time_slots' => Inertia::lazy(fn () => new CourtTimeSlotsAvailabilityResource($this->courtModel->with([
-                'timeSlots' => function ($query) use ($weekday) {
-                    $query->where('weekday', $weekday);
-                }, 
-                'reservations' => function ($query) use ($date) {
-                    $query->whereDate('date', $date);
-            }])->find($courtId))),
+            'club' => new CreateReservationResource(
+                $this->clubModel->with(['courts' => function ($query) use ($sport, $type, $cover, $search) {
+                    if ($sport && $sport != "all") {
+                        $query->where('sport', $sport);
+                    }
+                    if ($type && $type != "all") {
+                        $query->where('type', $type);
+                    }
+                    if ($cover && $cover !== "all") {
+                        $query->where('is_covered', $cover === "covered");
+                    }
+                    if ($search) {
+                        $query->where("name", 'like', '%' . $search . '%');
+                    }
+                }])->find($clubId)
+            ),
+            'court_available_time_slots' => Inertia::lazy(fn () => new CourtTimeSlotsAvailabilityResource(
+                $this->courtModel->with([
+                    'timeSlots' => function ($query) use ($weekday) {
+                        $query->where('weekday', $weekday);
+                    },
+                    'reservations' => function ($query) use ($date) {
+                        $query->whereDate('date', $date);
+                    }
+                ])->find($courtId)
+            )),
             'queryParams' => request()->query() ?: null,
         ]);
-        
     }
+
+
 
     /**
      * Store a newly created resource in storage.

@@ -13,72 +13,133 @@ class CourtTimeSlotsAvailabilityResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-{
-    // Recupera todos os time slots da quadra e as reservas para a data específica
-    $courtTimeSlots = $this->timeSlots;
-    $reservations = $this->reservations;
+    {
+        $courtTimeSlots = $this->timeSlots;
+        $reservations = $this->reservations;
 
-    // Inicializa um array para armazenar os time slots com disponibilidade
-    $timeSlotsWithAvailability = [];
+        $timeSlotsWithAvailability = [];
 
-    // Verifica a disponibilidade de cada time slot
-    foreach ($courtTimeSlots as $timeSlot) {
-        // Inicializa a disponibilidade como "não disponível"
-        $availabilityStatus = 'unavailable';
-        $vacancies = [];
-        $totalPlayers = null;
+        $groupedTimeSlots = $this->groupTimeSlotsByReservation($courtTimeSlots, $reservations);
 
-        // 1. Verifica se o time slot não tem nenhuma reserva associada (disponível)
-        $isAvailable = $reservations->every(function ($reservation) use ($timeSlot) {
-            return !$reservation->courtTimeSlots->contains('id', $timeSlot->id);
-        });
+        foreach ($groupedTimeSlots as $group) {
+            $timeSlotsWithAvailability[] = $this->createTimeSlotGroup($group);
+        }
 
-        if ($isAvailable) {
-            // Se não houver reserva, o time slot está disponível
-            $availabilityStatus = 'available';
-        } else {
-            // 2. Verifica time slots públicos com vagas (status pending e is_public true)
-            $hasVacancy = $reservations->filter(function ($reservation) use ($timeSlot, &$vacancies) {
-                // Verifica se a reserva está associada ao time slot
-                if ($reservation->courtTimeSlots->contains('id', $timeSlot->id) && $reservation->status === 'pending' && $reservation->is_public) {
-                    
-                    // Coleta todas as vagas (preenchidas ou não) com o status 'filled'
-                    $slots = $reservation->playerSlots->map(function ($slot) {
-                        return [
-                            'position' => $slot->position,
-                            'filled' => !is_null($slot->player_id),
-                        ];
-                    });
+        return $timeSlotsWithAvailability;
+    }
 
-                    if ($slots->isNotEmpty()) {
-                        // Adiciona todas as vagas ao array
-                        $vacancies = array_merge($vacancies, $slots->toArray());
-                    }
+    /**
+     * Agrupa os time slots por reserva.
+     *
+     * @param Collection $courtTimeSlots
+     * @param Collection $reservations
+     * @return array
+     */
+    private function groupTimeSlotsByReservation($courtTimeSlots, $reservations): array
+    {
+        $groupedTimeSlots = [];
 
-                    return true;
+        foreach ($courtTimeSlots as $timeSlot) {
+            // Verifica se o time slot está associado a uma reserva
+            $reservation = $reservations->first(function ($reservation) use ($timeSlot) {
+                return $reservation->courtTimeSlots->contains('id', $timeSlot->id);
+            });
+
+            if ($reservation) {
+                // Se o time slot estiver associado a uma reserva, agrupa por reserva
+                $reservationId = $reservation->id;
+                if (!isset($groupedTimeSlots[$reservationId])) {
+                    $groupedTimeSlots[$reservationId] = [
+                        'reservation' => $reservation,
+                        'timeSlots' => [],
+                    ];
                 }
-
-                return false;
-            })->isNotEmpty();
-
-            // Se o time slot tem vagas abertas, ele está disponível com vagas
-            if ($hasVacancy) {
-                $availabilityStatus = 'available vacancy';
+                $groupedTimeSlots[$reservationId]['timeSlots'][] = $timeSlot;
+            } else {
+                // Se o time slot não estiver associado a uma reserva, trata como disponível
+                $groupedTimeSlots[] = [
+                    'reservation' => null,
+                    'timeSlots' => [$timeSlot],
+                ];
             }
         }
 
-        // Adiciona o time slot com o campo de disponibilidade
-        $timeSlotsWithAvailability[] = [
-            'id' => $timeSlot->id,
-            'label' => $timeSlot->start_time . "-" . $timeSlot->end_time, 
-            'start_time' => $timeSlot->start_time,
-            'end_time' => $timeSlot->end_time,
-            'status' => $availabilityStatus, 
-            'vacancies' => $vacancies, // Lista completa de vagas com filled true/false
+        return $groupedTimeSlots;
+    }
+
+    /**
+     * Cria um grupo de time slots para exibição.
+     *
+     * @param array $group
+     * @return array
+     */
+    private function createTimeSlotGroup($group): array
+    {
+        $timeSlots = $group['timeSlots'];
+        $reservation = $group['reservation'];
+
+        // Determina o status e as vagas
+        $availabilityStatus = 'available';
+        $vacancies = [];
+
+        if ($reservation) {
+            if ($reservation->status === 'pending' && $reservation->is_public) {
+                $availabilityStatus = 'available vacancy';
+                // Coleta todas as vagas (preenchidas ou não) com o status 'filled'
+                $vacancies = $reservation->playerSlots->map(function ($player_slot) use ($reservation) {
+                    // Determina o time com base na posição e no total de players
+                    $team = $this->determineTeam($player_slot->position, $reservation->total_players);
+
+                    return [
+                        'position' => $player_slot->position,
+                        'team' => $team, // Adiciona o time ao array de vagas
+                        'player' => is_null($player_slot->player_id) ? [] : [
+                            'name' => $player_slot->player->user->name,
+                            'image' => $player_slot->player->avatar_image,
+                            'best_hand' => $player_slot->player->best_hand,
+                            'match_type' => $player_slot->player->match_type,
+                            'sex' => $player_slot->player->sex,
+                            'description' => $player_slot->player->description,
+                            'created_at' => $player_slot->player->user->created_at
+                        ],
+                        'filled' => !is_null($player_slot->player_id),
+                    ];
+                })->toArray();
+            } else {
+                $availabilityStatus = 'unavailable';
+            }
+        }
+
+        // Determina o start_time e end_time do grupo
+        $startTime = $timeSlots[0]->start_time;
+        $endTime = end($timeSlots)->end_time;
+
+        return [
+            'id' => $timeSlots[0]->id,
+            'label' => $startTime . "-" . $endTime,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'status' => $availabilityStatus,
+            'vacancies' => $vacancies,
         ];
     }
 
-    return $timeSlotsWithAvailability;
-}
+    /**
+     * Determina o time com base na posição e no total de players.
+     *
+     * @param int $position
+     * @param int $totalPlayers
+     * @return string
+     */
+    private function determineTeam(int $position, int $totalPlayers): string
+    {
+        if ($totalPlayers == 2) {
+            return $position == 1 ? 'A' : 'B';
+        } elseif ($totalPlayers == 4) {
+            return $position <= 2 ? 'A' : 'B';
+        }
 
+        // Caso o número de players não seja 2 ou 4, você pode retornar um valor padrão ou lançar uma exceção
+        return 'Unknown';
+    }
 }

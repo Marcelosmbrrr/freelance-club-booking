@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Head, router, usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { CreateReservationForSelectedCourt } from "./_components/CreateReservationForSelectedCourt";
@@ -7,55 +7,17 @@ import { CourtsFilter } from "./_components/CourtsFilter";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CalendarClock } from "lucide-react";
+import { CalendarClock, Volleyball } from "lucide-react";
 
 const breadCrumb = [
     { name: "Nova Reserva", href: "/player/new-reservation" },
     { name: "Criar Reserva" },
 ];
 
-export interface QueryParams {
-    courtId?: string;
-    sport: string;
-    weekday: string;
-    time: { start_time: string; end_time: string };
-    price: { min: number; max: number };
-    type?: string;
-    isCovered?: boolean;
-    manufacturer?: string;
-    installationYear?: string;
-    search?: string;
-    searchBy: string;
-    orderBy: string;
-    order: "asc" | "desc";
-    limit: number;
-    page: number;
-}
-
-export const defaultParams: QueryParams = {
-    courtId: undefined,
-    sport: "padel",
-    weekday: "monday",
-    time: { start_time: "06:00", end_time: "00:00" },
-    price: { min: 10, max: 100 },
-    searchBy: "name",
-    orderBy: "id",
-    order: "asc",
-    limit: 10,
-    page: 1,
-    type: undefined,
-    isCovered: true,
-    manufacturer: undefined,
-    installationYear: undefined,
-    search: undefined,
-};
-
 export default function CreateReservation() {
     const { club, queryParams = null }: any = usePage().props;
 
-    const parameters: QueryParams = { ...defaultParams, ...queryParams };
-
-    const [courtId, setCourtId] = React.useState(parameters.courtId ?? "");
+    const [courtId, setCourtId] = React.useState(queryParams.courtId ?? "");
 
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
@@ -101,14 +63,34 @@ export default function CreateReservation() {
                                         />
                                     </div>
                                     <div className="p-4">
-                                        <div className="mb-2">
-                                            <Badge className="mr-1">
-                                                {court.sport}
-                                            </Badge>
-                                            <Badge>
-                                                a partir de R${court.min_price}
-                                            </Badge>
-                                        </div>
+                                        <ul className="flex gap-x-2 mb-2 text-sm text-neutral-600">
+                                            <li className="flex items-center">
+                                                <Volleyball className="w-4 h-4 mr-1 text-gray-800 dark:text-white" />
+                                                <span>{court.sport}</span>
+                                            </li>
+                                            <li className="flex items-center">
+                                                <svg
+                                                    className="w-4 h-4 mr-1 text-gray-800 dark:text-white"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24"
+                                                    height="24"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke="currentColor"
+                                                        strokeLinecap="round"
+                                                        strokeWidth="2"
+                                                        d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                                    />
+                                                </svg>
+                                                <span>
+                                                    a partir de R$
+                                                    {court.min_price}
+                                                </span>
+                                            </li>
+                                        </ul>
                                         <div className="space-y-2">
                                             <div className="line-clamp-3 break-words text-lg font-medium lg:text-2xl">
                                                 {court.name}
@@ -131,6 +113,9 @@ export default function CreateReservation() {
                                     </div>
                                 </div>
                             ))}
+
+                            {club.data.courts.length === 0 &&
+                                "Nenhum resultado encontrado."}
                         </div>
                     </>
                 )}

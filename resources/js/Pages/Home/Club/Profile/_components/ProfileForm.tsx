@@ -91,180 +91,155 @@ export function ProfileForm() {
     }
 
     return (
-        <section className="space-y-4">
-            <div className="space-y-4 py-8">
-                <form className="space-y-6" onSubmit={submit}>
+        <section className="space-y-8">
+            <form className="space-y-6 mt-8" onSubmit={submit}>
+                <div className="grid w-full items-center gap-1.5">
+                    <Label htmlFor="name">Nome Completo</Label>
+                    <Input
+                        type="text"
+                        id="name"
+                        placeholder="Informe o seu nome"
+                        value={data.name}
+                        onChange={(e) => setData("name", e.target.value)}
+                    />
+                    <InputError message={errors.name} className="mt-2" />
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                    <Label htmlFor="email">E-mail</Label>
+                    <Input
+                        type="text"
+                        id="email"
+                        placeholder="Informe o seu e-mail"
+                        value={data.email}
+                        onChange={(e) => setData("email", e.target.value)}
+                    />
+                    <InputError message={errors.email} className="mt-2" />
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                    <Label htmlFor="phonenumber">Contato</Label>
+                    <Input
+                        type="text"
+                        id="phonenumber"
+                        placeholder="Informe o número para contato"
+                        value={data.phonenumber}
+                        onChange={(e) => setData("phonenumber", e.target.value)}
+                    />
+                    <InputError message={errors.phonenumber} className="mt-2" />
+                </div>
+                <div className="flex gap-4">
                     <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="name">Nome Completo</Label>
+                        <Label htmlFor="cnpj">CNPJ</Label>
                         <Input
                             type="text"
-                            id="name"
-                            placeholder="Informe o seu nome"
-                            value={data.name}
-                            onChange={(e) => setData("name", e.target.value)}
-                        />
-                        <InputError message={errors.name} className="mt-2" />
-                    </div>
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="email">E-mail</Label>
-                        <Input
-                            type="text"
-                            id="email"
-                            placeholder="Informe o seu e-mail"
-                            value={data.email}
-                            onChange={(e) => setData("email", e.target.value)}
-                        />
-                        <InputError message={errors.email} className="mt-2" />
-                    </div>
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="phonenumber">Contato</Label>
-                        <Input
-                            type="text"
-                            id="phonenumber"
-                            placeholder="Informe o número para contato"
-                            value={data.phonenumber}
+                            id="cnpj"
+                            placeholder="Informe o CNPJ"
+                            value={data.cnpj}
                             onChange={(e) =>
-                                setData("phonenumber", e.target.value)
+                                setData("cnpj", applyCNPJMask(e.target.value))
                             }
                         />
+                        <InputError message={errors.cnpj} className="mt-2" />
+                    </div>
+                    <div className="grid w-full items-center gap-1.5">
+                        <Label htmlFor="zip_code">CEP</Label>
+                        <div className="relative">
+                            <Input
+                                type="text"
+                                id="zip_code"
+                                placeholder="Informe o CEP"
+                                value={data.zip_code}
+                                onChange={(e) =>
+                                    setData(
+                                        "zip_code",
+                                        applyCEPMask(e.target.value)
+                                    )
+                                }
+                            />
+                            <button
+                                type="button"
+                                onClick={handleSearchZipCode} // Substitua por sua lógica de busca
+                                className="absolute inset-y-0 right-0 flex items-center px-3 text-sm font-medium text-primary hover:text-primary-foreground"
+                            >
+                                🔍
+                            </button>
+                        </div>
                         <InputError
-                            message={errors.phonenumber}
+                            message={errors.zip_code}
                             className="mt-2"
                         />
                     </div>
-                    <div className="flex gap-4">
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label htmlFor="cnpj">CNPJ</Label>
-                            <Input
-                                type="text"
-                                id="cnpj"
-                                placeholder="Informe o CNPJ"
-                                value={data.cnpj}
-                                onChange={(e) =>
-                                    setData(
-                                        "cnpj",
-                                        applyCNPJMask(e.target.value)
-                                    )
-                                }
-                            />
-                            <InputError
-                                message={errors.cnpj}
-                                className="mt-2"
-                            />
-                        </div>
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label htmlFor="zip_code">CEP</Label>
-                            <div className="relative">
-                                <Input
-                                    type="text"
-                                    id="zip_code"
-                                    placeholder="Informe o CEP"
-                                    value={data.zip_code}
-                                    onChange={(e) =>
-                                        setData(
-                                            "zip_code",
-                                            applyCEPMask(e.target.value)
-                                        )
-                                    }
-                                />
-                                <button
-                                    type="button"
-                                    onClick={handleSearchZipCode} // Substitua por sua lógica de busca
-                                    className="absolute inset-y-0 right-0 flex items-center px-3 text-sm font-medium text-primary hover:text-primary-foreground"
-                                >
-                                    🔍
-                                </button>
-                            </div>
-                            <InputError
-                                message={errors.zip_code}
-                                className="mt-2"
-                            />
-                        </div>
-                    </div>
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                    <Label htmlFor="address">Endereço</Label>
+                    <Input
+                        type="text"
+                        id="address"
+                        placeholder="Informe o endereço"
+                        name="address"
+                        value={data.address}
+                    />
+                    <InputError message={errors.address} className="mt-2" />
+                </div>
+                <div className="flex gap-4">
                     <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="address">Endereço</Label>
+                        <Label htmlFor="cpf">Razão Social</Label>
                         <Input
                             type="text"
-                            id="address"
-                            placeholder="Informe o endereço"
-                            name="address"
-                            value={data.address}
-                        />
-                        <InputError message={errors.address} className="mt-2" />
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label htmlFor="cpf">Razão Social</Label>
-                            <Input
-                                type="text"
-                                id="cpf"
-                                placeholder="Informe a razão social"
-                                value={data.trading_name}
-                                onChange={(e) =>
-                                    setData(
-                                        "trading_name",
-                                        applyCNPJMask(e.target.value)
-                                    )
-                                }
-                            />
-                            <InputError
-                                message={errors.trading_name}
-                                className="mt-2"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Estado</Label>
-                            <Input
-                                type="text"
-                                id="state"
-                                placeholder="Informe o estado"
-                                value={data.state}
-                                readOnly
-                            />
-                            <InputError
-                                message={errors.state}
-                                className="mt-2"
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="city">Cidade</Label>
-                            <Input
-                                type="text"
-                                id="city"
-                                placeholder="Informe a cidade"
-                                value={data.city}
-                                readOnly
-                            />
-                            <InputError
-                                message={errors.city}
-                                className="mt-2"
-                            />
-                        </div>
-                    </div>
-                    <div className="grid w-full items-center gap-1.5">
-                        <Label htmlFor="bio">Descrição</Label>
-                        <Textarea
-                            id="bio"
-                            placeholder="Fale sobre você"
-                            value={data.description}
+                            id="cpf"
+                            placeholder="Informe a razão social"
+                            value={data.trading_name}
                             onChange={(e) =>
-                                setData("description", e.target.value)
+                                setData(
+                                    "trading_name",
+                                    applyCNPJMask(e.target.value)
+                                )
                             }
                         />
+                        <InputError
+                            message={errors.trading_name}
+                            className="mt-2"
+                        />
                     </div>
-                    <Button
-                        className="w-full"
-                        type="submit"
-                        disabled={processing}
-                    >
-                        {processing ? "Carregando ..." : "Salvar Dados"}
-                    </Button>
-                </form>
-            </div>
+                </div>
+                <div className="flex gap-2">
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">Estado</Label>
+                        <Input
+                            type="text"
+                            id="state"
+                            placeholder="Informe o estado"
+                            value={data.state}
+                            readOnly
+                        />
+                        <InputError message={errors.state} className="mt-2" />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="city">Cidade</Label>
+                        <Input
+                            type="text"
+                            id="city"
+                            placeholder="Informe a cidade"
+                            value={data.city}
+                            readOnly
+                        />
+                        <InputError message={errors.city} className="mt-2" />
+                    </div>
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                    <Label htmlFor="bio">Descrição</Label>
+                    <Textarea
+                        id="bio"
+                        placeholder="Fale sobre você"
+                        value={data.description}
+                        onChange={(e) => setData("description", e.target.value)}
+                    />
+                </div>
+                <Button type="submit" disabled={processing}>
+                    {processing ? "Carregando ..." : "Salvar"}
+                </Button>
+            </form>
 
-            <div className="py-8">
+            <div className="space-y-4">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">Geolocalização</h1>
                     <p className="text-gray-600">
@@ -273,16 +248,12 @@ export function ProfileForm() {
                     </p>
                 </div>
                 <GoogleMaps />
-                <Button
-                    className="w-full mt-2"
-                    type="submit"
-                    disabled={processing}
-                >
-                    {processing ? "Carregando ..." : "Salvar Localização"}
+                <Button type="submit" disabled={processing}>
+                    {processing ? "Carregando ..." : "Salvar"}
                 </Button>
             </div>
 
-            <div className="py-8">
+            <div>
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">Imagens</h1>
                     <p className="text-gray-600">

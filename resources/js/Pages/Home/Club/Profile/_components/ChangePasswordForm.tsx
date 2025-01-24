@@ -52,7 +52,7 @@ export function ChangePasswordForm() {
     };
 
     return (
-        <form className="space-y-6" onSubmit={submit}>
+        <form className="space-y-4" onSubmit={submit}>
             <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="name">Senha atual</Label>
                 <Input
@@ -91,7 +91,7 @@ export function ChangePasswordForm() {
                     className="mt-2"
                 />
             </div>
-            <Button type="submit" className="w-full" disabled={processing}>
+            <Button type="submit" disabled={processing}>
                 {processing ? "Carregando ..." : "Alterar Senha"}
             </Button>
         </form>

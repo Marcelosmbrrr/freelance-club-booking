@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
 import { ChangePasswordForm } from "./ChangePasswordForm";
@@ -6,9 +6,6 @@ import { DeactivateAccountForm } from "./DeactivateAccountForm";
 
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export function ProfileConfigurationsForm() {
     const { user }: any = usePage().props;
@@ -53,10 +50,10 @@ export function ProfileConfigurationsForm() {
     };
     return (
         <section className="space-y-4">
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
+            <div className="max-w-screen-md space-y-6 py-8">
                 <ChangePasswordForm />
             </div>
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
+            <div className="max-w-screen-md space-y-6 py-8">
                 <DeactivateAccountForm />
             </div>
         </section>

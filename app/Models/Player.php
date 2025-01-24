@@ -40,4 +40,31 @@ class Player extends Model
     public function getAvatarImageAttribute($value) {
         return Storage::url($value);
     }
+
+    public function getSavedClubsAttribute()
+    {
+        $reservationsAsCreator = $this->reservations()
+            ->with('club')
+            ->get();
+
+        $reservationsAsParticipant = Reservation::whereHas('playerSlots', function ($query) {
+                $query->where('player_id', $this->id);
+            })
+            ->with('club')
+            ->get();
+
+        $allReservations = $reservationsAsCreator->merge($reservationsAsParticipant);
+
+        $clubs = $allReservations->pluck('club')
+            ->unique('id') 
+            ->map(function ($club) {
+                return [
+                    'id' => $club->id,
+                    'name' => $club->name,
+                ];
+            })
+            ->values();
+
+        return $clubs;
+    }
 }

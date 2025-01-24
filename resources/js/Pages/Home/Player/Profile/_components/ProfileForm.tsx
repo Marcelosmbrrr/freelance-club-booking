@@ -69,8 +69,8 @@ export function ProfileForm() {
     };
 
     return (
-        <section className="space-y-4">
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
+        <section>
+            <div className="max-w-screen-md space-y-6 py-8">
                 <div className="w-32 h-32 overflow-hidden rounded-xl">
                     <img
                         src={user.data.player.avatar_image}
@@ -83,7 +83,7 @@ export function ProfileForm() {
                     <Input id="picture" type="file" />
                 </div>
             </div>
-            <div className="max-w-screen-md space-y-6 rounded-lg border p-10">
+            <div className="max-w-screen-md space-y-6">
                 <form className="space-y-6" onSubmit={submit}>
                     <div className="grid w-full items-center gap-1.5">
                         <Label htmlFor="name">Nome Completo</Label>
@@ -254,7 +254,7 @@ export function ProfileForm() {
                         type="submit"
                         disabled={processing}
                     >
-                        {processing ? "Carregando ..." : "Salvar Dados"}
+                        {processing ? "Carregando ..." : "Salvar"}
                     </Button>
                 </form>
             </div>

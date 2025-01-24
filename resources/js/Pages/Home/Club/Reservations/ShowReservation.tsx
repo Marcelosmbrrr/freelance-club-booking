@@ -141,11 +141,7 @@ export default function ShowReservation() {
                                         <div className="flex items-center gap-2 md:flex-col md:items-start lg:gap-4">
                                             <Avatar className="size-12">
                                                 <AvatarImage
-                                                    src={
-                                                        player.user
-                                                            ? player.user.avatar
-                                                            : ""
-                                                    }
+                                                    src={player.user?.avatar || ""}
                                                     alt="@shadcn"
                                                 />
                                                 <AvatarFallback>

@@ -1,15 +1,17 @@
 import * as React from "react";
 import { Head, router, usePage } from "@inertiajs/react";
 
+import { QueryParams } from "../_components/SearchClubOrCourt";
+import { defaultParams } from "../_components/SearchClubOrCourt";
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { SearchClubOrCourt } from "../_components/SearchClubOrCourt";
 import { getDistanceFromUser } from "@/utils/functions/getDistanceFromUser";
 
-import { Check, DollarSign, MapPin, Volleyball } from "lucide-react";
+import { Check, MapPin, Volleyball } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Badge } from "@/components/ui/badge";
 import {
     Tooltip,
     TooltipContent,
@@ -51,7 +53,8 @@ export type ClubOrCourt = {
 const breadCrumb = [{ name: "Nova Reserva" }];
 
 export default function Reservations() {
-    const { pagination, success }: any = usePage().props;
+    const { pagination, queryParams = null, success }: any = usePage().props;
+    const parameters: QueryParams = { ...defaultParams, ...queryParams };
 
     const {
         data,
@@ -97,7 +100,7 @@ export default function Reservations() {
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Criar Reserva" />
             <SearchClubOrCourt localization={clubLocation} />
-            <div className="flex justify-center gap-4 flex-wrap">
+            <div className="flex gap-4 flex-wrap">
                 {data.map((item) => (
                     <div
                         key={item.clubId}
@@ -136,9 +139,9 @@ export default function Reservations() {
                                         viewBox="0 0 24 24"
                                     >
                                         <path
-                                            fill-rule="evenodd"
+                                            fillRule="evenodd"
                                             d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z"
-                                            clip-rule="evenodd"
+                                            clipRule="evenodd"
                                         />
                                     </svg>
                                     <span>
@@ -160,8 +163,8 @@ export default function Reservations() {
                                     >
                                         <path
                                             stroke="currentColor"
-                                            stroke-linecap="round"
-                                            stroke-width="2"
+                                            strokeLinecap="round"
+                                            strokeWidth="2"
                                             d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
                                         />
                                     </svg>
@@ -212,19 +215,29 @@ export default function Reservations() {
                                                     "entity"
                                                 );
 
-                                            // Construir os parâmetros dinamicamente
                                             const params = {
                                                 clubId: item.clubId,
-                                                ...(entityParam ===
-                                                    "courts" && {
-                                                    courtId: item.courtId,
-                                                }), // Adiciona courtId se entity for "courts"
+                                                ...(entityParam === "courts"
+                                                    ? {
+                                                          courtId: item.courtId,
+                                                          date: parameters.date,
+                                                      }
+                                                    : {
+                                                          sport: parameters.sport,
+                                                          date: parameters.date,
+                                                          type: parameters.type,
+                                                          cover: parameters.cover,
+                                                          min_price:
+                                                              parameters.min_price,
+                                                          max_price:
+                                                              parameters.max_price,
+                                                      }),
                                             };
 
                                             router.get(
                                                 route(
                                                     "player.new-reservation.create",
-                                                    params
+                                                    { ...params }
                                                 )
                                             );
                                         }}

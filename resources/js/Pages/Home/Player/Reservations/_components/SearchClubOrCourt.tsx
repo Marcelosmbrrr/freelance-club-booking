@@ -1,9 +1,6 @@
 import * as React from "react";
 import { router, usePage } from "@inertiajs/react";
 
-import { CourtsFilter } from "./CourtsFilter";
-import { ClubsFilter } from "./ClubsFilter";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,66 +19,58 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-interface QueryParams {
-    entity: "clubs" | "courts";
-    sport: string;
-    weekday: string;
-    time: { start_time: string; end_time: string };
-    price: { min: number; max: number };
-    type?: string;
-    isCovered?: boolean;
-    manufacturer?: string;
-    installationYear?: string;
-    search?: string;
+export interface QueryParams {
+    search: string;
     searchBy: string;
-    orderBy: string;
-    order: "asc" | "desc";
-    limit: number;
-    page: number;
+    // Agnostic
+    entity: string;
+    date: string;
+    sport: string;
+    min_price: string;
+    max_price: string;
+    // Courts
+    type: string;
+    cover: string;
+    manufacturer: string;
+    installation_year: string;
 }
 
-const defaultParams: QueryParams = {
+export const defaultParams: QueryParams = {
+    search: "",
+    searchBy: "",
+    // Agnostic
     entity: "clubs",
-    sport: "padel",
-    weekday: "monday",
-    time: { start_time: "06:00", end_time: "00:00" },
-    price: { min: 10, max: 100 },
-    searchBy: "name",
-    orderBy: "id",
-    order: "asc",
-    limit: 10,
-    page: 1,
-    type: undefined,
-    isCovered: true,
-    manufacturer: undefined,
-    installationYear: undefined,
-    search: undefined,
+    date: new Date().toISOString().split("T")[0],
+    sport: "all",
+    min_price: "0",
+    max_price: "100",
+    // Courts
+    type: "all",
+    cover: "all",
+    manufacturer: "",
+    installation_year: "",
 };
 
 export function SearchClubOrCourt(props: {
     localization?: { lat: number; lng: number };
 }) {
     const { queryParams = null } = usePage().props;
-
     const parameters: QueryParams = { ...defaultParams, ...queryParams };
 
+    const [filter, setFilter] = React.useState<QueryParams>(parameters);
     const [openMap, setOpenMap] = React.useState<boolean>(false);
 
-    const fetchData = React.useCallback(
-        (param: Partial<QueryParams>) => {
-            router.get(
-                route("player.new-reservation.index"),
-                { ...param },
-                {
-                    preserveState: true,
-                }
-            );
-        },
-        [parameters]
-    );
+    function fetchData() {
+        router.get(
+            route("player.new-reservation.index"),
+            { ...filter },
+            {
+                preserveState: true,
+            }
+        );
+    }
 
     return (
         <div className="w-full rounded-t-lg mb-4">
@@ -91,7 +80,53 @@ export function SearchClubOrCourt(props: {
                         <Input
                             type="email"
                             className="min-w-96"
-                            placeholder="Pesquisar por nome, estado ou cidade"
+                            placeholder="Pesquisar por nome"
+                            onChange={(e) =>
+                                setFilter({ ...filter, search: e.target.value })
+                            }
+                        />
+                        <Select
+                            value={filter.entity}
+                            onValueChange={(v) =>
+                                setFilter({ ...filter, entity: v })
+                            }
+                        >
+                            <SelectTrigger className="min-w-40">
+                                <SelectValue placeholder="Selecionar" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="clubs">
+                                        Procurar Clubes
+                                    </SelectItem>
+                                    <SelectItem value="courts">
+                                        Procurar Quadras
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Select
+                            value={filter.sport}
+                            onValueChange={(v) =>
+                                setFilter({ ...filter, sport: v })
+                            }
+                        >
+                            <SelectTrigger className="min-w-44">
+                                <SelectValue placeholder="Esporte" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="all">Todos os Esportes</SelectItem>
+                                    <SelectItem value="padel">Padel</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Input
+                            type="date"
+                            value={filter.date}
+                            onChange={(e) =>
+                                setFilter({ ...filter, date: e.target.value })
+                            }
                         />
                         <Popover>
                             <PopoverTrigger asChild>
@@ -101,61 +136,170 @@ export function SearchClubOrCourt(props: {
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] lg:w-[500px]">
                                 <div className="grid gap-4">
-                                    <div className="space-y-2">
+                                    <div className="flex justify-between items-center">
                                         <h4 className="font-semibold leading-none">
                                             Filtros
                                         </h4>
+                                        <Button onClick={fetchData}>
+                                            Aplicar Filtros
+                                        </Button>
                                     </div>
                                     <Separator />
                                     <div className="grid gap-2">
-                                        <div className="grid grid-cols-2 items-center gap-4">
-                                            <Label htmlFor="width">
-                                                Pesquisar por
-                                            </Label>
-                                            <Select
-                                                value={parameters.entity}
-                                                onValueChange={(
-                                                    v: "clubs" | "courts"
-                                                ) => fetchData({ entity: v })}
-                                            >
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Selecionar" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectItem value="clubs">
-                                                            Clubes
-                                                        </SelectItem>
-                                                        <SelectItem value="courts">
-                                                            Quadras
-                                                        </SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-
-                                        {parameters.entity === "courts" && (
-                                            <div className="grid grid-cols-2 items-center gap-4">
-                                                <Label htmlFor="maxWidth">
-                                                    Filtrar Quadra
-                                                </Label>
-                                                <CourtsFilter />
+                                
+                                        {filter.entity === "courts" && (
+                                            <div className="grid gap-2">
+                                                <div className="grid grid-cols-2 items-center gap-2">
+                                                    <Label htmlFor="type">
+                                                        Tipo
+                                                    </Label>
+                                                    <Select
+                                                        value={filter.type}
+                                                        onValueChange={(v) =>
+                                                            setFilter({
+                                                                ...filter,
+                                                                type: v,
+                                                            })
+                                                        }
+                                                    >
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Selecionar" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup>
+                                                                <SelectItem value="all">
+                                                                    Todos
+                                                                </SelectItem>
+                                                                <SelectItem value="masonry">
+                                                                    Alvenaria
+                                                                </SelectItem>
+                                                                <SelectItem value="panoramic">
+                                                                    Panorâmica
+                                                                </SelectItem>
+                                                                <SelectItem value="mixed">
+                                                                    Misto
+                                                                </SelectItem>
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                <div className="grid grid-cols-2 items-center gap-2">
+                                                    <Label htmlFor="is_covered">
+                                                        Cobertura
+                                                    </Label>
+                                                    <Select
+                                                        value={filter.type}
+                                                        onValueChange={(v) =>
+                                                            setFilter({
+                                                                ...filter,
+                                                                type: v,
+                                                            })
+                                                        }
+                                                    >
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="Selecionar" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup>
+                                                                <SelectItem value="all">
+                                                                    Todos
+                                                                </SelectItem>
+                                                                <SelectItem value="covered">
+                                                                    Com
+                                                                    Cobertura
+                                                                </SelectItem>
+                                                                <SelectItem value="uncovered">
+                                                                    Sem
+                                                                    Cobertura
+                                                                </SelectItem>
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                <div className="grid grid-cols-2 items-center gap-2">
+                                                    <Label htmlFor="price_range">
+                                                        Preço Médio
+                                                    </Label>
+                                                    <div className="grid grid-cols-2 gap-2 w-full">
+                                                        <Input
+                                                            type="number"
+                                                            className="w-full"
+                                                            placeholder="Mínimo"
+                                                            min="0"
+                                                            value={
+                                                                filter.min_price
+                                                            }
+                                                            onChange={(e) =>
+                                                                setFilter({
+                                                                    ...filter,
+                                                                    min_price:
+                                                                        e.target
+                                                                            .value,
+                                                                })
+                                                            }
+                                                        />
+                                                        <Input
+                                                            type="number"
+                                                            className="w-full"
+                                                            placeholder="Máximo"
+                                                            min="0"
+                                                            value={
+                                                                filter.max_price
+                                                            }
+                                                            onChange={(e) =>
+                                                                setFilter({
+                                                                    ...filter,
+                                                                    max_price:
+                                                                        e.target
+                                                                            .value,
+                                                                })
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
 
-                                        {parameters.entity === "clubs" && (
-                                            <div className="grid grid-cols-2 items-center gap-4">
-                                                <Label htmlFor="maxWidth">
-                                                    Filtrar Clube
-                                                </Label>
-                                                <ClubsFilter />
+                                        {filter.entity === "clubs" && (
+                                            <div className="grid gap-2">
+                                                <div className="grid grid-cols-2 items-center py-2 gap-2">
+                                                    <Label htmlFor="status">
+                                                        Distância
+                                                    </Label>
+                                                    <Input type="text" />
+                                                </div>
+                                                <div className="grid grid-cols-2 items-center gap-2">
+                                                    <Label htmlFor="time">
+                                                        Preço Médio
+                                                    </Label>
+                                                    <div className="grid grid-cols-2 gap-2 w-full">
+                                                        <Input
+                                                            type="number"
+                                                            className="w-full"
+                                                            placeholder="Mínimo"
+                                                            min="0"
+                                                            value={
+                                                                filter.min_price
+                                                            }
+                                                        />
+                                                        <Input
+                                                            type="number"
+                                                            className="w-full"
+                                                            placeholder="Máximo"
+                                                            min="0"
+                                                            value={
+                                                                filter.max_price
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </PopoverContent>
                         </Popover>
-                        <Button>
+                        <Button onClick={fetchData}>
                             Pesquisar
                             <Search />
                         </Button>
@@ -170,24 +314,6 @@ export function SearchClubOrCourt(props: {
                             <Label htmlFor="airplane-mode">Mapa</Label>
                         </div>
                     </div>
-                </div>
-                <div className="flex gap-x-2">
-                    <Badge variant="secondary">
-                        Procura: {parameters.entity}
-                    </Badge>
-                    <Badge variant="secondary">
-                        Esporte: {parameters.sport}
-                    </Badge>
-                    <Badge variant="secondary">
-                        Dia da Semana: {parameters.weekday}
-                    </Badge>
-                    <Badge variant="secondary">
-                        Horário: {parameters.time.start_time} -{" "}
-                        {parameters.time.end_time}{" "}
-                    </Badge>
-                    <Badge variant="secondary">
-                        R$: {parameters.price.min} - {parameters.price.max}
-                    </Badge>
                 </div>
                 {openMap && (
                     <div className="my-4 sticky">

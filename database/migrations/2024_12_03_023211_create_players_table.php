@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum("court_side", ["backhand", "forehand", "both"])->nullable();
             $table->enum("match_type", ["competitive", "friendly", "both"])->nullable();
             $table->string("avatar_image")->nullable();
+            $table->text("description")->nullable();
             $table->timestamps();
         });
     }
