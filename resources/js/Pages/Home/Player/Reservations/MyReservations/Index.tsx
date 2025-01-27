@@ -131,7 +131,7 @@ export const columns: ColumnDef<Reservation>[] = [
                             onClick={() =>
                                 router.get(
                                     route(
-                                        "club.reservations.show",
+                                        "player.reservations.show",
                                         row.original.id
                                     )
                                 )

@@ -34,71 +34,35 @@ class NewReservationController extends Controller
         $limit = $request->input('limit', 10); 
         $page = $request->input('page', 1);
 
-        $entity = $request->input('entity', 'clubs');
-
-        // Club and Court
+        $date = $request->input("date");
+        $time = $request->input("time", "all");
+        $distance = $request->input("distance");
         $sport = $request->input('sport', 'all');
-        $type = $request->input('type', "all"); 
-        $cover = $request->input('cover', "all"); 
-        $manufacturer = $request->input('manufacturer'); 
-        $installation_year = $request->input('installation_year');
+        $min_price = $request->input('min_price');
+        $max_price = $request->input('max_price');
 
-        $query = $entity === "clubs" ? $this->clubModel->query() : $this->courtModel->query();
+        $query = $this->clubModel->query();
 
-        if ($entity === "clubs") {
-            $query->with(['user', 'courts']);
-            if ($sport && $sport != "all") {
-                $query->whereHas('courts', function ($courtQuery) use ($sport) {
-                    $courtQuery->where('sport', $sport);
-                });
-            }
-        } else {
-            $query->with('club');
-            if ($sport && $sport != "all") {
-                $query->where('sport', $sport);
-            }
+        $query->with(['user', 'courts']);
+
+        if ($sport && $sport != "all") {
+            $query->whereHas('courts', function ($courtQuery) use ($sport) {
+                $courtQuery->where('sport', $sport);
+            });
         }
 
         if ($search) {
             if(in_array($searchBy, ['city', 'state'])) {
                 $query->where($searchBy, 'like', '%' . $search . '%');
-
-                if ($entity === 'courts') {
-                    $query->orWhereHas('club', function ($clubQuery) use ($search, $searchBy) {
-                        $clubQuery->where($searchBy, 'like', '%' . $search . '%');
-                    });
-                }
             }
         }
 
-        if ($entity === 'courts') {
-            $query->where('status', true);
-
-            if ($type && $type != "all") {
-                $query->where('type', $type);
-            }
-
-            if ($cover && $cover !== "all") {
-                $query->where('is_covered', $cover === "covered");
-            }
-
-            if ($manufacturer) {
-                $query->where('manufacturer', $manufacturer);
-            }
-
-            if ($installation_year) {
-                $query->whereYear('installation_year', $installation_year);
-            }
-        }
-
-        $query->orderBy("$entity." . $orderBy, $order);
+        $query->orderBy("clubs." . $orderBy, $order);
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
         return Inertia::render('Home/Player/Reservations/NewReservation/Index', [
-            'pagination' =>  NewReservationResource::collection($data)->additional([
-                'entity' => $entity,
-            ]),
+            'pagination' =>  NewReservationResource::collection($data),
             'queryParams' => request()->query() ?: null,
             'success' => session('success')
         ]);

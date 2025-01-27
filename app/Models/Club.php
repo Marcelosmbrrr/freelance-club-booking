@@ -27,7 +27,7 @@ class Club extends Model
         'geolocalization',
     ];   
 
-    protected $appends = ['name', 'min_price', 'sports'];
+    protected $appends = ['name', 'min_price', 'sports', 'opening_hours'];
 
     public function user()
     {
@@ -79,6 +79,17 @@ class Club extends Model
         }
 
         return $urls;
+    }
+
+    public function getGeolocalizationAttribute($value) 
+    {
+        $value = explode(",", $value);
+
+        return ["lat" => $value[0], "lng" => $value[1]];
+    }
+
+    public function getOpeningHoursAttribute() {
+
     }
 
 }

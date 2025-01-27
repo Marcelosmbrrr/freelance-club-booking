@@ -1,14 +1,15 @@
 import * as React from "react";
-import { Head, router, usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
-import { QueryParams } from "../_components/SearchClubOrCourt";
-import { defaultParams } from "../_components/SearchClubOrCourt";
+import { QueryParams } from "./_components/ClubFilter";
+import { defaultParams } from "./_components/ClubFilter";
+import { SelectedClubDrawer } from "./_components/selected-club-drawer/SelectedClubDrawer";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { SearchClubOrCourt } from "../_components/SearchClubOrCourt";
+import { ClubFilter } from "./_components/ClubFilter";
 import { getDistanceFromUser } from "@/utils/functions/getDistanceFromUser";
 
-import { Check, MapPin, Volleyball } from "lucide-react";
+import { MapPin, Volleyball } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -38,16 +39,17 @@ export function RadioGroupDemo() {
     );
 }
 
-export type ClubOrCourt = {
-    clubId: string;
-    courtId: string;
+export type Club = {
+    id: string;
     name: string;
     images: string[];
-    sponsor_image?: string;
     description: string;
+    address: string;
     geolocalization: { lat: number; lng: number };
     sports: string[];
     min_price: number;
+    total_courts: number;
+    time_slots: any[];
 };
 
 const breadCrumb = [{ name: "Nova Reserva" }];
@@ -56,11 +58,8 @@ export default function Reservations() {
     const { pagination, queryParams = null, success }: any = usePage().props;
     const parameters: QueryParams = { ...defaultParams, ...queryParams };
 
-    const {
-        data,
-        meta,
-        links,
-    }: { data: ClubOrCourt[]; meta: any; links: any } = pagination;
+    const { data, meta, links }: { data: Club[]; meta: any; links: any } =
+        pagination;
 
     const [userLocation, setUserLocation] = React.useState<{
         lat: number;
@@ -99,33 +98,26 @@ export default function Reservations() {
     return (
         <AuthenticatedLayout breadCrumb={breadCrumb}>
             <Head title="Criar Reserva" />
-            <SearchClubOrCourt localization={clubLocation} />
+            <ClubFilter localization={clubLocation} />
             <div className="flex gap-4 flex-wrap">
-                {data.map((item) => (
+                {data.map((club) => (
                     <div
-                        key={item.clubId}
+                        key={club.id}
                         className="group flex flex-col border rounded-lg shadow-sm w-full sm:w-auto md:w-[300px] lg:w-[380px] xl:w-[420px]"
                     >
                         <div className="flex text-clip relative">
                             <div
                                 className="aspect-[3/2] size-full rounded-t-lg bg-cover bg-center"
                                 style={{
-                                    backgroundImage: `url(${item.images[0]})`,
+                                    backgroundImage: `url(${club.images[0]})`,
                                 }}
                             ></div>
-                            {item.sponsor_image && (
-                                <img
-                                    src={item.sponsor_image}
-                                    alt="Miniatura"
-                                    className="absolute bottom-2 left-4 w-12 h-12 rounded border-white"
-                                />
-                            )}
                         </div>
                         <div className="p-4 flex flex-col grow">
                             <ul className="flex gap-x-2 mb-2 text-sm text-neutral-600">
                                 <li className="flex items-center">
                                     <Volleyball className="w-4 h-4 mr-1 text-gray-800 dark:text-white" />
-                                    <span>{item.sports}</span>
+                                    <span>{club.sports}</span>
                                 </li>
 
                                 <li className="flex items-center">
@@ -146,8 +138,8 @@ export default function Reservations() {
                                     </svg>
                                     <span>
                                         {calculateDistance(
-                                            item.geolocalization.lat,
-                                            item.geolocalization.lng
+                                            club.geolocalization.lat,
+                                            club.geolocalization.lng
                                         )}
                                     </span>
                                 </li>
@@ -168,15 +160,15 @@ export default function Reservations() {
                                             d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
                                         />
                                     </svg>
-                                    <span>a partir de R${item.min_price}</span>
+                                    <span>a partir de R${club.min_price}</span>
                                 </li>
                             </ul>
                             <div className="space-y-2 flex-grow">
                                 <div className="line-clamp-3 break-words text-lg font-medium lg:text-2xl">
-                                    {item.name}
+                                    {club.name}
                                 </div>
                                 <div className="line-clamp-3 break-words text-sm font-medium">
-                                    {item.description}
+                                    {club.description}
                                 </div>
                             </div>
                             <div className="flex justify-end items-center gap-2 py-2 mt-auto">
@@ -188,10 +180,10 @@ export default function Reservations() {
                                                     variant="outline"
                                                     onClick={() =>
                                                         setClubLocation({
-                                                            lat: item
+                                                            lat: club
                                                                 .geolocalization
                                                                 .lat,
-                                                            lng: item
+                                                            lng: club
                                                                 .geolocalization
                                                                 .lng,
                                                         })
@@ -205,46 +197,7 @@ export default function Reservations() {
                                             </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>
-                                    <Button
-                                        onClick={() => {
-                                            const currentUrl = new URL(
-                                                window.location.href
-                                            );
-                                            const entityParam =
-                                                currentUrl.searchParams.get(
-                                                    "entity"
-                                                );
-
-                                            const params = {
-                                                clubId: item.clubId,
-                                                ...(entityParam === "courts"
-                                                    ? {
-                                                          courtId: item.courtId,
-                                                          date: parameters.date,
-                                                      }
-                                                    : {
-                                                          sport: parameters.sport,
-                                                          date: parameters.date,
-                                                          type: parameters.type,
-                                                          cover: parameters.cover,
-                                                          min_price:
-                                                              parameters.min_price,
-                                                          max_price:
-                                                              parameters.max_price,
-                                                      }),
-                                            };
-
-                                            router.get(
-                                                route(
-                                                    "player.new-reservation.create",
-                                                    { ...params }
-                                                )
-                                            );
-                                        }}
-                                    >
-                                        Selecionar
-                                        <Check />
-                                    </Button>
+                                    <SelectedClubDrawer club={club} />
                                 </div>
                             </div>
                         </div>

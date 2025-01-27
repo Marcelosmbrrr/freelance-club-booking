@@ -73,7 +73,16 @@ class MyReservationController extends Controller
      */
     public function show(string $id)
     {
-        $reservation = $this->reservationModel->findOrFail($id);
+        $query = $this->reservationModel->query();
+
+        $query->with([
+            'court.promotions',
+            'courtTimeSlots'
+        ]);
+
+        $query->select('id', 'status', 'date', 'total_players', 'court_id', 'player_id', 'price'); 
+
+        $reservation = $query->findOrFail($id);
 
         return Inertia::render('Home/Player/Reservations/MyReservations/ShowReservation', [
             'reservation' => new ShowMyReservationResource($reservation)

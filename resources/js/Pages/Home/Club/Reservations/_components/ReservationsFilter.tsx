@@ -65,20 +65,17 @@ export function ReservationsFilter() {
                     setFilter({ ...filter, search: e.target.value })
                 }
             />
-            <Select>
-                <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Quadra" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        {courts.map((court: { id: string; name: string }) => (
-                            <SelectItem value={court.id}>
-                                {court.name}
-                            </SelectItem>
-                        ))}
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
+            <Input
+                type="date"
+                value={filter.date}
+                onChange={(e) =>
+                    setFilter({
+                        ...filter,
+                        date: e.target.value,
+                    })
+                }
+                className="w-fit"
+            />
             <Popover>
                 <PopoverTrigger asChild>
                     <Button variant="outline">
@@ -97,54 +94,6 @@ export function ReservationsFilter() {
                         <div className="grid gap-2">
                             <div className="grid gap-4">
                                 <div className="grid gap-2">
-                                    <div className="grid grid-cols-2 items-center py-2 gap-4">
-                                        <Label htmlFor="status">Status</Label>
-                                        <Select
-                                            value={filter.status}
-                                            onValueChange={(v) =>
-                                                setFilter({
-                                                    ...filter,
-                                                    status: v,
-                                                })
-                                            }
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecionar Status" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectItem value="all">
-                                                        Todos
-                                                    </SelectItem>
-                                                    <SelectItem value="pending">
-                                                        Pendente
-                                                    </SelectItem>
-                                                    <SelectItem value="confirmed">
-                                                        Confirmado
-                                                    </SelectItem>
-                                                    <SelectItem value="completed">
-                                                        Completado
-                                                    </SelectItem>
-                                                    <SelectItem value="cancelled">
-                                                        Cancelado
-                                                    </SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <div className="grid grid-cols-2 items-center gap-4">
-                                        <Label htmlFor="maxWidth">Data</Label>
-                                        <Input
-                                            type="date"
-                                            value={filter.date}
-                                            onChange={(e) =>
-                                                setFilter({
-                                                    ...filter,
-                                                    date: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
                                     <div className="grid grid-cols-2 items-center gap-4">
                                         <Label htmlFor="price">
                                             Preço Médio

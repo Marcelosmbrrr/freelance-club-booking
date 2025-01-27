@@ -49,20 +49,6 @@ export default function ShowReservation() {
                         <Badge>Situação: {reservation.data.status}</Badge>
                         <div className="flex gap-4">
                             <div className="grid gap-2">
-                                <Label>Criado em</Label>
-                                <Input
-                                    type="text"
-                                    className="w-72"
-                                    value={format(
-                                        reservation.data.date,
-                                        "EEEE, dd 'de' MMMM 'de' yyyy",
-                                        {
-                                            locale: ptBR,
-                                        }
-                                    )}
-                                />
-                            </div>
-                            <div className="grid gap-2">
                                 <Label>Data Agendada</Label>
                                 <Input
                                     type="text"

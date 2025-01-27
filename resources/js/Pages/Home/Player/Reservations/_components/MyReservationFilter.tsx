@@ -49,7 +49,7 @@ export function MyReservationFilter() {
 
     function fetchData() {
         router.get(
-            route("player.my-reservations.index"),
+            route("player.reservations.index"),
             { ...filter },
             {
                 preserveState: true,
@@ -58,7 +58,7 @@ export function MyReservationFilter() {
     }
 
     return (
-        <div className="flex gap-x-1">
+        <div className="flex gap-x-2">
             <Input
                 placeholder="Pesquisar"
                 className="min-w-96"

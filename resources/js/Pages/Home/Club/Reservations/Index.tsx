@@ -6,6 +6,7 @@ import { ptBR } from "date-fns/locale";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ReservationsFilter } from "./_components/ReservationsFilter";
 import { DeletionModal } from "@/components/modal/DeletionModal";
+import { Scheduler } from "./_components/Scheduler";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,14 +29,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 
 export type Reservation = {
     id: string;
@@ -184,7 +177,12 @@ export default function Reservations() {
             <div className="flex justify-between items-center py-4">
                 <ReservationsFilter />
                 <div className="flex items-center space-x-2">
-                    <DeletionModal disabled={table.getFilteredSelectedRowModel().rows.length === 0} />
+                    <DeletionModal
+                        disabled={
+                            table.getFilteredSelectedRowModel().rows.length ===
+                            0
+                        }
+                    />
                     <Button
                         variant="outline"
                         className="ml-auto"
@@ -197,75 +195,7 @@ export default function Reservations() {
                 </div>
             </div>
             <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext()
-                                              )}
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="text-center"
-                                >
-                                    Nenhuma reserva encontrada.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} de{" "}
-                    {table.getFilteredRowModel().rows.length} quadra(s)
-                    selecionada(s).
-                </div>
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Anterior
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Próximo
-                    </Button>
-                </div>
+                <Scheduler />
             </div>
         </AuthenticatedLayout>
     );
