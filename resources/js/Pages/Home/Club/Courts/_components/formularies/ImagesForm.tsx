@@ -74,7 +74,7 @@ export function ImagesForm(props: {
                     </div>
                 </div>
             </div>
-            <div className="p-8">
+            <div className="py-8">
                 <div className="mb-2 space-y-2">
                     <h1 className="text-xl font-semibold">
                         Logo da Quadra / Patrocinador (opcional)
@@ -94,7 +94,7 @@ export function ImagesForm(props: {
                         />
                     </div>
                     <div className="grid grid-cols-5 gap-4">
-                        {sponsorImages.map((image_src, index) => (
+                        {sponsorImages.length > 0 && sponsorImages.map((image_src, index) => (
                             <div key={index} className="relative">
                                 <img
                                     className="h-36 w-full rounded-lg"

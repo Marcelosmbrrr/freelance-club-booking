@@ -18,11 +18,11 @@ class CourtSeeder extends Seeder
     {
         $club = Club::first();
 
-        // Criação da quadra
-        $courtName = 'Quadra 1'; // Nome da quadra variado com o nome do clube
-        $court = Court::create([
+        // Criação da primeira quadra
+        $court1Name = 'Quadra 1';
+        $court1 = Court::create([
             'club_id' => $club->id,
-            'name' => $courtName, 
+            'name' => $court1Name, 
             'sport' => 'padel',
             'is_covered' => true,
             'type' => 'masonry',
@@ -36,36 +36,87 @@ class CourtSeeder extends Seeder
             'pricing' => [
                 [
                     'time' => '01:00',
-                    'price' => 50.00
+                    'price' => 06.00
                 ],
                 [
-                    'time' => '03:00',
-                    'price' => 70.00
+                    'time' => '01:30',
+                    'price' => 08.00
                 ],
                 [
-                    'time' => '05:00',
-                    'price' => 99.00
+                    'time' => '02:00',
+                    'price' => 10.00
                 ]
             ],
         ]);
 
-        // Configura imagens da quadra
-        $courtImagesPath = "images/courts/$court->id/common/";
-        $sponsorImagePath = "images/courts/$court->id/sponsor/img.jpg";
+        // Configura imagens da primeira quadra
+        $court1ImagesPath = "images/courts/$court1->id/common/";
+        $court1SponsorImagePath = "images/courts/$court1->id/sponsor/img.jpg";
 
-        $court->update([
-            'images' => $courtImagesPath,
-            'sponsor_image' => $sponsorImagePath
+        $court1->update([
+            'images' => $court1ImagesPath,
+            'sponsor_image' => $court1SponsorImagePath
         ]);
 
-        // Adicionar imagens
+        // Adicionar imagens da primeira quadra
         Storage::disk('public')->put(
-            $courtImagesPath . 'img1.jpg',
+            $court1ImagesPath . 'img1.jpg',
             file_get_contents("https://monteseunegocio.boasideias.com.br/wp-content/uploads/sites/8/2022/01/como-montar-quadra-de-tenisd.jpg")
         );
 
         Storage::disk('public')->put(
-            $sponsorImagePath,
+            $court1SponsorImagePath,
+            file_get_contents("https://www.logotipo.pt/wp-content/uploads/2016/09/coca-cola-classic-1.jpg")
+        );
+
+        // Criação da segunda quadra
+        $court2Name = 'Quadra 2';
+        $court2 = Court::create([
+            'club_id' => $club->id,
+            'name' => $court2Name, 
+            'sport' => 'padel',
+            'is_covered' => true,
+            'type' => 'masonry',
+            'grass_type' => 'synthetic',
+            'floor_type' => 'concrete',
+            'can_play_outside' => true,
+            'description' => 'Outra excelente quadra de padel coberta, com piso de concreto e grama sintética.',
+            'installation_year' => 2022,
+            'manufacturer' => 'XYZ Sports',
+            'status' => true,
+            'pricing' => [
+                [
+                    'time' => '01:00',
+                    'price' => 06.00
+                ],
+                [
+                    'time' => '01:30',
+                    'price' => 08.00
+                ],
+                [
+                    'time' => '02:00',
+                    'price' => 10.00
+                ]
+            ],
+        ]);
+
+        // Configura imagens da segunda quadra
+        $court2ImagesPath = "images/courts/$court2->id/common/";
+        $court2SponsorImagePath = "images/courts/$court2->id/sponsor/img.jpg";
+
+        $court2->update([
+            'images' => $court2ImagesPath,
+            'sponsor_image' => $court2SponsorImagePath
+        ]);
+
+        // Adicionar imagens da segunda quadra
+        Storage::disk('public')->put(
+            $court2ImagesPath . 'img1.jpg',
+            file_get_contents("https://th.bing.com/th/id/R.334a435eeff488e6a965f7a8b6a6e1d3?rik=XiHScBJF2vVjAw&pid=ImgRaw&r=0")
+        );
+
+        Storage::disk('public')->put(
+            $court2SponsorImagePath,
             file_get_contents("https://www.logotipo.pt/wp-content/uploads/2016/09/coca-cola-classic-1.jpg")
         );
 
@@ -80,30 +131,49 @@ class CourtSeeder extends Seeder
         // Define uma lista de horários diferentes por dia
         $weekdaysTimeSlotMap = [
             'monday'    => $timeSlots->whereBetween('start_time', ['06:00', '11:00'])->pluck('id')
-                              ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
+                            ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
             'tuesday'   => $timeSlots->whereBetween('start_time', ['06:00', '11:00'])->pluck('id')
-                              ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
+                            ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
             'wednesday' => $timeSlots->whereBetween('start_time', ['06:00', '11:00'])->pluck('id')
-                              ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
+                            ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
             'thursday'  => $timeSlots->whereBetween('start_time', ['06:00', '11:00'])->pluck('id')
-                              ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
+                            ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
             'friday'    => $timeSlots->whereBetween('start_time', ['06:00', '11:00'])->pluck('id')
-                              ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
+                            ->merge($timeSlots->whereBetween('start_time', ['14:00', '18:00'])->pluck('id')),
             'saturday'  => $timeSlots->whereBetween('start_time', ['06:00', '23:59'])->pluck('id'),
             'sunday'    => $timeSlots->whereBetween('start_time', ['06:00', '23:59'])->pluck('id'),
         ];
 
-        // Associa os horários à quadra por dia da semana
+        // Associa os horários à primeira quadra por dia da semana
         foreach ($weekdaysTimeSlotMap as $weekday => $timeSlotIds) {
             foreach ($timeSlotIds as $timeSlotId) {
-                $court->timeSlots()->attach($timeSlotId, [
+                $court1->timeSlots()->attach($timeSlotId, [
                     'weekday' => $weekday,
                     'available' => true,
                 ]);
             }
         }
 
-        $court->promotions()->create([
+        // Associa os horários à segunda quadra por dia da semana
+        foreach ($weekdaysTimeSlotMap as $weekday => $timeSlotIds) {
+            foreach ($timeSlotIds as $timeSlotId) {
+                $court2->timeSlots()->attach($timeSlotId, [
+                    'weekday' => $weekday,
+                    'available' => true,
+                ]);
+            }
+        }
+
+        // Cria promoção para a primeira quadra
+        $court1->promotions()->create([
+            "start_time" => "18:00",
+            "end_time" => "00:00",
+            "weekday" => "saturday",
+            "discount" => 10
+        ]);
+
+        // Cria promoção para a segunda quadra
+        $court2->promotions()->create([
             "start_time" => "18:00",
             "end_time" => "00:00",
             "weekday" => "saturday",

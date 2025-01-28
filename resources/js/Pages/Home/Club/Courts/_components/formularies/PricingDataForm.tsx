@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Head, useForm, Link } from "@inertiajs/react";
 import { HelpSidebar } from "@/components/help-sidebar/HelpSidebar";
 import { PricingSelector } from "../PricingSelector";
 import { Pricing, Promotion } from "../../types/types";
@@ -21,12 +20,13 @@ export function PricingDataForm(props: {
                             description="Formulário para seleção de preços por intervalos de tempo."
                             text={[
                                 "O preço de uma quadra é calculado com base no tempo de uso.",
-                                "O tempo mínimo é de 1 hora, com um preço definido, e a partir de 5 horas é caracterizado como confraria.",
+                                "Não é obrigatório precificar todas as opções de tempo disponíveis. Por exemplo, o clube pode optar por oferecer apenas as opções de 60, 90 e 120 minutos para a quadra, conforme sua necessidade.",
                             ]}
                         />
                     </div>
                     <p className="text-gray-600">
-                        Selecione o preço por intervalos de tempo.
+                        Selecione e defina os preços para as opções de tempo de
+                        uso da quadra.
                     </p>
                 </div>
                 <PricingSelector
@@ -38,7 +38,9 @@ export function PricingDataForm(props: {
             <div className="space-y-4 py-8">
                 <div className="space-y-2">
                     <div className="flex justify-between">
-                        <h1 className="text-xl font-semibold">Promoções (opcional)</h1>
+                        <h1 className="text-xl font-semibold">
+                            Promoções (opcional)
+                        </h1>
                         <HelpSidebar
                             title="Promoções"
                             description="Formulário para configurar promoções de membro vip e horários promocionais."

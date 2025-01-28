@@ -3,10 +3,17 @@
 namespace App\Http\Resources\Club\Reservations;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReservationsResource extends JsonResource
 {
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+        self::withoutWrapping();
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -14,29 +21,33 @@ class ReservationsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $data = parent::toArray($request);
+        $timeSlots = $this->courtTimeSlots->pluck('timeSlot');
 
-        $court_time_slots_collection = $this->courtTimeSlots();
-      
-        $data["time_slots"] = $court_time_slots_collection->toArray();
-        $data["start_end_time"] = $court_time_slots_collection->first()["start_time"] . " - " . $court_time_slots_collection->last()["end_time"];
+        $startTime = $timeSlots->first()->start_time;
 
-        return $data;
-    }
+        $endTime = $timeSlots->last()->end_time;
 
-    function courtTimeSlots() {
+        $start = Carbon::parse($startTime);
+        $end = Carbon::parse($endTime);
+        $duration = (int) $start->diffInMinutes($end) / 30;
 
-        $time_slots = [];
-
-        foreach($this->courtTimeSlots as $index => $timeSlot){
-            $time_slots[$index] = [
-                "id" => $timeSlot->timeSlot->id,
-                "start_time" => $timeSlot->timeSlot->start_time,
-                "end_time" => $timeSlot->timeSlot->end_time,
-            ];
-        }  
-
-        return collect($time_slots);
-
+        return [
+            'id' => $this->id,
+            'price' => $this->price,
+            'date' => $this->date,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'duration' => $duration,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'creator_name' => $this->player->user->name, 
+            'promotion' => '',
+            'court' => [
+                'id' => $this->court->id,
+                'name' => $this->court->name
+            ],
+            "players" => []
+        ];
     }
 }

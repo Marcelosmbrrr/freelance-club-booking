@@ -30,30 +30,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { router } from "@inertiajs/react";
 
-const reservation_fake = {
-    data: {
-        creator: "Criador",
-        status: "Confirmada",
-        date: new Date(),
-        court: {
-            name: "Quadra 1",
-            id: 1,
-        },
-        payment: {
-            start_time: "10:00",
-            end_time: "12:00",
-            promotion: "Desconto de 10%",
-        },
-        price: "50,00",
-        players: [
-            { position: 1, user: { name: "João", avatar: "" } },
-            { position: 2, user: { name: "Carlos", avatar: "" } },
-            { position: 3, user: { name: "Maria", avatar: "" } },
-        ],
-    },
-};
-
 export function ReservationDrawer({ children, reservation }) {
+    console.log(reservation)
     return (
         <Drawer>
             <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -62,10 +40,10 @@ export function ReservationDrawer({ children, reservation }) {
                     <DrawerHeader className="flex justify-between items-center">
                         <div>
                             <DrawerTitle className="text-2xl">
-                                Reserva de {reservation_fake.data.creator}
+                                Reserva de {reservation.creator_name}
                             </DrawerTitle>
                             <DrawerDescription>
-                                <Badge>{reservation_fake.data.status}</Badge>
+                                <Badge>{reservation.status}</Badge>
                             </DrawerDescription>
                         </div>
                         <DrawerClose asChild>
@@ -81,7 +59,7 @@ export function ReservationDrawer({ children, reservation }) {
                                         type="text"
                                         className="w-72"
                                         value={format(
-                                            reservation_fake.data.date,
+                                            reservation.date,
                                             "EEEE, dd 'de' MMMM 'de' yyyy",
                                             {
                                                 locale: ptBR,
@@ -94,7 +72,7 @@ export function ReservationDrawer({ children, reservation }) {
                                     <Input
                                         type="text"
                                         className="w-72"
-                                        value={reservation_fake.data.court.name}
+                                        value={reservation.court.name}
                                     />
                                 </div>
                                 <div className="flex items-end">
@@ -102,7 +80,7 @@ export function ReservationDrawer({ children, reservation }) {
                                         onClick={() =>
                                             router.get(
                                                 route("club.courts.show", {
-                                                    court: reservation_fake.data
+                                                    court: reservation
                                                         .court.id,
                                                 })
                                             )
@@ -131,18 +109,17 @@ export function ReservationDrawer({ children, reservation }) {
                                 <TableRow>
                                     <TableCell>
                                         {
-                                            reservation_fake.data.payment
-                                                .start_time
+                                            reservation.start_time
                                         }{" "}
                                         -{" "}
-                                        {reservation_fake.data.payment.end_time}
+                                        {reservation.end_time}
                                     </TableCell>
                                     <TableCell>
-                                        {reservation_fake.data.payment
+                                        {reservation
                                             .promotion ?? "Sem promoção"}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        R${reservation_fake.data.price}
+                                        R${reservation.price}
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -150,7 +127,7 @@ export function ReservationDrawer({ children, reservation }) {
                         <div className="container w-full">
                             <Tabs defaultValue="1">
                                 <TabsList className="flex h-auto w-full flex-col gap-2 bg-background md:flex-row">
-                                    {reservation_fake.data.players.map(
+                                    {reservation.players.map(
                                         (player) => (
                                             <TabsTrigger
                                                 value={player.position}
@@ -188,7 +165,7 @@ export function ReservationDrawer({ children, reservation }) {
                                         )
                                     )}
                                 </TabsList>
-                                {reservation_fake.data.players.map((player) => (
+                                {reservation.players.map((player) => (
                                     <TabsContent
                                         value={player.position}
                                         className="rounded-lg border p-8 space-y-4"

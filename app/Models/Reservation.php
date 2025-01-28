@@ -18,8 +18,6 @@ class Reservation extends Model
         'price'
     ];
 
-    protected $appends = ['players'];
-
     /**
      * Get the attributes that should be cast.
      *
@@ -58,19 +56,5 @@ class Reservation extends Model
     }
 
     // Getters
-
-    public function getPlayersAttribute()
-    {
-        return $this->playerSlots->map(function ($slot) {
-            return [
-                'position' => $slot->position,
-                'user' => $slot->player ? [
-                    'name' => $slot->player->user->name,
-                    'email' => $slot->player->user->email,
-                    'avatar' => $slot->player->avatar_image
-                ] : null, 
-            ];
-        });
-    }
 
 }

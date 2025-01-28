@@ -26,15 +26,14 @@ type Pricing = {
 const initialValue = [{ time: "", price: "" }];
 
 const times = [
-    { label: "1 hora", value: "01:00" },
-    { label: "1 hora e 30 minutos", value: "01:30" },
-    { label: "2 horas", value: "02:00" },
-    { label: "2 horas e 30 minutos", value: "02:30" },
-    { label: "3 horas", value: "03:00" },
-    { label: "3 horas e 30 minutos", value: "03:30" },
-    { label: "4 horas", value: "04:00" },
-    { label: "4 horas e 30 minutos", value: "04:30" },
-    { label: "5 horas", value: "05:00" },
+    { label: "60 minutos", value: "01:00" },
+    { label: "90 minutos", value: "01:30" },
+    { label: "120 minutos", value: "02:00" },
+    { label: "180 minutos", value: "03:00" },
+    { label: "210 minutos", value: "03:30" },
+    { label: "240 minutos", value: "04:00" },
+    { label: "270 minutos", value: "04:30" },
+    { label: "300 minutos", value: "05:00" },
 ];
 
 export function PricingSelector(props: {
