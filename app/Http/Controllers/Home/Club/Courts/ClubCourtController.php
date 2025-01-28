@@ -124,7 +124,7 @@ class ClubCourtController extends Controller
         ->where("id", $id)
         ->with(["timeSlots" => function($query) {
                 $query->select('time_slots.id', 'time_slots.start_time', 'time_slots.end_time') 
-                    ->addSelect('court_time_slot.weekday', 'court_time_slot.available'); 
+                    ->addSelect('court_time_slots.weekday', 'court_time_slots.available'); 
             }
         ])
         ->firstOrFail();
@@ -143,7 +143,7 @@ class ClubCourtController extends Controller
         ->where("id", $id)
         ->with(["timeSlots" => function($query) {
                 $query->select(['time_slots.id', 'time_slots.start_time', 'time_slots.end_time']) 
-                    ->addSelect('court_time_slot.weekday', 'court_time_slot.available'); 
+                    ->addSelect('court_time_slots.weekday', 'court_time_slots.available'); 
             }
         ])
         ->firstOrFail();

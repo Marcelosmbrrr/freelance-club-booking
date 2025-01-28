@@ -15,11 +15,6 @@ class ReservationSlot extends Model
         'position',
     ];
 
-    public function reservation()
-    {
-        return $this->belongsTo(Reservation::class);
-    }
-
     public function player()
     {
         return $this->belongsTo(Player::class);

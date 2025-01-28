@@ -8,27 +8,8 @@ use Illuminate\Support\Carbon;
 class Reservation extends Model
 {
     protected $fillable = [
-        'player_id',
-        'court_id',
-        'total_players',
-        'is_public',
-        'date',
-        'is_filled',
-        'status',
-        'price'
+        'player_id', 'court_id', 'total_players', 'price', 'is_public', 'date', 'status'
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'date' => 'date'
-        ];
-    }
 
     public function player()
     {
@@ -47,7 +28,8 @@ class Reservation extends Model
 
     public function courtTimeSlots()
     {
-        return $this->belongsToMany(CourtTimeSlot::class, 'reservation_court_time_slot', 'reservation_id', 'court_time_slot_id');
+        return $this->belongsToMany(CourtTimeSlot::class, 'reservation_court_time_slots')
+                    ->using(ReservationCourtTimeSlot::class);
     }
 
     public function playerSlots()

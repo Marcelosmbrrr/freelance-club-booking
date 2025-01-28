@@ -22,6 +22,25 @@ return new class extends Migration
             $table->enum("status", ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
+
+        Schema::create('reservation_court_time_slots', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
+            $table->foreignId('court_time_slot_id')->constrained('court_time_slots')->onDelete('cascade');
+            $table->timestamps();
+        
+            $table->unique(['reservation_id', 'court_time_slot_id'], 'res_court_time_slot_unique');
+        });
+
+        Schema::create('reservation_slots', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('reservation_id')->constrained('reservations');
+            $table->foreignId('player_id')->nullable()->constrained('players');
+            $table->integer('position');
+            $table->timestamps();
+
+            $table->unique(['reservation_id', 'player_id']);
+        });
     }
 
     /**
@@ -29,6 +48,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('reservation_court_time_slots');
+        Schema::dropIfExists('reservation_slots');
         Schema::dropIfExists('reservations');
     }
 };

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
-use App\Models\Client;
 
 class Club extends Model
 {
@@ -37,11 +36,6 @@ class Club extends Model
     public function courts()
     {
         return $this->hasMany(Court::class);
-    }
-
-    public function clients()
-    {
-        return $this->hasMany(Client::class);
     }
 
     public function reservations()

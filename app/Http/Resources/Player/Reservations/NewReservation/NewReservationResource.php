@@ -26,4 +26,10 @@ class NewReservationResource extends JsonResource
             "images" => $this->images
         ];
     }
+
+    function clubTimeSlotsByWeekday() {
+
+        //
+        
+    }
 }

@@ -5,31 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Club;
+use App\Models\CourtPricing;
 
 class Court extends Model
 {
     protected $fillable = [
-        'club_id',
-        'name',
-        'sport',
-        'total_players',
-        'is_covered',
-        'type',
-        'grass_type',
-        'floor_type',
-        'can_play_outside',
-        'description',
-        'installation_year',
-        'manufacturer',
-        'status',
-        'images',
-        'sponsor_image',
-        'pricing',
+        'club_id', 'name', 'sport', 'is_covered', 'type', 'grass_type', 
+        'floor_type', 'can_play_outside', 'description', 'installation_year', 
+        'manufacturer', 'status', 'sponsor_image'
     ]; 
-
-    protected $casts = [
-        'pricing' => 'array', 
-    ];
 
     protected $appends = ['min_price', 'promotions_by_weekday'];
     
@@ -40,17 +24,29 @@ class Court extends Model
 
     public function timeSlots()
     {
-        return $this->belongsToMany(TimeSlot::class, 'court_time_slot')->withPivot('weekday', 'available');
+        return $this->belongsToMany(TimeSlot::class, 'court_time_slots')
+                    ->using(CourtTimeSlot::class)
+                    ->withPivot('weekday', 'available');
     }
 
     public function reservations()
     {
-        return $this->hasMany(Reservation::class, "court_id");
+        return $this->hasMany(Reservation::class);
     }
 
     public function promotions()
     {
-        return $this->hasMany(Promotion::class, "court_id");
+        return $this->hasMany(CourtPromotion::class);
+    }
+
+    public function pricings()
+    {
+        return $this->hasMany(CourtPricing::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(CourtImage::class);
     }
 
     // Getters

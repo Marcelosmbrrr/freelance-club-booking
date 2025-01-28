@@ -10,7 +10,8 @@ class TimeSlot extends Model
 
     public function courts()
     {
-        return $this->belongsToMany(Court::class, 'court_time_slot')
+        return $this->belongsToMany(Court::class, 'court_time_slots')
+                    ->using(CourtTimeSlot::class)
                     ->withPivot('weekday', 'available')
                     ->withTimestamps();
     }

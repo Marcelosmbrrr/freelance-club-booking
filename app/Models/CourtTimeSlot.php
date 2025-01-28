@@ -6,14 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourtTimeSlot extends Model
 {
-    protected $table = "court_time_slot";
+    protected $table = "court_time_slots";
 
-    protected $fillable = [
-        'court_id',
-        'time_slot_id',
-        'weekday',
-        'available',
-    ];
+    protected $fillable = ['court_id', 'time_slot_id', 'weekday', 'available'];
 
     public function court()
     {
@@ -27,8 +22,16 @@ class CourtTimeSlot extends Model
 
     public function reservations()
     {
-        return $this->belongsToMany(Reservation::class, 'reservation_court_time_slots');
+        return $this->belongsToMany(Reservation::class, 'reservation_court_time_slots')
+                    ->using(ReservationCourtTimeSlot::class);
     }
+
+    public function promotions()
+    {
+        return $this->hasMany(CourtPromotion::class);
+    }
+
+    // Getters
 
     public static function getAvailableCourtTimeSlots()
     {
